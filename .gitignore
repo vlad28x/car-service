@@ -11,6 +11,3 @@ target/
 
 ### Mac OS ###
 .DS_Store
-
-# Aplication Properties
-src/main/resources/application.properties
