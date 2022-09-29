@@ -11,6 +11,6 @@ import java.io.Serializable;
 @Embeddable
 public class ServiceConsumableId implements Serializable {
 
-    private Integer serviceId;
-    private Integer consumableId;
+    private Long serviceId;
+    private Long consumableId;
 }

@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -12,16 +13,16 @@ import java.util.List;
 public class Service extends AbstractEntity<Long> {
 
     private String name;
-    private Integer price;
+    private Long price;
 
     @ManyToOne
     @JoinColumn(name = "car_service_id", referencedColumnName = "id")
     private CarService carService;
 
     @OneToMany(mappedBy = "service")
-    private List<ServiceConsumable> consumableList;
+    private List<ServiceConsumable> consumableList = new ArrayList<>();
 
     @ManyToMany(mappedBy = "services")
-    private List<Orders> orders;
+    private List<Order> orders = new ArrayList<>();
 
 }

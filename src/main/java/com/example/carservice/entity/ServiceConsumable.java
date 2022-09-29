@@ -3,10 +3,7 @@ package com.example.carservice.entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Data
 @Entity
@@ -16,18 +13,14 @@ public class ServiceConsumable {
     @EmbeddedId
     private ServiceConsumableId id;
 
-    private Integer count;
+    private Long count;
 
     @ManyToOne
-    @JoinColumn(name = "service_id", referencedColumnName = "id")
+    @MapsId("serviceId")
     private Service service;
 
     @ManyToOne
-    @JoinColumn(name = "consumable_id", referencedColumnName = "id")
+    @MapsId("consumableId")
     private Consumable consumable;
 
-    /*service_id    bigint references service (id),
-    consumable_id bigint references consumable (id),
-    count         bigint not null,
-    primary key (service_id, consumable_id)*/
 }
