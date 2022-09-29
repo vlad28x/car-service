@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -13,10 +14,10 @@ import java.util.List;
 public class Consumable extends AbstractEntity<Long>{
 
     private String name;
-    private Integer price;
-    private Integer quantity;
+    private Long price;
+    private Long quantity;
 
     @OneToMany(mappedBy = "consumable")
-    private List<ServiceConsumable> serviceList;
+    private List<ServiceConsumable> serviceList = new ArrayList<>();
 
 }
