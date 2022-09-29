@@ -8,4 +8,5 @@ public class CarServiceRequestDto {
     private Long id;
     private Long budget;
     private String name;
+
 }

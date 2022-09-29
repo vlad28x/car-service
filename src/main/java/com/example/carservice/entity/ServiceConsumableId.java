@@ -7,10 +7,11 @@ import javax.persistence.Embeddable;
 import java.io.Serializable;
 
 @Data
-@NoArgsConstructor
 @Embeddable
+@NoArgsConstructor
 public class ServiceConsumableId implements Serializable {
 
     private Long serviceId;
     private Long consumableId;
+
 }
