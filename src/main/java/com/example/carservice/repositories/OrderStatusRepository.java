@@ -1,9 +1,9 @@
 package com.example.carservice.repositories;
 
-import com.example.carservice.entity.OrderStatus;
+import com.example.carservice.entity.OrderStatusEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface OrderStatusRepository extends JpaRepository<OrderStatus, Long> {
+public interface OrderStatusRepository extends JpaRepository<OrderStatusEntity, Long> {
 }

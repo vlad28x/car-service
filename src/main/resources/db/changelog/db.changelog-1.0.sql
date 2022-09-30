@@ -4,24 +4,24 @@
 create table car_service
 (
     id     bigserial primary key,
-    budget bigint    not null,
-    name   char(255) not null
-
+    name   char(255) not null,
+    budget bigint    not null
 );
 
 --changeset vlad28x:000001-create-role-table
 create table role
 (
     id   bigserial primary key,
-    name char(255)
+    name char(255) not null
 );
 
 --changeset vlad28x:000002-create-users-table
 create table users
 (
     id             bigserial primary key,
-    username       char(255),
-    password       char(255),
+    username       char(255) not null,
+    password       char(255) not null,
+    email          char(255) not null,
     salary         bigint,
     role_id        bigint references role (id),
     car_service_id bigint references car_service (id)
