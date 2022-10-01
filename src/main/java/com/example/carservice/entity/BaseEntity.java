@@ -1,6 +1,9 @@
 package com.example.carservice.entity;
 
-import javax.persistence.*;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -12,6 +15,10 @@ public abstract class BaseEntity<T extends Serializable> {
     private T id;
 
     public BaseEntity() {
+    }
+
+    public BaseEntity(T id) {
+        this.id = id;
     }
 
     public T getId() {

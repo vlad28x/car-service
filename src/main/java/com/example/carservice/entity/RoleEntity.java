@@ -15,6 +15,10 @@ public class RoleEntity extends BaseEntity<Long> {
     public RoleEntity() {
     }
 
+    public RoleEntity(Long id) {
+        super(id);
+    }
+
     public String getName() {
         return name;
     }

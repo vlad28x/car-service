@@ -8,19 +8,19 @@ import java.util.List;
 @Entity
 public class OrderStatusEntity extends BaseEntity<Long> {
 
-    private String status;
+    private String name;
     @OneToMany(mappedBy = "orderStatus")
     private List<OrderEntity> orders = new ArrayList<>();
 
     public OrderStatusEntity() {
     }
 
-    public String getStatus() {
-        return status;
+    public String getName() {
+        return name;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public List<OrderEntity> getOrders() {
@@ -35,7 +35,7 @@ public class OrderStatusEntity extends BaseEntity<Long> {
     public String toString() {
         return "OrderStatusEntity{" +
                 "id=" + getId() +
-                ", status='" + status + '\'' +
+                ", name='" + name + '\'' +
                 '}';
     }
 

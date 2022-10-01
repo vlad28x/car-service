@@ -57,8 +57,8 @@ create table service_consumable
 --changeset vlad28x:000006-create-order_status-table
 create table order_status
 (
-    id     bigserial primary key,
-    status char(255) not null
+    id   bigserial primary key,
+    name char(255) not null
 );
 
 --changeset vlad28x:000007-create-orders-table

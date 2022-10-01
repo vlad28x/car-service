@@ -3,7 +3,7 @@ package com.example.carservice.dto;
 public class OrderStatusRequestDto {
 
     private Long id;
-    private String status;
+    private String name;
 
     public OrderStatusRequestDto() {
     }
@@ -16,12 +16,12 @@ public class OrderStatusRequestDto {
         this.id = id;
     }
 
-    public String getStatus() {
-        return status;
+    public String getName() {
+        return name;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setName(String name) {
+        this.name = name;
     }
 
 }

@@ -18,6 +18,10 @@ public class CarServiceEntity extends BaseEntity<Long> {
     public CarServiceEntity() {
     }
 
+    public CarServiceEntity(Long id) {
+        super(id);
+    }
+
     public String getName() {
         return name;
     }
