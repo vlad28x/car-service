@@ -22,7 +22,6 @@ public final class ServiceMapper {
     }
 
     public static ServiceResponseDto serviceEntityToOrderResponseDto(ServiceEntity serviceEntity) {
-
         ServiceResponseDto serviceResponseDto = new ServiceResponseDto();
         serviceResponseDto.setId(serviceEntity.getId());
         serviceResponseDto.setName(serviceEntity.getName());

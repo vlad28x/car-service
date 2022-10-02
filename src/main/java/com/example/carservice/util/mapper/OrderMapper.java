@@ -19,7 +19,7 @@ public final class OrderMapper {
         orderEntity.setPrice(orderRequestDto.getPrice());
         if (orderRequestDto.getServicesId() != null)
             orderEntity.setServices(new ArrayList<>(orderRequestDto.getServicesId()
-                    .stream().map(id -> new ServiceEntity(id)).collect(Collectors.toList())));
+                    .stream().map(ServiceEntity::new).collect(Collectors.toList())));
         if (orderRequestDto.getWorkerId() != null)
             orderEntity.setWorker(new UserEntity(orderRequestDto.getWorkerId()));
         if (orderRequestDto.getManagerId() != null)
@@ -38,7 +38,7 @@ public final class OrderMapper {
                     .getOrderStatus()));
         if (orderEntity.getServices() != null)
             orderResponseDto.setServices(new ArrayList<>(orderEntity.getServices().stream()
-                    .map(serviceEntity -> ServiceMapper.serviceEntityToOrderResponseDto(serviceEntity))
+                    .map(ServiceMapper::serviceEntityToOrderResponseDto)
                     .collect(Collectors.toList())));
         if (orderEntity.getWorker() != null)
             orderResponseDto.setUser(UserMapper.userEntityToUserResponseDto(orderEntity.getWorker()));

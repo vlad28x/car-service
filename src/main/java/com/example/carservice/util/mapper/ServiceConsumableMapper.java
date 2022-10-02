@@ -1,7 +1,8 @@
 package com.example.carservice.util.mapper;
 
-import com.example.carservice.dto.*;
-import com.example.carservice.entity.*;
+import com.example.carservice.dto.ServiceConsumableRequestDto;
+import com.example.carservice.dto.ServiceConsumableResponseDto;
+import com.example.carservice.entity.ServiceConsumableEntity;
 
 
 public final class ServiceConsumableMapper {
