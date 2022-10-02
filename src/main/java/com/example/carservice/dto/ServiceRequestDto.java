@@ -2,20 +2,11 @@ package com.example.carservice.dto;
 
 public class ServiceRequestDto {
 
-    private Long id;
     private String name;
     private Long price;
     private Long carServiceId;
 
     public ServiceRequestDto() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {

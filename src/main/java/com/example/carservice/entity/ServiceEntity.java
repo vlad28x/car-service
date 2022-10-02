@@ -20,6 +20,10 @@ public class ServiceEntity extends BaseEntity<Long> {
     public ServiceEntity() {
     }
 
+    public ServiceEntity(Long id){
+        super(id);
+    }
+
     public String getName() {
         return name;
     }

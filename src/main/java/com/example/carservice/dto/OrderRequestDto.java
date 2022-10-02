@@ -4,7 +4,6 @@ import java.util.List;
 
 public class OrderRequestDto {
 
-    private Long id;
     private Long price;
     private Long statusId;
     private List<Long> servicesId;
@@ -13,14 +12,6 @@ public class OrderRequestDto {
     private Long customerId;
 
     public OrderRequestDto() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Long getPrice() {

@@ -27,6 +27,9 @@ public class UserEntity extends BaseEntity<Long> {
 
     public UserEntity() {
     }
+    public UserEntity(Long id){
+        super(id);
+    }
 
     public String getUsername() {
         return username;

@@ -12,7 +12,6 @@ public final class OrderStatusMapper {
 
     public static OrderStatusEntity orderStatusRequestDtoToOrderStatusEntity(OrderStatusRequestDto requestDto) {
         OrderStatusEntity orderStatusEntity = new OrderStatusEntity();
-        orderStatusEntity.setId(requestDto.getId());
         orderStatusEntity.setName(requestDto.getName());
         return orderStatusEntity;
     }

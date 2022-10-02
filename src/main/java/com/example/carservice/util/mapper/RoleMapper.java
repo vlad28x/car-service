@@ -12,7 +12,6 @@ public final class RoleMapper {
 
     public static RoleEntity roleRequestDtoToRoleEntity(RoleRequestDto requestDto) {
         RoleEntity roleEntity = new RoleEntity();
-        roleEntity.setId(requestDto.getId());
         roleEntity.setName(requestDto.getName());
         return roleEntity;
     }
