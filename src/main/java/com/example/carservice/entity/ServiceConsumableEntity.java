@@ -4,10 +4,12 @@ import javax.persistence.*;
 
 
 @Entity
+@Table(name = "service_consumable")
 public class ServiceConsumableEntity {
 
     @EmbeddedId
     private ServiceConsumableId id;
+    @Column(name = "count")
     private Long count;
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("serviceId")

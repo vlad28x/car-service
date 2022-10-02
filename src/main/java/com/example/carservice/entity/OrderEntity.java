@@ -8,6 +8,7 @@ import java.util.List;
 @Table(name = "orders")
 public class OrderEntity extends BaseEntity<Long> {
 
+    @Column(name = "price")
     private Long price;
     @ManyToOne
     @JoinColumn(name = "status_id")

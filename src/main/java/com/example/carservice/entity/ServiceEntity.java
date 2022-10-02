@@ -5,9 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "service")
 public class ServiceEntity extends BaseEntity<Long> {
 
+    @Column(name = "name")
     private String name;
+    @Column(name = "price")
     private Long price;
     @ManyToOne
     @JoinColumn(name = "car_service_id")
