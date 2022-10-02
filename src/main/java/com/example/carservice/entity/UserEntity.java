@@ -8,9 +8,13 @@ import java.util.List;
 @Table(name = "users")
 public class UserEntity extends BaseEntity<Long> {
 
+    @Column(name = "username")
     private String username;
+    @Column(name = "password")
     private String password;
+    @Column(name = "email")
     private String email;
+    @Column(name = "salary")
     private Long salary;
     @ManyToOne
     @JoinColumn(name = "role_id")
