@@ -27,4 +27,5 @@ public final class ConsumableMapper {
         consumableResponseDto.setQuantity(consumableResponseDto.getQuantity());
         return consumableResponseDto;
     }
+
 }

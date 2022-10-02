@@ -1,5 +1,7 @@
 package com.example.carservice.dto;
 
+import java.util.Objects;
+
 public class ServiceConsumableResponseDto {
 
     private ServiceResponseDto service;
@@ -37,21 +39,13 @@ public class ServiceConsumableResponseDto {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         ServiceConsumableResponseDto that = (ServiceConsumableResponseDto) o;
-
-        if (service != null ? !service.equals(that.service) : that.service != null)
-            return false;
-        if (consumable != null ? !consumable.equals(that.consumable) : that.consumable != null)
-            return false;
-        return count != null ? count.equals(that.count) : that.count == null;
+        return Objects.equals(service, that.service) && Objects.equals(consumable, that.consumable) && Objects.equals(count, that.count);
     }
 
     @Override
     public int hashCode() {
-        int result = service != null ? service.hashCode() : 0;
-        result = 31 * result + (consumable != null ? consumable.hashCode() : 0);
-        result = 31 * result + (count != null ? count.hashCode() : 0);
-        return result;
+        return Objects.hash(service, consumable, count);
     }
+
 }

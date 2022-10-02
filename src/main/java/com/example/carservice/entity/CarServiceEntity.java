@@ -54,7 +54,6 @@ public class CarServiceEntity extends BaseEntity<Long> {
         this.services = services;
     }
 
-
     @Override
     public String toString() {
         return "CarServiceEntity{" +

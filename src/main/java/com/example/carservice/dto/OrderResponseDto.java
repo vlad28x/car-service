@@ -1,6 +1,7 @@
 package com.example.carservice.dto;
 
 import java.util.List;
+import java.util.Objects;
 
 public class OrderResponseDto {
 
@@ -75,32 +76,13 @@ public class OrderResponseDto {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         OrderResponseDto that = (OrderResponseDto) o;
-
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (price != null ? !price.equals(that.price) : that.price != null)
-            return false;
-        if (status != null ? !status.equals(that.status) : that.status != null)
-            return false;
-        if (services != null ? !services.equals(that.services) : that.services != null)
-            return false;
-        if (worker != null ? !worker.equals(that.worker) : that.worker != null)
-            return false;
-        if (manager != null ? !manager.equals(that.manager) : that.manager != null)
-            return false;
-        return customer != null ? customer.equals(that.customer) : that.customer == null;
+        return Objects.equals(id, that.id) && Objects.equals(price, that.price) && Objects.equals(status, that.status) && Objects.equals(services, that.services) && Objects.equals(worker, that.worker) && Objects.equals(manager, that.manager) && Objects.equals(customer, that.customer);
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (price != null ? price.hashCode() : 0);
-        result = 31 * result + (status != null ? status.hashCode() : 0);
-        result = 31 * result + (services != null ? services.hashCode() : 0);
-        result = 31 * result + (worker != null ? worker.hashCode() : 0);
-        result = 31 * result + (manager != null ? manager.hashCode() : 0);
-        result = 31 * result + (customer != null ? customer.hashCode() : 0);
-        return result;
+        return Objects.hash(id, price, status, services, worker, manager, customer);
     }
+
 }
