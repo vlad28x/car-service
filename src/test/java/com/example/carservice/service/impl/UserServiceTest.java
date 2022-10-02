@@ -27,8 +27,10 @@ class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
     @InjectMocks
     private UserServiceImpl userService;
+
     private UserRequestDto userRequestDto;
 
     @BeforeEach
@@ -101,10 +103,9 @@ class UserServiceTest {
 
     @Test
     void canDeleteUser() {
-        long id = 10;
+        userService.delete(10L);
 
-        userService.delete(id);
-
-        Mockito.verify(userRepository).deleteById(id);
+        Mockito.verify(userRepository).deleteById(10L);
     }
+
 }
