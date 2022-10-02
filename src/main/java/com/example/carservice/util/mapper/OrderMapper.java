@@ -2,7 +2,9 @@ package com.example.carservice.util.mapper;
 
 import com.example.carservice.dto.OrderRequestDto;
 import com.example.carservice.dto.OrderResponseDto;
-import com.example.carservice.entity.*;
+import com.example.carservice.entity.OrderEntity;
+import com.example.carservice.entity.ServiceEntity;
+import com.example.carservice.entity.UserEntity;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -18,8 +20,10 @@ public final class OrderMapper {
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setPrice(orderRequestDto.getPrice());
         if (orderRequestDto.getServicesId() != null)
-            orderEntity.setServices(new ArrayList<>(orderRequestDto.getServicesId()
-                    .stream().map(ServiceEntity::new).collect(Collectors.toList())));
+            orderEntity.setServices(
+                    new ArrayList<>(orderRequestDto.getServicesId().stream()
+                            .map(ServiceEntity::new).collect(Collectors.toList()))
+            );
         if (orderRequestDto.getWorkerId() != null)
             orderEntity.setWorker(new UserEntity(orderRequestDto.getWorkerId()));
         if (orderRequestDto.getManagerId() != null)
@@ -34,12 +38,14 @@ public final class OrderMapper {
         orderResponseDto.setId(orderEntity.getId());
         orderResponseDto.setPrice(orderResponseDto.getPrice());
         if (orderEntity.getOrderStatus() != null)
-            orderResponseDto.setStatus(OrderStatusMapper.orderStatusEntityToOrderStatusResponseDto(orderEntity
-                    .getOrderStatus()));
+            orderResponseDto.setStatus(
+                    OrderStatusMapper.orderStatusEntityToOrderStatusResponseDto(orderEntity.getOrderStatus())
+            );
         if (orderEntity.getServices() != null)
-            orderResponseDto.setServices(new ArrayList<>(orderEntity.getServices().stream()
-                    .map(ServiceMapper::serviceEntityToOrderResponseDto)
-                    .collect(Collectors.toList())));
+            orderResponseDto.setServices(
+                    new ArrayList<>(orderEntity.getServices().stream()
+                            .map(ServiceMapper::serviceEntityToOrderResponseDto).collect(Collectors.toList()))
+            );
         if (orderEntity.getWorker() != null)
             orderResponseDto.setUser(UserMapper.userEntityToUserResponseDto(orderEntity.getWorker()));
         if (orderEntity.getManager() != null)

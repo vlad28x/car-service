@@ -7,11 +7,14 @@ import com.example.carservice.exception.NotFoundException;
 import com.example.carservice.repositories.UserRepository;
 import com.example.carservice.service.UserService;
 import com.example.carservice.util.mapper.UserMapper;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class UserServiceImpl implements UserService {
+
     private final UserRepository userRepository;
 
     public UserServiceImpl(UserRepository userRepository) {
@@ -41,7 +44,9 @@ public class UserServiceImpl implements UserService {
     public UserResponseDto update(Long id, UserRequestDto newUser) {
         UserEntity user = UserMapper.userRequestDtoToUserEntity(newUser);
         user.setId(id);
-        return UserMapper.userEntityToUserResponseDto(userRepository.save(UserMapper.userRequestDtoToUserEntity(newUser)));
+        return UserMapper.userEntityToUserResponseDto(
+                userRepository.save(UserMapper.userRequestDtoToUserEntity(newUser))
+        );
     }
 
     @Override

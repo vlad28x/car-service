@@ -12,11 +12,11 @@ public final class ConsumableMapper {
     }
 
     public static ConsumableEntity consumableRequestDtoToConsumableEntity(ConsumableRequestDto consumableRequestDto) {
-       ConsumableEntity consumableEntity = new ConsumableEntity();
-       consumableEntity.setName(consumableRequestDto.getName());
-       consumableEntity.setPrice(consumableRequestDto.getPrice());
-       consumableEntity.setQuantity(consumableRequestDto.getQuantity());
-       return consumableEntity;
+        ConsumableEntity consumableEntity = new ConsumableEntity();
+        consumableEntity.setName(consumableRequestDto.getName());
+        consumableEntity.setPrice(consumableRequestDto.getPrice());
+        consumableEntity.setQuantity(consumableRequestDto.getQuantity());
+        return consumableEntity;
     }
 
     public static ConsumableResponseDto consumableEntityToConsumableResponseDto(ConsumableEntity consumableEntity) {

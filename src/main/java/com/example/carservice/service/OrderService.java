@@ -1,20 +1,7 @@
 package com.example.carservice.service;
 
-import com.example.carservice.dto.RoleRequestDto;
-import com.example.carservice.dto.RoleResponseDto;
+import com.example.carservice.dto.OrderRequestDto;
+import com.example.carservice.dto.OrderResponseDto;
 
-import java.util.List;
-
-public interface OrderService {
-
-    RoleResponseDto getById(Long id);
-
-    List<RoleResponseDto> getAll();
-
-    RoleResponseDto create(RoleRequestDto newRole);
-
-    RoleResponseDto update(Long id, RoleRequestDto newRole);
-
-    void delete(Long id);
-
+public interface OrderService extends Service<OrderResponseDto, OrderRequestDto, Long> {
 }
