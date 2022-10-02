@@ -1,15 +1,21 @@
 package com.example.carservice.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "consumable")
 public class ConsumableEntity extends BaseEntity<Long> {
 
+    @Column(name = "name")
     private String name;
+    @Column(name = "price")
     private Long price;
+    @Column(name = "quantity")
     private Long quantity;
     @OneToMany(mappedBy = "consumable")
     private List<ServiceConsumableEntity> serviceConsumables = new ArrayList<>();
