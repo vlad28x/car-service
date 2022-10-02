@@ -8,6 +8,7 @@ public final class CarServiceMapper {
     private CarServiceMapper() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
+
     public static CarServiceEntity carServiceRequestDtoToCarService(CarServiceRequestDto carServiceRequestDto) {
         CarServiceEntity carServiceEntity = new CarServiceEntity();
         carServiceEntity.setName(carServiceRequestDto.getName());
@@ -15,7 +16,7 @@ public final class CarServiceMapper {
         return carServiceEntity;
     }
 
-    public static CarServiceResponseDto carServiceEntityToСarServiceResponseDto(CarServiceEntity carServiceEntity) {
+    public static CarServiceResponseDto carServiceEntityToCarServiceResponseDto(CarServiceEntity carServiceEntity) {
         CarServiceResponseDto carServiceResponseDto = new CarServiceResponseDto();
         carServiceResponseDto.setId(carServiceEntity.getId());
         carServiceResponseDto.setName(carServiceEntity.getName());
