@@ -31,4 +31,5 @@ public final class ServiceMapper {
             serviceResponseDto.setCarServiceId(serviceEntity.getCarService().getId());
         return serviceResponseDto;
     }
+
 }

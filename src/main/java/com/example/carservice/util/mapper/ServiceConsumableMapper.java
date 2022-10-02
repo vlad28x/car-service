@@ -12,10 +12,6 @@ public final class ServiceConsumableMapper {
 
     public static ServiceConsumableEntity ServiceConsumableRequestDtoToServiceConsumableEntity(ServiceConsumableRequestDto serviceConsumableRequestDto) {
         ServiceConsumableEntity serviceConsumableEntity = new ServiceConsumableEntity();
-        if (serviceConsumableRequestDto.getServiceId() != null)
-            serviceConsumableEntity.setService(new ServiceEntity(serviceConsumableRequestDto.getServiceId()));
-        if (serviceConsumableRequestDto.getConsumableId() != null)
-            serviceConsumableEntity.setConsumable(new ConsumableEntity(serviceConsumableRequestDto.getConsumableId()));
         serviceConsumableEntity.setCount(serviceConsumableRequestDto.getCount());
         return serviceConsumableEntity;
     }

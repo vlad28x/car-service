@@ -1,5 +1,7 @@
 package com.example.carservice.dto;
 
+import java.util.Objects;
+
 public class ConsumableResponseDto {
 
     private Long id;
@@ -46,23 +48,13 @@ public class ConsumableResponseDto {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         ConsumableResponseDto that = (ConsumableResponseDto) o;
-
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null)
-            return false;
-        if (price != null ? !price.equals(that.price) : that.price != null)
-            return false;
-        return quantity != null ? quantity.equals(that.quantity) : that.quantity == null;
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(price, that.price) && Objects.equals(quantity, that.quantity);
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (price != null ? price.hashCode() : 0);
-        result = 31 * result + (quantity != null ? quantity.hashCode() : 0);
-        return result;
+        return Objects.hash(id, name, price, quantity);
     }
+
 }
