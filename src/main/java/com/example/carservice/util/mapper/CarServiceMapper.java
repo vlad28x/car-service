@@ -16,7 +16,6 @@ public final class CarServiceMapper {
     }
 
     public static CarServiceResponseDto carServiceEntityToСarServiceResponseDto(CarServiceEntity carServiceEntity) {
-
         CarServiceResponseDto carServiceResponseDto = new CarServiceResponseDto();
         carServiceResponseDto.setId(carServiceEntity.getId());
         carServiceResponseDto.setName(carServiceEntity.getName());
