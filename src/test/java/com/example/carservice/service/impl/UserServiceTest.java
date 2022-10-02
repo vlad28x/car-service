@@ -29,7 +29,7 @@ class UserServiceTest {
     private UserRepository userRepository;
     @InjectMocks
     private UserServiceImpl userService;
-    UserRequestDto userRequestDto;
+    private UserRequestDto userRequestDto;
 
     @BeforeEach
     void setUp() {
@@ -43,7 +43,7 @@ class UserServiceTest {
     }
 
     @Test
-    void canGetById() {
+    void canGetUserById() {
         UserEntity userEntity = UserMapper.userRequestDtoToUserEntity(userRequestDto);
         userEntity.setId(10L);
 
@@ -54,7 +54,7 @@ class UserServiceTest {
     }
 
     @Test
-    void willThrowWhenGetByIdNotFound() {
+    void willThrowWhenGetUserByIdNotFound() {
         Mockito.when(userRepository.findById(Mockito.any(Long.class))).thenReturn(Optional.empty());
         assertThrows(NotFoundException.class, () -> userService.getById(10L));
     }
@@ -85,7 +85,7 @@ class UserServiceTest {
     }
 
     @Test
-    void update() {
+    void canUpdateUser() {
         UserEntity userEntity = UserMapper.userRequestDtoToUserEntity(userRequestDto);
 
         Mockito.when(userRepository.save(Mockito.any(UserEntity.class))).thenReturn(userEntity);
