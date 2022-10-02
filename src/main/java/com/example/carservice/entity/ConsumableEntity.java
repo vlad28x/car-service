@@ -17,6 +17,10 @@ public class ConsumableEntity extends BaseEntity<Long> {
     public ConsumableEntity() {
     }
 
+    public ConsumableEntity(Long id) {
+        super(id);
+    }
+
     public String getName() {
         return name;
     }

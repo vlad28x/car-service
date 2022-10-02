@@ -2,7 +2,6 @@ package com.example.carservice.dto;
 
 public class UserRequestDto {
 
-    private Long id;
     private String username;
     private String password;
     private String email;
@@ -11,14 +10,6 @@ public class UserRequestDto {
     private Long carServiceId;
 
     public UserRequestDto() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getUsername() {

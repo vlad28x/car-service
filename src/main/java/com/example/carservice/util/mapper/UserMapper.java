@@ -14,12 +14,12 @@ public final class UserMapper {
 
     public static UserEntity userRequestDtoToUserEntity(UserRequestDto userRequestDto) {
         UserEntity userEntity = new UserEntity();
-        userEntity.setId(userRequestDto.getId());
         userEntity.setUsername(userRequestDto.getUsername());
         userEntity.setPassword(userRequestDto.getPassword());
         userEntity.setEmail(userRequestDto.getEmail());
         userEntity.setSalary(userRequestDto.getSalary());
-        if (userRequestDto.getRoleId() != null) userEntity.setRole(new RoleEntity(userRequestDto.getId()));
+        if (userRequestDto.getRoleId() != null)
+            userEntity.setRole(new RoleEntity(userRequestDto.getRoleId()));
         if (userRequestDto.getCarServiceId() != null)
             userEntity.setCarService(new CarServiceEntity(userRequestDto.getCarServiceId()));
         return userEntity;
@@ -31,8 +31,10 @@ public final class UserMapper {
         responseDto.setUsername(userEntity.getUsername());
         responseDto.setEmail(userEntity.getEmail());
         responseDto.setSalary(userEntity.getSalary());
-        responseDto.setRole(RoleMapper.roleEntityToRoleResponseDto(userEntity.getRole()));
-        responseDto.setCarServiceId(userEntity.getCarService().getId());
+        if (userEntity.getRole() != null)
+            responseDto.setRole(RoleMapper.roleEntityToRoleResponseDto(userEntity.getRole()));
+        if (userEntity.getCarService() != null)
+            responseDto.setCarServiceId(userEntity.getCarService().getId());
         return responseDto;
     }
 
