@@ -2,6 +2,8 @@ package com.example.carservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.util.Objects;
+
 public class UserResponseDto {
 
     private Long id;
@@ -67,29 +69,13 @@ public class UserResponseDto {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         UserResponseDto that = (UserResponseDto) o;
-
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (username != null ? !username.equals(that.username) : that.username != null)
-            return false;
-        if (email != null ? !email.equals(that.email) : that.email != null)
-            return false;
-        if (salary != null ? !salary.equals(that.salary) : that.salary != null)
-            return false;
-        if (role != null ? !role.equals(that.role) : that.role != null)
-            return false;
-        return carServiceId != null ? carServiceId.equals(that.carServiceId) : that.carServiceId == null;
+        return Objects.equals(id, that.id) && Objects.equals(username, that.username) && Objects.equals(email, that.email) && Objects.equals(salary, that.salary) && Objects.equals(role, that.role) && Objects.equals(carServiceId, that.carServiceId);
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (username != null ? username.hashCode() : 0);
-        result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (salary != null ? salary.hashCode() : 0);
-        result = 31 * result + (role != null ? role.hashCode() : 0);
-        result = 31 * result + (carServiceId != null ? carServiceId.hashCode() : 0);
-        return result;
+        return Objects.hash(id, username, email, salary, role, carServiceId);
     }
+
 }
