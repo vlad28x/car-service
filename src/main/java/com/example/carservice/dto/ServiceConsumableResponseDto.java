@@ -33,4 +33,25 @@ public class ServiceConsumableResponseDto {
         this.count = count;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ServiceConsumableResponseDto that = (ServiceConsumableResponseDto) o;
+
+        if (service != null ? !service.equals(that.service) : that.service != null)
+            return false;
+        if (consumable != null ? !consumable.equals(that.consumable) : that.consumable != null)
+            return false;
+        return count != null ? count.equals(that.count) : that.count == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = service != null ? service.hashCode() : 0;
+        result = 31 * result + (consumable != null ? consumable.hashCode() : 0);
+        result = 31 * result + (count != null ? count.hashCode() : 0);
+        return result;
+    }
 }

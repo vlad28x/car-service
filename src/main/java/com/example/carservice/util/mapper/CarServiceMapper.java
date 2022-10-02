@@ -11,7 +11,6 @@ public final class CarServiceMapper {
     }
     public static CarServiceEntity carServiceRequestDtoToCarService(CarServiceRequestDto carServiceRequestDto) {
         CarServiceEntity carServiceEntity = new CarServiceEntity();
-        carServiceEntity.setId(carServiceRequestDto.getId());
         carServiceEntity.setName(carServiceRequestDto.getName());
         carServiceEntity.setBudget(carServiceRequestDto.getBudget());
         return carServiceEntity;
