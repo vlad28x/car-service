@@ -1,6 +1,7 @@
 package com.example.carservice.entity;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 
 @Entity
@@ -62,4 +63,16 @@ public class ServiceConsumableEntity {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ServiceConsumableEntity that = (ServiceConsumableEntity) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
