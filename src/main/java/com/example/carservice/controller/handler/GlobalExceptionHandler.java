@@ -43,15 +43,15 @@ public class GlobalExceptionHandler {
 
     private static class ResponseError {
 
-        private final Instant instant = Instant.now();
+        private final Instant time = Instant.now();
         private String message;
 
         public ResponseError(String message) {
             this.message = message;
         }
 
-        public Instant getInstant() {
-            return instant;
+        public Instant getTime() {
+            return time;
         }
 
         public String getMessage() {
