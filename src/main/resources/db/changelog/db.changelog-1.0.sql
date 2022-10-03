@@ -82,33 +82,37 @@ create table service_orders
 
 --changeset Anastasia7868:000009-insert-car_service
 insert into car_service(name, budget)
-values ('Fixes', 10000000);
+values ('FIXES', 10000000);
 
 --changeset Anastasia7868:000010-insert-role
 insert into role(name)
-values ('manager'),
-       ('worker'),
-       ('customer'),
-       ('admin');
+values ('MANAGER'),
+       ('WORKER'),
+       ('CUSTOMER'),
+       ('ADMIN');
 
 --changeset Anastasia7868:000011-insert-users
 insert into users(username, password, email, salary, role_id, car_service_id)
-values ('username1', 'password1', 'user1@mail.ru', null, 3, 1),
-       ('username2', 'password2', 'user2@mail.ru', 150000, 1, 1),
-       ('username3', 'password3', 'user3@mail.ru', 60000, 2, 1),
-       ('username4', 'password4', 'user4@mail.ru', 50000, 4, 1),
-       ('username5', 'password5', 'user5@mail.ru', null, 3, 1);
+values ('Customer1', 'password1', 'user1@mail.ru', null, 3, 1),
+       ('Manager1', 'password2', 'user2@mail.ru', 150000, 1, 1),
+       ('Worker1', 'password3', 'user3@mail.ru', 60000, 2, 1),
+       ('Admin', 'password4', 'user4@mail.ru', 50000, 4, 1),
+       ('Customer2', 'password5', 'user5@mail.ru', null, 3, 1),
+       ('Worker2', 'password6', 'user6@mail.ru', 50000, 2, 1),
+       ('Worker3', 'password7', 'user7@mail.ru', 70000, 2, 1),
+       ('Customer3', 'password8', 'user8@mail.ru', null, 3, 1),
+       ('Manager2', 'password9', 'user9@mail.ru', 150000, 1, 1);
 
 --changeset Anastasia7868:000012-insert-service
 insert into service(name, price, car_service_id)
-values ('carwash', 300, 1),
-       ('tire fitting', 3500, 1),
-       ('car repair', 20000, 1);
+values ('carwash', 1200, 1),
+       ('tire fitting', 9600, 1),
+       ('car inspection', 2700, 1);
 
 --changeset Anastasia7868:000013-insert-consumable
 insert into consumable(name, price, quantity)
 values ('rags', 100, 1000),
-       ('tires', 6000, 200),
+       ('tires', 2000, 200),
        ('gloves', 150, 2000),
        ('detergents', 700, 300),
        ('screwdrivers', 400, 500);
@@ -128,22 +132,25 @@ values (1, 1, 2),
 
 --changeset Anastasia7868:000015-insert-order_status
 insert into order_status(name)
-values ('pending'),
-       ('assigned'),
-       ('canceled'),
-       ('in progress'),
-       ('done'),
-       ('paid');
+values ('PENDING'),
+       ('ASSIGNED'),
+       ('CANCELED'),
+       ('IN PROGRESS'),
+       ('DONE'),
+       ('PAID');
 
 --changeset Anastasia7868:000016-insert-orders
 insert into orders(price, status_id, worker_id, manager_id, customer_id)
-values (3500, 4, 3, 2, 1),
-       (300, 5, 3, 2, 5),
-       (20000, 6, 3, 2, 1);
+values (19200, 4, 3, 2, 1),
+       (2400, 5, 6, 9, 5),
+       (5400, 6, 7, 2, 1),
+       (7800, 2, 3, 9, 8);
 
 --changeset Anastasia7868:000017-insert-service_orders
 insert into service_orders(service_id, orders_id)
 values (2, 1),
        (1, 2),
-       (3, 3);
+       (3, 3),
+       (2, 4),
+       (3, 4);
 
