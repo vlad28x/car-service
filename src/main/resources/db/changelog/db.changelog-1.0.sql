@@ -93,15 +93,15 @@ values ('MANAGER'),
 
 --changeset Anastasia7868:000011-insert-users
 insert into users(username, password, email, salary, role_id, car_service_id)
-values ('Customer1', 'password1', 'сustomer@mail.ru', null, 3, 1),
-       ('Manager1', 'password2', 'manager1@mail.ru', 150000, 1, 1),
-       ('Worker1', 'password3', 'worker1@mail.ru', 60000, 2, 1),
-       ('Admin', 'password4', 'admin@mail.ru', null, 4, 1),
-       ('Customer2', 'password5', 'customer2@mail.ru', null, 3, 1),
-       ('Worker2', 'password6', 'worker2@mail.ru', 50000, 2, 1),
-       ('Worker3', 'password7', 'worker3@mail.ru', 70000, 2, 1),
-       ('Customer3', 'password8', 'customer3@mail.ru', null, 3, 1),
-       ('Manager2', 'password9', 'manager2@mail.ru', 150000, 1, 1);
+values ('сustomer1', 'сustomer1', 'сustomer@mail.ru', null, 3, 1),
+       ('manager1', 'manager1', 'manager1@mail.ru', 150000, 1, 1),
+       ('worker1', 'worker1', 'worker1@mail.ru', 60000, 2, 1),
+       ('admin', 'admin', 'admin@mail.ru', null, 4, 1),
+       ('customer2', 'customer2', 'customer2@mail.ru', null, 3, 1),
+       ('worker2', 'worker2', 'worker2@mail.ru', 50000, 2, 1),
+       ('worker3', 'worker3', 'worker3@mail.ru', 70000, 2, 1),
+       ('сustomer3', 'сustomer3', 'customer3@mail.ru', null, 3, 1),
+       ('manager2', 'manager2', 'manager2@mail.ru', 150000, 1, 1);
 
 --changeset Anastasia7868:000012-insert-service
 insert into service(name, price, car_service_id)
