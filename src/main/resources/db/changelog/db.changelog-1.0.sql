@@ -93,15 +93,15 @@ values ('MANAGER'),
 
 --changeset Anastasia7868:000011-insert-users
 insert into users(username, password, email, salary, role_id, car_service_id)
-values ('Customer1', 'password1', 'user1@mail.ru', null, 3, 1),
-       ('Manager1', 'password2', 'user2@mail.ru', 150000, 1, 1),
-       ('Worker1', 'password3', 'user3@mail.ru', 60000, 2, 1),
-       ('Admin', 'password4', 'user4@mail.ru', 50000, 4, 1),
-       ('Customer2', 'password5', 'user5@mail.ru', null, 3, 1),
-       ('Worker2', 'password6', 'user6@mail.ru', 50000, 2, 1),
-       ('Worker3', 'password7', 'user7@mail.ru', 70000, 2, 1),
-       ('Customer3', 'password8', 'user8@mail.ru', null, 3, 1),
-       ('Manager2', 'password9', 'user9@mail.ru', 150000, 1, 1);
+values ('Customer1', 'password1', 'сustomer@mail.ru', null, 3, 1),
+       ('Manager1', 'password2', 'manager1@mail.ru', 150000, 1, 1),
+       ('Worker1', 'password3', 'worker1@mail.ru', 60000, 2, 1),
+       ('Admin', 'password4', 'admin@mail.ru', null, 4, 1),
+       ('Customer2', 'password5', 'customer2@mail.ru', null, 3, 1),
+       ('Worker2', 'password6', 'worker2@mail.ru', 50000, 2, 1),
+       ('Worker3', 'password7', 'worker3@mail.ru', 70000, 2, 1),
+       ('Customer3', 'password8', 'customer3@mail.ru', null, 3, 1),
+       ('Manager2', 'password9', 'manager2@mail.ru', 150000, 1, 1);
 
 --changeset Anastasia7868:000012-insert-service
 insert into service(name, price, car_service_id)
@@ -111,11 +111,11 @@ values ('carwash', 1200, 1),
 
 --changeset Anastasia7868:000013-insert-consumable
 insert into consumable(name, price, quantity)
-values ('rags', 100, 1000),
-       ('tires', 2000, 200),
-       ('gloves', 150, 2000),
-       ('detergents', 700, 300),
-       ('screwdrivers', 400, 500);
+values ('rags', 100, 100),
+       ('tires', 2000, 50),
+       ('gloves', 150, 200),
+       ('detergents', 700, 30),
+       ('screwdrivers', 400, 50);
 
 --changeset Anastasia7868:000014-insert-service_consumable
 insert into service_consumable(service_id, consumable_id, count)
