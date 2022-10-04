@@ -49,7 +49,7 @@ public class CarServiceServiceImpl implements CarServiceService {
         CarServiceEntity carService = CarServiceMapper.carServiceRequestDtoToCarService(newCarService);
         carService.setId(id);
         return CarServiceMapper.carServiceEntityToCarServiceResponseDto(
-                carServiceRepository.save(CarServiceMapper.carServiceRequestDtoToCarService(newCarService))
+                carServiceRepository.save(carService)
         );
     }
 
@@ -57,4 +57,5 @@ public class CarServiceServiceImpl implements CarServiceService {
     public void delete(Long id) {
         carServiceRepository.deleteById(id);
     }
+
 }

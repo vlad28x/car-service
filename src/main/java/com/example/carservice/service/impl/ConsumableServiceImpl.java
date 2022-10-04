@@ -49,7 +49,7 @@ public class ConsumableServiceImpl implements ConsumableService {
         ConsumableEntity consumable = ConsumableMapper.consumableRequestDtoToConsumableEntity(newConsumable);
         consumable.setId(id);
         return ConsumableMapper.consumableEntityToConsumableResponseDto(
-                consumableRepository.save(ConsumableMapper.consumableRequestDtoToConsumableEntity(newConsumable))
+                consumableRepository.save(consumable)
         );
     }
 

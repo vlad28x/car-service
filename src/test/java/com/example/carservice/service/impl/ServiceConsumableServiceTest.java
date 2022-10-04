@@ -101,6 +101,9 @@ class ServiceConsumableServiceTest {
     void canUpdateServiceConsumable() {
         ServiceConsumableEntity serviceConsumableEntity = ServiceConsumableMapper
                 .serviceConsumableRequestDtoToServiceConsumableEntity(serviceConsumableRequestDto);
+
+        serviceConsumableEntity.setId(serviceConsumableId);
+
         Mockito.when(serviceConsumableRepository.save(Mockito.any(ServiceConsumableEntity.class)))
                 .thenReturn(serviceConsumableEntity);
 

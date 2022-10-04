@@ -89,7 +89,7 @@ class CarServiceServiceTest {
     void canUpdateCarService() {
         CarServiceEntity carServiceEntity = CarServiceMapper
                 .carServiceRequestDtoToCarService(carServiceRequestDto);
-
+        carServiceEntity.setId(1L);
         Mockito.when(carServiceRepository.save(Mockito.any(CarServiceEntity.class))).thenReturn(carServiceEntity);
 
         CarServiceResponseDto expected = CarServiceMapper

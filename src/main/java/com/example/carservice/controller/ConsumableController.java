@@ -10,12 +10,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/consumable")
+@RequestMapping("/consumables")
 public class ConsumableController {
 
     private final ConsumableService consumableService;
 
-    @Autowired
     public ConsumableController(ConsumableService consumableService) {
         this.consumableService = consumableService;
     }

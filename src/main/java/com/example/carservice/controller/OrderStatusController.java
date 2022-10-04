@@ -3,19 +3,17 @@ package com.example.carservice.controller;
 import com.example.carservice.dto.OrderStatusRequestDto;
 import com.example.carservice.dto.OrderStatusResponseDto;
 import com.example.carservice.service.OrderStatusService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/order_status")
+@RequestMapping("/order/statuses")
 public class OrderStatusController {
 
     private final OrderStatusService orderStatusService;
 
-    @Autowired
     public OrderStatusController(OrderStatusService orderStatusService) {
         this.orderStatusService = orderStatusService;
     }

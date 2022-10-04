@@ -90,6 +90,7 @@ class ConsumableServiceTest {
     void canUpdateConsumable() {
         ConsumableEntity consumableEntity = ConsumableMapper
                 .consumableRequestDtoToConsumableEntity(consumableRequestDto);
+        consumableEntity.setId(8L);
         Mockito.when(consumableRepository.save(Mockito.any(ConsumableEntity.class))).thenReturn(consumableEntity);
 
         ConsumableResponseDto expected = ConsumableMapper

@@ -48,9 +48,7 @@ public class UserServiceImpl implements UserService {
     public UserResponseDto update(Long id, UserRequestDto newUser) {
         UserEntity user = UserMapper.userRequestDtoToUserEntity(newUser);
         user.setId(id);
-        return UserMapper.userEntityToUserResponseDto(
-                userRepository.save(UserMapper.userRequestDtoToUserEntity(newUser))
-        );
+        return UserMapper.userEntityToUserResponseDto(userRepository.save(user));
     }
 
     @Override

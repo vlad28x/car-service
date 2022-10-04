@@ -49,7 +49,7 @@ public class ServiceServiceImpl implements ServiceService {
         ServiceEntity service = ServiceMapper.serviceRequestDtoToServiceEntity(newService);
         service.setId(id);
         return ServiceMapper.serviceEntityToOrderResponseDto(
-                serviceRepository.save(ServiceMapper.serviceRequestDtoToServiceEntity(newService))
+                serviceRepository.save(service)
         );
     }
 
