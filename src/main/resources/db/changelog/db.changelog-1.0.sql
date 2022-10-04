@@ -5,7 +5,7 @@ create table car_service
 (
     id     bigserial primary key,
     name   varchar(255) not null,
-    budget bigint    not null
+    budget bigint       not null
 );
 
 --changeset vlad28x:000001-create-role-table
@@ -32,7 +32,7 @@ create table service
 (
     id             bigserial primary key,
     name           varchar(255) not null unique,
-    price          bigint    not null,
+    price          bigint       not null,
     car_service_id bigint references car_service (id)
 );
 
@@ -41,8 +41,8 @@ create table consumable
 (
     id       bigserial primary key,
     name     varchar(255) not null unique,
-    price    bigint    not null,
-    quantity bigint    not null
+    price    bigint       not null,
+    quantity bigint       not null
 );
 
 --changeset vlad28x:000005-create-service_consumable-table
