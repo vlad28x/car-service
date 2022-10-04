@@ -19,6 +19,10 @@ public class OrderStatusEntity extends BaseEntity<Long> {
     public OrderStatusEntity() {
     }
 
+    public OrderStatusEntity(Long id) {
+        super(id);
+    }
+
     public String getName() {
         return name;
     }

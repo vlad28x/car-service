@@ -3,6 +3,7 @@ package com.example.carservice.util.mapper;
 import com.example.carservice.dto.OrderRequestDto;
 import com.example.carservice.dto.OrderResponseDto;
 import com.example.carservice.entity.OrderEntity;
+import com.example.carservice.entity.OrderStatusEntity;
 import com.example.carservice.entity.ServiceEntity;
 import com.example.carservice.entity.UserEntity;
 
@@ -19,6 +20,9 @@ public final class OrderMapper {
     public static OrderEntity orderRequestDtoToOrderEntity(OrderRequestDto orderRequestDto) {
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setPrice(orderRequestDto.getPrice());
+        if (orderRequestDto.getStatusId() != null) {
+            orderEntity.setOrderStatus(new OrderStatusEntity(orderRequestDto.getStatusId()));
+        }
         if (orderRequestDto.getServicesId() != null)
             orderEntity.setServices(
                     new ArrayList<>(orderRequestDto.getServicesId().stream()
