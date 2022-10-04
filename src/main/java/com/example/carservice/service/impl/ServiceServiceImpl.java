@@ -8,11 +8,13 @@ import com.example.carservice.repositories.ServiceRepository;
 import com.example.carservice.service.ServiceService;
 import com.example.carservice.util.mapper.ServiceMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class ServiceServiceImpl implements ServiceService {
 
     private final ServiceRepository serviceRepository;
@@ -21,12 +23,14 @@ public class ServiceServiceImpl implements ServiceService {
         this.serviceRepository = serviceRepository;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public ServiceResponseDto getById(Long id) {
         return ServiceMapper.serviceEntityToOrderResponseDto(serviceRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(String.format("Service with ID %s not found", id))));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<ServiceResponseDto> getAll() {
         return serviceRepository.findAll().stream()

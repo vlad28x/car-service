@@ -8,11 +8,13 @@ import com.example.carservice.repositories.RoleRepository;
 import com.example.carservice.service.RoleService;
 import com.example.carservice.util.mapper.RoleMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class RoleServiceImpl implements RoleService {
 
     private final RoleRepository roleRepository;
@@ -21,12 +23,14 @@ public class RoleServiceImpl implements RoleService {
         this.roleRepository = roleRepository;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public RoleResponseDto getById(Long id) {
         return RoleMapper.roleEntityToRoleResponseDto(roleRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(String.format("Role with ID %s not found", id))));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<RoleResponseDto> getAll() {
         return roleRepository.findAll().stream()
