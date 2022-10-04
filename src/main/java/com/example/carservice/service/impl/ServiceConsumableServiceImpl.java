@@ -9,12 +9,14 @@ import com.example.carservice.repositories.ServiceConsumableRepository;
 import com.example.carservice.service.ServiceConsumableService;
 import com.example.carservice.util.mapper.ServiceConsumableMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 
 @Service
+@Transactional
 public class ServiceConsumableServiceImpl implements ServiceConsumableService {
 
     private final ServiceConsumableRepository serviceConsumableRepository;
@@ -23,13 +25,16 @@ public class ServiceConsumableServiceImpl implements ServiceConsumableService {
         this.serviceConsumableRepository = serviceConsumableRepository;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public ServiceConsumableResponseDto getById(ServiceConsumableId id) {
         return ServiceConsumableMapper.userEntityToServiceConsumableResponseDto(
-                serviceConsumableRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("ServiceConsumable with ID %s not found", id)))
+                serviceConsumableRepository.findById(id).orElseThrow(() ->
+                        new NotFoundException(String.format("ServiceConsumable with ID %s not found", id)))
         );
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<ServiceConsumableResponseDto> getAll() {
         return serviceConsumableRepository

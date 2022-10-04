@@ -8,11 +8,13 @@ import com.example.carservice.repositories.OrderRepository;
 import com.example.carservice.service.OrderService;
 import com.example.carservice.util.mapper.OrderMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
@@ -21,12 +23,14 @@ public class OrderServiceImpl implements OrderService {
         this.orderRepository = orderRepository;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public OrderResponseDto getById(Long id) {
         return OrderMapper.orderEntityToOrderResponseDto(orderRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(String.format("Order with ID %s not found", id))));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<OrderResponseDto> getAll() {
         return orderRepository.findAll().stream()

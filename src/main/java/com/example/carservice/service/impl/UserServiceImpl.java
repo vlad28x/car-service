@@ -8,11 +8,13 @@ import com.example.carservice.repositories.UserRepository;
 import com.example.carservice.service.UserService;
 import com.example.carservice.util.mapper.UserMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -21,12 +23,14 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public UserResponseDto getById(Long id) {
         return UserMapper.userEntityToUserResponseDto(userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(String.format("User with ID %s not found", id))));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<UserResponseDto> getAll() {
         return userRepository.findAll().stream()

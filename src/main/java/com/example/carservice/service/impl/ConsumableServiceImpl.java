@@ -8,11 +8,13 @@ import com.example.carservice.repositories.ConsumableRepository;
 import com.example.carservice.service.ConsumableService;
 import com.example.carservice.util.mapper.ConsumableMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class ConsumableServiceImpl implements ConsumableService {
 
     private final ConsumableRepository consumableRepository;
@@ -21,12 +23,14 @@ public class ConsumableServiceImpl implements ConsumableService {
         this.consumableRepository = consumableRepository;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public ConsumableResponseDto getById(Long id) {
         return ConsumableMapper.consumableEntityToConsumableResponseDto(consumableRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(String.format("Consumable with ID %s not found", id))));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<ConsumableResponseDto> getAll() {
         return consumableRepository.findAll().stream()
