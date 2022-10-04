@@ -104,8 +104,7 @@ class ServiceConsumableServiceTest {
 
         serviceConsumableEntity.setId(serviceConsumableId);
 
-        Mockito.when(serviceConsumableRepository.save(Mockito.any(ServiceConsumableEntity.class)))
-                .thenReturn(serviceConsumableEntity);
+        Mockito.when(serviceConsumableRepository.findById(Mockito.any(ServiceConsumableId.class))).thenReturn(Optional.of(serviceConsumableEntity));
 
         ServiceConsumableResponseDto expected = ServiceConsumableMapper
                 .userEntityToServiceConsumableResponseDto(serviceConsumableEntity);
@@ -113,7 +112,7 @@ class ServiceConsumableServiceTest {
         ServiceConsumableResponseDto actual = serviceConsumableService
                 .update(serviceConsumableId, serviceConsumableRequestDto);
 
-        Mockito.verify(serviceConsumableRepository).save(serviceConsumableEntity);
+        Mockito.verify(serviceConsumableRepository).findById(serviceConsumableId);
 
         assertEquals(expected, actual);
     }

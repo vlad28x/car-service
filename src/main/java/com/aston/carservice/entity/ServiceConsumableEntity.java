@@ -9,7 +9,7 @@ import java.util.Objects;
 public class ServiceConsumableEntity {
 
     @EmbeddedId
-    private ServiceConsumableId id;
+    private ServiceConsumableId id = new ServiceConsumableId();
     @Column(name = "count")
     private Long count;
     @ManyToOne(fetch = FetchType.LAZY)

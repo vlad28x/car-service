@@ -44,7 +44,6 @@ public class ServiceConsumableServiceImpl implements ServiceConsumableService {
                 .collect(Collectors.toList());
     }
 
-    // В контроллере в dto пропихиваем id из путя
     @Override
     public ServiceConsumableResponseDto create(ServiceConsumableRequestDto newServiceConsumable) {
         return ServiceConsumableMapper.userEntityToServiceConsumableResponseDto(
@@ -56,12 +55,10 @@ public class ServiceConsumableServiceImpl implements ServiceConsumableService {
     @Override
     public ServiceConsumableResponseDto update(ServiceConsumableId id,
                                                ServiceConsumableRequestDto newServiceConsumable) {
-        ServiceConsumableEntity serviceConsumable = ServiceConsumableMapper
-                .serviceConsumableRequestDtoToServiceConsumableEntity(newServiceConsumable);
-        serviceConsumable.setId(id);
-        return ServiceConsumableMapper
-                .userEntityToServiceConsumableResponseDto(serviceConsumableRepository
-                        .save(serviceConsumable));
+        ServiceConsumableEntity serviceConsumableEntity = serviceConsumableRepository.findById(id).orElseThrow(() ->
+                new NotFoundException(String.format("ServiceConsumable with ID %s not found", id)));
+        serviceConsumableEntity.setCount(newServiceConsumable.getCount());
+        return ServiceConsumableMapper.userEntityToServiceConsumableResponseDto(serviceConsumableEntity);
     }
 
     @Override

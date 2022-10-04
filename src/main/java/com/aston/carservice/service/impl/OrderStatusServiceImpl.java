@@ -46,6 +46,9 @@ public class OrderStatusServiceImpl implements OrderStatusService {
 
     @Override
     public OrderStatusResponseDto update(Long id, OrderStatusRequestDto newOrderStatus) {
+        if (!orderStatusRepository.existsById(id)) {
+            throw new NotFoundException(String.format("Order status with ID %s not found", id));
+        }
         OrderStatusEntity orderStatusEntity = OrderStatusMapper.orderStatusRequestDtoToOrderStatusEntity(newOrderStatus);
         orderStatusEntity.setId(id);
         return OrderStatusMapper.orderStatusEntityToOrderStatusResponseDto(

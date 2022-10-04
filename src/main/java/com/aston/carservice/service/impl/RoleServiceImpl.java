@@ -46,6 +46,9 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public RoleResponseDto update(Long id, RoleRequestDto newRole) {
+        if (!roleRepository.existsById(id)) {
+            throw new NotFoundException(String.format("Role with ID %s not found", id));
+        }
         RoleEntity roleEntity = RoleMapper.roleRequestDtoToRoleEntity(newRole);
         roleEntity.setId(id);
         return RoleMapper.roleEntityToRoleResponseDto(roleRepository.save(roleEntity));

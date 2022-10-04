@@ -46,6 +46,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderResponseDto update(Long id, OrderRequestDto newOrder) {
+        if (!orderRepository.existsById(id)) {
+            throw new NotFoundException(String.format("Order with ID %s not found", id));
+        }
         OrderEntity orderEntity = OrderMapper.orderRequestDtoToOrderEntity(newOrder);
         orderEntity.setId(id);
         return OrderMapper.orderEntityToOrderResponseDto(orderRepository.save(orderEntity));

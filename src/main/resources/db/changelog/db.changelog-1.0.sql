@@ -93,7 +93,7 @@ values ('MANAGER'),
 
 --changeset Anastasia7868:000011-insert-users
 insert into users(username, password, email, salary, role_id, car_service_id)
-values ('customer1', 'customer1', 'сustomer@mail.ru', null, 3, 1),
+values ('customer1', 'customer1', 'сustomer1@mail.ru', null, 3, 1),
        ('manager1', 'manager1', 'manager1@mail.ru', 150000, 1, 1),
        ('worker1', 'worker1', 'worker1@mail.ru', 60000, 2, 1),
        ('admin', 'admin', 'admin@mail.ru', null, 4, 1),

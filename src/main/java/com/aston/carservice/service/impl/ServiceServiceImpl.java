@@ -46,6 +46,9 @@ public class ServiceServiceImpl implements ServiceService {
 
     @Override
     public ServiceResponseDto update(Long id, ServiceRequestDto newService) {
+        if (!serviceRepository.existsById(id)) {
+            throw new NotFoundException(String.format("Service with ID %s not found", id));
+        }
         ServiceEntity service = ServiceMapper.serviceRequestDtoToServiceEntity(newService);
         service.setId(id);
         return ServiceMapper.serviceEntityToOrderResponseDto(

@@ -93,6 +93,7 @@ class UserServiceTest {
         userEntity.setId(10L);
 
         Mockito.when(userRepository.save(Mockito.any(UserEntity.class))).thenReturn(userEntity);
+        Mockito.when(userRepository.existsById(Mockito.any(Long.class))).thenReturn(true);
 
         UserResponseDto expected = UserMapper.userEntityToUserResponseDto(userEntity);
 

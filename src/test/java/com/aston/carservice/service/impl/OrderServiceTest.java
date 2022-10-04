@@ -94,7 +94,9 @@ class OrderServiceTest {
         OrderEntity orderEntity = OrderMapper
                 .orderRequestDtoToOrderEntity(orderRequestDto);
         orderEntity.setId(123L);
+
         Mockito.when(orderRepository.save(Mockito.any(OrderEntity.class))).thenReturn(orderEntity);
+        Mockito.when(orderRepository.existsById(Mockito.any(Long.class))).thenReturn(true);
 
         OrderResponseDto expected = OrderMapper
                 .orderEntityToOrderResponseDto(orderEntity);

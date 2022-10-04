@@ -91,6 +91,7 @@ class OrderStatusServiceTest {
         orderStatusEntity.setId(5L);
 
         Mockito.when(orderStatusRepository.save(Mockito.any(OrderStatusEntity.class))).thenReturn(orderStatusEntity);
+        Mockito.when(orderStatusRepository.existsById(Mockito.any(Long.class))).thenReturn(true);
 
         OrderStatusResponseDto expected = OrderStatusMapper
                 .orderStatusEntityToOrderStatusResponseDto(orderStatusEntity);

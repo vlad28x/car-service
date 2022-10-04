@@ -46,6 +46,9 @@ public class ConsumableServiceImpl implements ConsumableService {
 
     @Override
     public ConsumableResponseDto update(Long id, ConsumableRequestDto newConsumable) {
+        if (!consumableRepository.existsById(id)) {
+            throw new NotFoundException(String.format("Consumable with ID %s not found", id));
+        }
         ConsumableEntity consumable = ConsumableMapper.consumableRequestDtoToConsumableEntity(newConsumable);
         consumable.setId(id);
         return ConsumableMapper.consumableEntityToConsumableResponseDto(

@@ -87,6 +87,7 @@ class RoleServiceTest {
         roleEntity.setId(2L);
 
         Mockito.when(roleRepository.save(Mockito.any(RoleEntity.class))).thenReturn(roleEntity);
+        Mockito.when(roleRepository.existsById(Mockito.any(Long.class))).thenReturn(true);
 
         RoleResponseDto expected = RoleMapper.roleEntityToRoleResponseDto(roleEntity);
 

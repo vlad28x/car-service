@@ -1,5 +1,6 @@
 package com.aston.carservice.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
@@ -7,7 +8,9 @@ import java.util.Objects;
 @Embeddable
 public class ServiceConsumableId implements Serializable {
 
+    @Column(name = "service_id")
     private Long serviceId;
+    @Column(name = "consumable_id")
     private Long consumableId;
 
     public ServiceConsumableId() {

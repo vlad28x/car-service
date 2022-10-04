@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/service/consumables")
+@RequestMapping("/services")
 public class ServiceConsumableController {
 
     private final ServiceConsumableService serviceConsumableService;
@@ -19,30 +19,42 @@ public class ServiceConsumableController {
         this.serviceConsumableService = serviceConsumableService;
     }
 
-    @GetMapping("/{id}")
-    public ServiceConsumableResponseDto getById(@PathVariable("id") ServiceConsumableId id) {
+    @GetMapping("/{serviceId}/consumables/{consumableId}")
+    public ServiceConsumableResponseDto getById(@PathVariable("serviceId") Long serviceId,
+                                                @PathVariable("consumableId") Long consumableId) {
+        ServiceConsumableId id = new ServiceConsumableId();
+        id.setServiceId(serviceId);
+        id.setConsumableId(consumableId);
         return serviceConsumableService.getById(id);
     }
 
-    @GetMapping
+    @GetMapping("/consumables")
     public List<ServiceConsumableResponseDto> getAll() {
         return serviceConsumableService.getAll();
     }
 
-    @PostMapping
+    @PostMapping("/consumables")
     @ResponseStatus(HttpStatus.CREATED)
     public ServiceConsumableResponseDto create(@RequestBody ServiceConsumableRequestDto newServiceConsumable) {
         return serviceConsumableService.create(newServiceConsumable);
     }
 
-    @PutMapping("/{id}")
-    public ServiceConsumableResponseDto update(@PathVariable("id") ServiceConsumableId id,
+    @PutMapping("/{serviceId}/consumables/{consumableId}")
+    public ServiceConsumableResponseDto update(@PathVariable("serviceId") Long serviceId,
+                                               @PathVariable("consumableId") Long consumableId,
                                                @RequestBody ServiceConsumableRequestDto newServiceConsumable) {
+        ServiceConsumableId id = new ServiceConsumableId();
+        id.setServiceId(serviceId);
+        id.setConsumableId(consumableId);
         return serviceConsumableService.update(id, newServiceConsumable);
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") ServiceConsumableId id) {
+    @DeleteMapping("/{serviceId}/consumables/{consumableId}")
+    public void delete(@PathVariable("serviceId") Long serviceId,
+                       @PathVariable("consumableId") Long consumableId) {
+        ServiceConsumableId id = new ServiceConsumableId();
+        id.setServiceId(serviceId);
+        id.setConsumableId(consumableId);
         serviceConsumableService.delete(id);
     }
 

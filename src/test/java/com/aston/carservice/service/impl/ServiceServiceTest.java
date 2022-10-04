@@ -94,6 +94,7 @@ class ServiceServiceTest {
         serviceEntity.setId(3L);
 
         Mockito.when(serviceRepository.save(Mockito.any(ServiceEntity.class))).thenReturn(serviceEntity);
+        Mockito.when(serviceRepository.existsById(Mockito.any(Long.class))).thenReturn(true);
 
         ServiceResponseDto expected = ServiceMapper
                 .serviceEntityToOrderResponseDto(serviceEntity);

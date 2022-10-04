@@ -46,6 +46,9 @@ public class CarServiceServiceImpl implements CarServiceService {
 
     @Override
     public CarServiceResponseDto update(Long id, CarServiceRequestDto newCarService) {
+        if (!carServiceRepository.existsById(id)) {
+            throw new NotFoundException(String.format("Car service with ID %s not found", id));
+        }
         CarServiceEntity carService = CarServiceMapper.carServiceRequestDtoToCarService(newCarService);
         carService.setId(id);
         return CarServiceMapper.carServiceEntityToCarServiceResponseDto(
