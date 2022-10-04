@@ -52,7 +52,7 @@ public class OrderResponseDto {
         return worker;
     }
 
-    public void setUser(UserResponseDto worker) {
+    public void setWorker(UserResponseDto worker) {
         this.worker = worker;
     }
 

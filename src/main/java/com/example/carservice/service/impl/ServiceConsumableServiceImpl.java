@@ -61,12 +61,12 @@ public class ServiceConsumableServiceImpl implements ServiceConsumableService {
         serviceConsumable.setId(id);
         return ServiceConsumableMapper
                 .userEntityToServiceConsumableResponseDto(serviceConsumableRepository
-                        .save(ServiceConsumableMapper
-                                .serviceConsumableRequestDtoToServiceConsumableEntity(newServiceConsumable)));
+                        .save(serviceConsumable));
     }
 
     @Override
     public void delete(ServiceConsumableId id) {
         serviceConsumableRepository.deleteById(id);
     }
+
 }

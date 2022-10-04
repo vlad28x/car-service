@@ -36,7 +36,7 @@ public final class OrderMapper {
     public static OrderResponseDto orderEntityToOrderResponseDto(OrderEntity orderEntity) {
         OrderResponseDto orderResponseDto = new OrderResponseDto();
         orderResponseDto.setId(orderEntity.getId());
-        orderResponseDto.setPrice(orderResponseDto.getPrice());
+        orderResponseDto.setPrice(orderEntity.getPrice());
         if (orderEntity.getOrderStatus() != null)
             orderResponseDto.setStatus(
                     OrderStatusMapper.orderStatusEntityToOrderStatusResponseDto(orderEntity.getOrderStatus())
@@ -47,11 +47,11 @@ public final class OrderMapper {
                             .map(ServiceMapper::serviceEntityToOrderResponseDto).collect(Collectors.toList()))
             );
         if (orderEntity.getWorker() != null)
-            orderResponseDto.setUser(UserMapper.userEntityToUserResponseDto(orderEntity.getWorker()));
+            orderResponseDto.setWorker(UserMapper.userEntityToUserResponseDto(orderEntity.getWorker()));
         if (orderEntity.getManager() != null)
-            orderResponseDto.setUser(UserMapper.userEntityToUserResponseDto(orderEntity.getManager()));
+            orderResponseDto.setManager(UserMapper.userEntityToUserResponseDto(orderEntity.getManager()));
         if (orderEntity.getCustomer() != null)
-            orderResponseDto.setUser(UserMapper.userEntityToUserResponseDto(orderEntity.getCustomer()));
+            orderResponseDto.setCustomer(UserMapper.userEntityToUserResponseDto(orderEntity.getCustomer()));
         return orderResponseDto;
     }
 

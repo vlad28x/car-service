@@ -90,6 +90,9 @@ class ServiceServiceTest {
     void canUpdateService() {
         ServiceEntity serviceEntity = ServiceMapper
                 .serviceRequestDtoToServiceEntity(serviceRequestDto);
+
+        serviceEntity.setId(3L);
+
         Mockito.when(serviceRepository.save(Mockito.any(ServiceEntity.class))).thenReturn(serviceEntity);
 
         ServiceResponseDto expected = ServiceMapper

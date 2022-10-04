@@ -10,12 +10,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/car_service")
+@RequestMapping("/carservices")
 public class CarServiceController {
 
     private final CarServiceService carService;
 
-    @Autowired
     public CarServiceController(CarServiceService carService) {
         this.carService = carService;
     }

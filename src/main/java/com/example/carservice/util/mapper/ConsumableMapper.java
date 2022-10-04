@@ -23,8 +23,8 @@ public final class ConsumableMapper {
         ConsumableResponseDto consumableResponseDto = new ConsumableResponseDto();
         consumableResponseDto.setId(consumableEntity.getId());
         consumableResponseDto.setName(consumableEntity.getName());
-        consumableResponseDto.setPrice(consumableResponseDto.getPrice());
-        consumableResponseDto.setQuantity(consumableResponseDto.getQuantity());
+        consumableResponseDto.setPrice(consumableEntity.getPrice());
+        consumableResponseDto.setQuantity(consumableEntity.getQuantity());
         return consumableResponseDto;
     }
 

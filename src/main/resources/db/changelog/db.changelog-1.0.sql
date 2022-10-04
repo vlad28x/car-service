@@ -4,7 +4,7 @@
 create table car_service
 (
     id     bigserial primary key,
-    name   char(255) not null,
+    name   varchar(255) not null,
     budget bigint    not null
 );
 
@@ -12,16 +12,16 @@ create table car_service
 create table role
 (
     id   bigserial primary key,
-    name char(255) not null unique
+    name varchar(255) not null unique
 );
 
 --changeset vlad28x:000002-create-users-table
 create table users
 (
     id             bigserial primary key,
-    username       char(255) not null unique,
-    password       char(255) not null,
-    email          char(255) not null unique,
+    username       varchar(255) not null unique,
+    password       varchar(255) not null,
+    email          varchar(255) not null unique,
     salary         bigint,
     role_id        bigint references role (id),
     car_service_id bigint references car_service (id)
@@ -31,7 +31,7 @@ create table users
 create table service
 (
     id             bigserial primary key,
-    name           char(255) not null unique,
+    name           varchar(255) not null unique,
     price          bigint    not null,
     car_service_id bigint references car_service (id)
 );
@@ -40,7 +40,7 @@ create table service
 create table consumable
 (
     id       bigserial primary key,
-    name     char(255) not null unique,
+    name     varchar(255) not null unique,
     price    bigint    not null,
     quantity bigint    not null
 );
@@ -58,7 +58,7 @@ create table service_consumable
 create table order_status
 (
     id   bigserial primary key,
-    name char(255) not null unique
+    name varchar(255) not null unique
 );
 
 --changeset vlad28x:000007-create-orders-table
@@ -93,14 +93,14 @@ values ('MANAGER'),
 
 --changeset Anastasia7868:000011-insert-users
 insert into users(username, password, email, salary, role_id, car_service_id)
-values ('сustomer1', 'сustomer1', 'сustomer@mail.ru', null, 3, 1),
+values ('customer1', 'customer1', 'сustomer@mail.ru', null, 3, 1),
        ('manager1', 'manager1', 'manager1@mail.ru', 150000, 1, 1),
        ('worker1', 'worker1', 'worker1@mail.ru', 60000, 2, 1),
        ('admin', 'admin', 'admin@mail.ru', null, 4, 1),
        ('customer2', 'customer2', 'customer2@mail.ru', null, 3, 1),
        ('worker2', 'worker2', 'worker2@mail.ru', 50000, 2, 1),
        ('worker3', 'worker3', 'worker3@mail.ru', 70000, 2, 1),
-       ('сustomer3', 'сustomer3', 'customer3@mail.ru', null, 3, 1),
+       ('customer3', 'customer3', 'customer3@mail.ru', null, 3, 1),
        ('manager2', 'manager2', 'manager2@mail.ru', 150000, 1, 1);
 
 --changeset Anastasia7868:000012-insert-service

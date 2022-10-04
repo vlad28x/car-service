@@ -90,6 +90,8 @@ class UserServiceTest {
     void canUpdateUser() {
         UserEntity userEntity = UserMapper.userRequestDtoToUserEntity(userRequestDto);
 
+        userEntity.setId(10L);
+
         Mockito.when(userRepository.save(Mockito.any(UserEntity.class))).thenReturn(userEntity);
 
         UserResponseDto expected = UserMapper.userEntityToUserResponseDto(userEntity);

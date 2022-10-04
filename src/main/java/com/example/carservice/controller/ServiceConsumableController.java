@@ -11,12 +11,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/service_consumable")
+@RequestMapping("/service/consumables")
 public class ServiceConsumableController {
 
     private final ServiceConsumableService serviceConsumableService;
 
-    @Autowired
     public ServiceConsumableController(ServiceConsumableService serviceConsumableService) {
         this.serviceConsumableService = serviceConsumableService;
     }
