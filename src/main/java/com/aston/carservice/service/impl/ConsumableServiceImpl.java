@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class ConsumableServiceImpl implements ConsumableService {
 
     private final ConsumableRepository consumableRepository;
@@ -23,14 +23,12 @@ public class ConsumableServiceImpl implements ConsumableService {
         this.consumableRepository = consumableRepository;
     }
 
-    @Transactional(readOnly = true)
     @Override
     public ConsumableResponseDto getById(Long id) {
         return ConsumableMapper.consumableEntityToConsumableResponseDto(consumableRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(String.format("Consumable with ID %s not found", id))));
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<ConsumableResponseDto> getAll() {
         return consumableRepository.findAll().stream()
@@ -38,6 +36,7 @@ public class ConsumableServiceImpl implements ConsumableService {
     }
 
     @Override
+    @Transactional
     public ConsumableResponseDto create(ConsumableRequestDto newConsumable) {
         return ConsumableMapper.consumableEntityToConsumableResponseDto(
                 consumableRepository.save(ConsumableMapper.consumableRequestDtoToConsumableEntity(newConsumable))
@@ -45,6 +44,7 @@ public class ConsumableServiceImpl implements ConsumableService {
     }
 
     @Override
+    @Transactional
     public ConsumableResponseDto update(Long id, ConsumableRequestDto newConsumable) {
         if (!consumableRepository.existsById(id)) {
             throw new NotFoundException(String.format("Consumable with ID %s not found", id));
@@ -57,8 +57,10 @@ public class ConsumableServiceImpl implements ConsumableService {
     }
 
     @Override
-    public void delete(Long id) {
+    @Transactional
+    public boolean delete(Long id) {
         consumableRepository.deleteById(id);
+        return true;
     }
 
 }

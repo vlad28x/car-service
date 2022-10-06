@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class ServiceConsumableServiceImpl implements ServiceConsumableService {
 
     private final ServiceConsumableRepository serviceConsumableRepository;
@@ -25,7 +25,6 @@ public class ServiceConsumableServiceImpl implements ServiceConsumableService {
         this.serviceConsumableRepository = serviceConsumableRepository;
     }
 
-    @Transactional(readOnly = true)
     @Override
     public ServiceConsumableResponseDto getById(ServiceConsumableId id) {
         return ServiceConsumableMapper.userEntityToServiceConsumableResponseDto(
@@ -34,7 +33,6 @@ public class ServiceConsumableServiceImpl implements ServiceConsumableService {
         );
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<ServiceConsumableResponseDto> getAll() {
         return serviceConsumableRepository
@@ -45,6 +43,7 @@ public class ServiceConsumableServiceImpl implements ServiceConsumableService {
     }
 
     @Override
+    @Transactional
     public ServiceConsumableResponseDto create(ServiceConsumableRequestDto newServiceConsumable) {
         return ServiceConsumableMapper.userEntityToServiceConsumableResponseDto(
                 serviceConsumableRepository.save(ServiceConsumableMapper
@@ -53,6 +52,7 @@ public class ServiceConsumableServiceImpl implements ServiceConsumableService {
     }
 
     @Override
+    @Transactional
     public ServiceConsumableResponseDto update(ServiceConsumableId id,
                                                ServiceConsumableRequestDto newServiceConsumable) {
         ServiceConsumableEntity serviceConsumableEntity = serviceConsumableRepository.findById(id).orElseThrow(() ->
@@ -62,8 +62,10 @@ public class ServiceConsumableServiceImpl implements ServiceConsumableService {
     }
 
     @Override
-    public void delete(ServiceConsumableId id) {
+    @Transactional
+    public boolean delete(ServiceConsumableId id) {
         serviceConsumableRepository.deleteById(id);
+        return true;
     }
 
 }

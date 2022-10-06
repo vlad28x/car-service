@@ -12,6 +12,6 @@ public interface Service<T, V, I> {
 
     T update(I id, V newObject);
 
-    void delete(I id);
+    boolean delete(I id);
 
 }

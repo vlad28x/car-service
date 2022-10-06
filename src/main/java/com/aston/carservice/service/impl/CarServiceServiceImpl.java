@@ -2,63 +2,72 @@ package com.aston.carservice.service.impl;
 
 import com.aston.carservice.dto.CarServiceRequestDto;
 import com.aston.carservice.dto.CarServiceResponseDto;
-import com.aston.carservice.repositories.CarServiceRepository;
-import com.aston.carservice.util.mapper.CarServiceMapper;
-import com.aston.carservice.entity.CarServiceEntity;
 import com.aston.carservice.exception.NotFoundException;
+import com.aston.carservice.repositories.CarServiceRepository;
 import com.aston.carservice.service.CarServiceService;
+import com.aston.carservice.util.mapper.newmapper.CarServiceMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class CarServiceServiceImpl implements CarServiceService {
 
     private final CarServiceRepository carServiceRepository;
+    private final CarServiceMapper carServiceMapper;
 
-    public CarServiceServiceImpl(CarServiceRepository carServiceRepository) {
+    public CarServiceServiceImpl(CarServiceRepository carServiceRepository, CarServiceMapper carServiceMapper) {
         this.carServiceRepository = carServiceRepository;
+        this.carServiceMapper = carServiceMapper;
     }
 
-    @Transactional(readOnly = true)
     @Override
     public CarServiceResponseDto getById(Long id) {
-        return CarServiceMapper.carServiceEntityToCarServiceResponseDto(carServiceRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(String.format("Car service with ID %s not found", id))));
+        return carServiceRepository.findById(id)
+                .map(carServiceMapper::toResponseDto)
+                .orElseThrow(() -> new NotFoundException(String.format("Car service with ID %s not found", id)));
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<CarServiceResponseDto> getAll() {
         return carServiceRepository.findAll().stream()
-                .map(CarServiceMapper::carServiceEntityToCarServiceResponseDto).collect(Collectors.toList());
+                .map(carServiceMapper::toResponseDto)
+                .collect(Collectors.toList());
     }
 
     @Override
+    @Transactional
     public CarServiceResponseDto create(CarServiceRequestDto newCarService) {
-        return CarServiceMapper.carServiceEntityToCarServiceResponseDto(
-                carServiceRepository.save(CarServiceMapper.carServiceRequestDtoToCarService(newCarService))
-        );
+        return Optional.ofNullable(newCarService)
+                .map(carServiceMapper::toEntity)
+                .map(carServiceRepository::save)
+                .map(carServiceMapper::toResponseDto)
+                .orElse(null);
     }
 
     @Override
+    @Transactional
     public CarServiceResponseDto update(Long id, CarServiceRequestDto newCarService) {
-        if (!carServiceRepository.existsById(id)) {
-            throw new NotFoundException(String.format("Car service with ID %s not found", id));
-        }
-        CarServiceEntity carService = CarServiceMapper.carServiceRequestDtoToCarService(newCarService);
-        carService.setId(id);
-        return CarServiceMapper.carServiceEntityToCarServiceResponseDto(
-                carServiceRepository.save(carService)
-        );
+        return carServiceRepository.findById(id)
+                .map(entity -> carServiceMapper.toEntity(newCarService, entity))
+                .map(carServiceRepository::saveAndFlush)
+                .map(carServiceMapper::toResponseDto)
+                .orElseThrow(() -> new NotFoundException(String.format("Car service with ID %s not found", id)));
     }
 
     @Override
-    public void delete(Long id) {
-        carServiceRepository.deleteById(id);
+    @Transactional
+    public boolean delete(Long id) {
+        return carServiceRepository.findById(id).
+                map(entity -> {
+                    carServiceRepository.delete(entity);
+                    return true;
+                })
+                .orElseThrow(() -> new NotFoundException(String.format("Car service with ID %s not found", id)));
     }
 
 }
