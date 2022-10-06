@@ -5,7 +5,7 @@ import com.aston.carservice.dto.ConsumableResponseDto;
 import com.aston.carservice.exception.NotFoundException;
 import com.aston.carservice.repositories.ConsumableRepository;
 import com.aston.carservice.service.ConsumableService;
-import com.aston.carservice.util.mapper.newmapper.ConsumableMapper;
+import com.aston.carservice.util.mapper.ConsumableMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

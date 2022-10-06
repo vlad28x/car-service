@@ -5,37 +5,65 @@ import com.aston.carservice.dto.UserResponseDto;
 import com.aston.carservice.entity.CarServiceEntity;
 import com.aston.carservice.entity.RoleEntity;
 import com.aston.carservice.entity.UserEntity;
+import com.aston.carservice.repositories.CarServiceRepository;
+import com.aston.carservice.repositories.RoleRepository;
+import org.springframework.stereotype.Component;
 
-public final class UserMapper {
+import java.util.Optional;
 
-    private UserMapper() {
-        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+@Component
+public class UserMapper implements Mapper<UserEntity, UserRequestDto, UserResponseDto> {
+
+    private final RoleRepository roleRepository;
+    private final CarServiceRepository carServiceRepository;
+    private final RoleMapper roleMapper;
+
+    public UserMapper(RoleRepository roleRepository, CarServiceRepository carServiceRepository, RoleMapper roleMapper, CarServiceMapper carServiceMapper) {
+        this.roleRepository = roleRepository;
+        this.carServiceRepository = carServiceRepository;
+        this.roleMapper = roleMapper;
     }
 
-    public static UserEntity userRequestDtoToUserEntity(UserRequestDto userRequestDto) {
-        UserEntity userEntity = new UserEntity();
-        userEntity.setUsername(userRequestDto.getUsername());
-        userEntity.setPassword(userRequestDto.getPassword());
-        userEntity.setEmail(userRequestDto.getEmail());
-        userEntity.setSalary(userRequestDto.getSalary());
-        if (userRequestDto.getRoleId() != null)
-            userEntity.setRole(new RoleEntity(userRequestDto.getRoleId()));
-        if (userRequestDto.getCarServiceId() != null)
-            userEntity.setCarService(new CarServiceEntity(userRequestDto.getCarServiceId()));
-        return userEntity;
+    @Override
+    public UserEntity toEntity(UserRequestDto requestDto) {
+        return toEntity(requestDto, new UserEntity());
     }
 
-    public static UserResponseDto userEntityToUserResponseDto(UserEntity userEntity) {
+    @Override
+    public UserEntity toEntity(UserRequestDto requestDto, UserEntity entity) {
+        entity.setUsername(requestDto.getUsername());
+        entity.setPassword(requestDto.getPassword());
+        entity.setEmail(requestDto.getEmail());
+        entity.setSalary(requestDto.getSalary());
+        entity.setRole(getRole(requestDto.getRoleId()));
+        entity.setCarService(getCarService(requestDto.getCarServiceId()));
+        return entity;
+    }
+
+    @Override
+    public UserResponseDto toResponseDto(UserEntity entity) {
         UserResponseDto responseDto = new UserResponseDto();
-        responseDto.setId(userEntity.getId());
-        responseDto.setUsername(userEntity.getUsername());
-        responseDto.setEmail(userEntity.getEmail());
-        responseDto.setSalary(userEntity.getSalary());
-        if (userEntity.getRole() != null)
-            responseDto.setRole(RoleMapper.roleEntityToRoleResponseDto(userEntity.getRole()));
-        if (userEntity.getCarService() != null)
-            responseDto.setCarServiceId(userEntity.getCarService().getId());
+        responseDto.setId(entity.getId());
+        responseDto.setUsername(entity.getUsername());
+        responseDto.setEmail(entity.getEmail());
+        responseDto.setSalary(entity.getSalary());
+        responseDto.setRole(Optional.ofNullable(entity.getRole())
+                .map(roleMapper::toResponseDto).orElse(null));
+        responseDto.setCarServiceId(Optional.ofNullable(entity.getCarService())
+                .map(CarServiceEntity::getId).orElse(null));
         return responseDto;
+    }
+
+    private RoleEntity getRole(Long roleId) {
+        return Optional.ofNullable(roleId)
+                .flatMap(roleRepository::findById)
+                .orElse(null);
+    }
+
+    private CarServiceEntity getCarService(Long carServiceId) {
+        return Optional.ofNullable(carServiceId)
+                .flatMap(carServiceRepository::findById)
+                .orElse(null);
     }
 
 }

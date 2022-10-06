@@ -1,4 +1,4 @@
-package com.aston.carservice.util.mapper.newmapper;
+package com.aston.carservice.util.mapper;
 
 public interface Mapper<E, C, R> {
 

@@ -4,31 +4,49 @@ import com.aston.carservice.dto.ServiceRequestDto;
 import com.aston.carservice.dto.ServiceResponseDto;
 import com.aston.carservice.entity.CarServiceEntity;
 import com.aston.carservice.entity.ServiceEntity;
+import com.aston.carservice.repositories.CarServiceRepository;
+import org.springframework.stereotype.Component;
 
+import java.util.Optional;
 
-public final class ServiceMapper {
+@Component
+public class ServiceMapper implements Mapper<ServiceEntity, ServiceRequestDto, ServiceResponseDto> {
 
-    private ServiceMapper() {
-        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    private final CarServiceRepository carServiceRepository;
+
+    public ServiceMapper(CarServiceRepository carServiceRepository) {
+        this.carServiceRepository = carServiceRepository;
     }
 
-    public static ServiceEntity serviceRequestDtoToServiceEntity(ServiceRequestDto serviceRequestDto) {
-        ServiceEntity serviceEntity = new ServiceEntity();
-        serviceEntity.setName(serviceRequestDto.getName());
-        serviceEntity.setPrice(serviceRequestDto.getPrice());
-        if (serviceRequestDto.getCarServiceId() != null)
-            serviceEntity.setCarService(new CarServiceEntity(serviceRequestDto.getCarServiceId()));
-        return serviceEntity;
+    @Override
+    public ServiceEntity toEntity(ServiceRequestDto requestDto) {
+        return toEntity(requestDto, new ServiceEntity());
     }
 
-    public static ServiceResponseDto serviceEntityToOrderResponseDto(ServiceEntity serviceEntity) {
-        ServiceResponseDto serviceResponseDto = new ServiceResponseDto();
-        serviceResponseDto.setId(serviceEntity.getId());
-        serviceResponseDto.setName(serviceEntity.getName());
-        serviceResponseDto.setPrice(serviceEntity.getPrice());
-        if (serviceEntity.getCarService() != null)
-            serviceResponseDto.setCarServiceId(serviceEntity.getCarService().getId());
-        return serviceResponseDto;
+    @Override
+    public ServiceEntity toEntity(ServiceRequestDto requestDto, ServiceEntity entity) {
+        entity.setName(requestDto.getName());
+        entity.setPrice(requestDto.getPrice());
+        entity.setCarService(getCarService(requestDto.getCarServiceId()));
+        return entity;
+    }
+
+    @Override
+    public ServiceResponseDto toResponseDto(ServiceEntity entity) {
+        ServiceResponseDto responseDto = new ServiceResponseDto();
+        responseDto.setId(entity.getId());
+        responseDto.setName(entity.getName());
+        responseDto.setPrice(entity.getPrice());
+        responseDto.setCarServiceId(Optional.ofNullable(entity.getCarService())
+                .map(CarServiceEntity::getId).orElse(null));
+        return responseDto;
+
+    }
+
+    private CarServiceEntity getCarService(Long carServiceId) {
+        return Optional.ofNullable(carServiceId)
+                .flatMap(carServiceRepository::findById)
+                .orElse(null);
     }
 
 }

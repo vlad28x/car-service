@@ -11,6 +11,10 @@ public class CarServiceResponseDto {
     public CarServiceResponseDto() {
     }
 
+    public CarServiceResponseDto(Long id) {
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
     }

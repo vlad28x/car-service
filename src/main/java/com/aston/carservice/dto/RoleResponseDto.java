@@ -10,6 +10,10 @@ public class RoleResponseDto {
     public RoleResponseDto() {
     }
 
+    public RoleResponseDto(Long id) {
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
     }

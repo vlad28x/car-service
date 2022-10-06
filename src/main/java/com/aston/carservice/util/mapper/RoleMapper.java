@@ -3,23 +3,27 @@ package com.aston.carservice.util.mapper;
 import com.aston.carservice.dto.RoleRequestDto;
 import com.aston.carservice.dto.RoleResponseDto;
 import com.aston.carservice.entity.RoleEntity;
+import org.springframework.stereotype.Component;
 
-public final class RoleMapper {
+@Component
+public class RoleMapper implements Mapper<RoleEntity, RoleRequestDto, RoleResponseDto> {
 
-    private RoleMapper() {
-        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    @Override
+    public RoleEntity toEntity(RoleRequestDto requestDto) {
+        return toEntity(requestDto, new RoleEntity());
     }
 
-    public static RoleEntity roleRequestDtoToRoleEntity(RoleRequestDto requestDto) {
-        RoleEntity roleEntity = new RoleEntity();
-        roleEntity.setName(requestDto.getName());
-        return roleEntity;
+    @Override
+    public RoleEntity toEntity(RoleRequestDto requestDto, RoleEntity entity) {
+        entity.setName(requestDto.getName());
+        return entity;
     }
 
-    public static RoleResponseDto roleEntityToRoleResponseDto(RoleEntity roleEntity) {
+    @Override
+    public RoleResponseDto toResponseDto(RoleEntity entity) {
         RoleResponseDto responseDto = new RoleResponseDto();
-        responseDto.setId(roleEntity.getId());
-        responseDto.setName(roleEntity.getName());
+        responseDto.setId(entity.getId());
+        responseDto.setName(entity.getName());
         return responseDto;
     }
 
