@@ -57,8 +57,9 @@ public class ServiceServiceImpl implements ServiceService {
     }
 
     @Override
-    public void delete(Long id) {
+    public boolean delete(Long id) {
         serviceRepository.deleteById(id);
+        return true;
     }
 
 }
