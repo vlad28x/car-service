@@ -5,7 +5,7 @@ import com.aston.carservice.dto.RoleResponseDto;
 import com.aston.carservice.exception.NotFoundException;
 import com.aston.carservice.repositories.RoleRepository;
 import com.aston.carservice.service.RoleService;
-import com.aston.carservice.util.mapper.newmapper.RoleMapper;
+import com.aston.carservice.util.mapper.RoleMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

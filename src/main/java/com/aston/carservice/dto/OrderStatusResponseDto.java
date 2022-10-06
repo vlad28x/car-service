@@ -10,6 +10,10 @@ public class OrderStatusResponseDto {
     public OrderStatusResponseDto() {
     }
 
+    public OrderStatusResponseDto(Long id) {
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
     }

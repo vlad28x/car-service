@@ -5,7 +5,7 @@ import com.aston.carservice.dto.ServiceResponseDto;
 import com.aston.carservice.exception.NotFoundException;
 import com.aston.carservice.repositories.ServiceRepository;
 import com.aston.carservice.service.ServiceService;
-import com.aston.carservice.util.mapper.newmapper.ServiceMapper;
+import com.aston.carservice.util.mapper.ServiceMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class ServiceServiceImpl implements ServiceService {
 
     private final ServiceRepository serviceRepository;
-    private  final ServiceMapper serviceMapper;
+    private final ServiceMapper serviceMapper;
 
     public ServiceServiceImpl(ServiceRepository serviceRepository, ServiceMapper serviceMapper) {
         this.serviceRepository = serviceRepository;

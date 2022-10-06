@@ -2,115 +2,163 @@ package com.aston.carservice.service.impl;
 
 import com.aston.carservice.dto.ServiceRequestDto;
 import com.aston.carservice.dto.ServiceResponseDto;
+import com.aston.carservice.entity.CarServiceEntity;
 import com.aston.carservice.entity.ServiceEntity;
 import com.aston.carservice.exception.NotFoundException;
 import com.aston.carservice.repositories.ServiceRepository;
 import com.aston.carservice.util.mapper.ServiceMapper;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ServiceServiceTest {
 
+    private static final Long SERVICE_ID = 1L;
+    private static final ServiceRequestDto SERVICE_REQUEST = new ServiceRequestDto();
+    private static final ServiceEntity SERVICE_ENTITY = new ServiceEntity();
+    private static final ServiceResponseDto SERVICE_RESPONSE = new ServiceResponseDto();
+
     @Mock
     private ServiceRepository serviceRepository;
+
+    @Mock
+    private ServiceMapper serviceMapper;
 
     @InjectMocks
     private ServiceServiceImpl serviceService;
 
-    private ServiceRequestDto serviceRequestDto;
+    @BeforeAll
+    static void init() {
+        SERVICE_REQUEST.setName("смена шин");
+        SERVICE_REQUEST.setPrice(10_000L);
+        SERVICE_REQUEST.setCarServiceId(1L);
 
-    @BeforeEach
-    void setUp() {
-        serviceRequestDto = new ServiceRequestDto();
-        serviceRequestDto.setName("Washing");
-        serviceRequestDto.setPrice(2000L);
-        serviceRequestDto.setCarServiceId(1L);
+        SERVICE_ENTITY.setId(SERVICE_ID);
+        SERVICE_ENTITY.setName("смена шин");
+        SERVICE_ENTITY.setPrice(10_000L);
+        SERVICE_ENTITY.setCarService(new CarServiceEntity(1L));
+
+        SERVICE_RESPONSE.setId(SERVICE_ID);
+        SERVICE_RESPONSE.setName("смена шин");
+        SERVICE_RESPONSE.setPrice(10_000L);
+        SERVICE_RESPONSE.setCarServiceId(1L);
     }
 
     @Test
-    void canGetServiceById() {
-        ServiceEntity serviceEntity = ServiceMapper
-                .serviceRequestDtoToServiceEntity(serviceRequestDto);
-        serviceEntity.setId(3L);
+    void shouldFindServiceById() {
+        doReturn(Optional.of(SERVICE_ENTITY)).when(serviceRepository).findById(SERVICE_ID);
+        doReturn(SERVICE_RESPONSE).when(serviceMapper).toResponseDto(SERVICE_ENTITY);
 
-        Mockito.when(serviceRepository.findById(3L)).thenReturn(Optional.of(serviceEntity));
+        ServiceResponseDto actual = serviceService.getById(SERVICE_ID);
 
-        serviceService.getById(3L);
-        Mockito.verify(serviceRepository).findById(3L);
+        assertThat(actual).isEqualTo(SERVICE_RESPONSE);
+        verify(serviceMapper, times(1)).toResponseDto(any(ServiceEntity.class));
+        verify(serviceRepository, times(1)).findById(any(Long.class));
     }
 
     @Test
-    void willThrowWhenGetServiceByIdNotFound() {
-        Mockito.when(serviceRepository.findById(Mockito.any(Long.class))).thenReturn(Optional.empty());
-        assertThrows(NotFoundException.class, () -> serviceService.getById(3L));
+    void shouldThrowExceptionWhenFindServiceByIdIfEntityNotExist() {
+        doReturn(Optional.empty()).when(serviceRepository).findById(SERVICE_ID);
+
+        NotFoundException ex = assertThrows(NotFoundException.class, () -> serviceService.getById(SERVICE_ID));
+
+        assertThat(ex.getMessage()).isEqualTo("Service with ID 1 not found");
+        verify(serviceMapper, never()).toResponseDto(any(ServiceEntity.class));
+        verify(serviceRepository, times(1)).findById(any(Long.class));
     }
 
     @Test
-    void canGetAllServices() {
-        List<ServiceEntity> list = new ArrayList<>(Arrays.asList(new ServiceEntity(), new ServiceEntity()));
-        Mockito.when(serviceRepository.findAll()).thenReturn(list);
+    void shouldGetAllServices() {
+        List<ServiceEntity> list = Collections.nCopies(3, SERVICE_ENTITY);
+        doReturn(list).when(serviceRepository).findAll();
+        doReturn(SERVICE_RESPONSE).when(serviceMapper).toResponseDto(any(ServiceEntity.class));
 
-        List<ServiceResponseDto> expected = serviceService.getAll();
-        Mockito.verify(serviceRepository).findAll();
+        List<ServiceResponseDto> actualList = serviceService.getAll();
 
-        assertEquals(expected.size(), list.size());
+        assertThat(actualList).hasSize(list.size());
+        verify(serviceRepository, times(1)).findAll();
+        verify(serviceMapper, times(3)).toResponseDto(any(ServiceEntity.class));
     }
 
     @Test
-    void canCreateService() {
-        ServiceEntity serviceEntity = ServiceMapper
-                .serviceRequestDtoToServiceEntity(serviceRequestDto);
-        Mockito.when(serviceRepository.save(Mockito.any(ServiceEntity.class))).thenReturn(serviceEntity);
+    void shouldCreateService() {
+        doReturn(SERVICE_ENTITY).when(serviceMapper).toEntity(SERVICE_REQUEST);
+        doReturn(SERVICE_ENTITY).when(serviceRepository).save(SERVICE_ENTITY);
+        doReturn(SERVICE_RESPONSE).when(serviceMapper).toResponseDto(SERVICE_ENTITY);
 
-        ServiceResponseDto expected = ServiceMapper
-                .serviceEntityToOrderResponseDto(serviceEntity);
+        ServiceResponseDto actual = serviceService.create(SERVICE_REQUEST);
 
-        ServiceResponseDto actual = serviceService.create(serviceRequestDto);
-
-        Mockito.verify(serviceRepository).save(serviceEntity);
-
-        assertEquals(expected, actual);
+        assertThat(actual).isEqualTo(SERVICE_RESPONSE);
+        verify(serviceMapper, times(1)).toEntity(any(ServiceRequestDto.class));
+        verify(serviceRepository, times(1)).save(any(ServiceEntity.class));
+        verify(serviceMapper, times(1)).toResponseDto(any(ServiceEntity.class));
     }
 
     @Test
-    void canUpdateService() {
-        ServiceEntity serviceEntity = ServiceMapper
-                .serviceRequestDtoToServiceEntity(serviceRequestDto);
+    void shouldUpdateService() {
+        doReturn(Optional.of(SERVICE_ENTITY)).when(serviceRepository).findById(SERVICE_ID);
+        doReturn(SERVICE_ENTITY).when(serviceMapper).toEntity(SERVICE_REQUEST, SERVICE_ENTITY);
+        doReturn(SERVICE_ENTITY).when(serviceRepository).saveAndFlush(SERVICE_ENTITY);
+        doReturn(SERVICE_RESPONSE).when(serviceMapper).toResponseDto(SERVICE_ENTITY);
 
-        serviceEntity.setId(3L);
+        ServiceResponseDto actual = serviceService.update(SERVICE_ID, SERVICE_REQUEST);
 
-        Mockito.when(serviceRepository.save(Mockito.any(ServiceEntity.class))).thenReturn(serviceEntity);
-        Mockito.when(serviceRepository.existsById(Mockito.any(Long.class))).thenReturn(true);
-
-        ServiceResponseDto expected = ServiceMapper
-                .serviceEntityToOrderResponseDto(serviceEntity);
-
-        ServiceResponseDto actual = serviceService.update(3L, serviceRequestDto);
-
-        Mockito.verify(serviceRepository).save(serviceEntity);
-
-        assertEquals(expected, actual);
+        assertThat(actual).isEqualTo(SERVICE_RESPONSE);
+        verify(serviceRepository, times(1)).findById(any(Long.class));
+        verify(serviceMapper, times(1))
+                .toEntity(any(ServiceRequestDto.class), any(ServiceEntity.class));
+        verify(serviceRepository, times(1)).saveAndFlush(any(ServiceEntity.class));
+        verify(serviceMapper, times(1)).toResponseDto(any(ServiceEntity.class));
     }
 
     @Test
-    void canDeleteService() {
-        serviceService.delete(3L);
+    void shouldThrowExceptionWhenUpdateServiceIfEntityNotExist() {
+        doReturn(Optional.empty()).when(serviceRepository).findById(SERVICE_ID);
 
-        Mockito.verify(serviceRepository).deleteById(3L);
+        NotFoundException ex = assertThrows(NotFoundException.class,
+                () -> serviceService.update(SERVICE_ID, SERVICE_REQUEST));
+
+        assertThat(ex.getMessage()).isEqualTo("Service with ID 1 not found");
+        verify(serviceRepository, times(1)).findById(any(Long.class));
+        verify(serviceMapper, never())
+                .toEntity(any(ServiceRequestDto.class), any(ServiceEntity.class));
+        verify(serviceRepository, never()).saveAndFlush(any(ServiceEntity.class));
+        verify(serviceMapper, never()).toResponseDto(any(ServiceEntity.class));
+    }
+
+    @Test
+    void shouldDeleteService() {
+        doReturn(Optional.of(SERVICE_ENTITY)).when(serviceRepository).findById(SERVICE_ID);
+
+        boolean actual = serviceService.delete(SERVICE_ID);
+
+        assertThat(actual).isTrue();
+        verify(serviceRepository, times(1)).findById(any(Long.class));
+        verify(serviceRepository, times(1)).delete(any(ServiceEntity.class));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenDeleteServiceIfEntityNotExist() {
+        doReturn(Optional.empty()).when(serviceRepository).findById(SERVICE_ID);
+
+        NotFoundException ex = assertThrows(NotFoundException.class,
+                () -> serviceService.update(SERVICE_ID, SERVICE_REQUEST));
+
+        assertThat(ex.getMessage()).isEqualTo("Service with ID 1 not found");
+        verify(serviceRepository, times(1)).findById(any(Long.class));
+        verify(serviceRepository, never()).delete(any(ServiceEntity.class));
     }
 
 }

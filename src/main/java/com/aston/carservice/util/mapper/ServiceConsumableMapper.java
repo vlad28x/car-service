@@ -5,36 +5,64 @@ import com.aston.carservice.dto.ServiceConsumableResponseDto;
 import com.aston.carservice.entity.ConsumableEntity;
 import com.aston.carservice.entity.ServiceConsumableEntity;
 import com.aston.carservice.entity.ServiceEntity;
+import com.aston.carservice.repositories.ConsumableRepository;
+import com.aston.carservice.repositories.ServiceRepository;
+import org.springframework.stereotype.Component;
 
+import java.util.Optional;
 
-public final class ServiceConsumableMapper {
+@Component
+public class ServiceConsumableMapper implements Mapper<ServiceConsumableEntity, ServiceConsumableRequestDto, ServiceConsumableResponseDto> {
 
-    private ServiceConsumableMapper() {
-        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    private final ServiceRepository serviceRepository;
+    private final ConsumableRepository consumableRepository;
+    private final ServiceMapper serviceMapper;
+    private final ConsumableMapper consumableMapper;
+
+    public ServiceConsumableMapper(ServiceRepository serviceRepository,
+                                   ConsumableRepository consumableRepository,
+                                   ServiceMapper serviceMapper,
+                                   ConsumableMapper consumableMapper) {
+        this.serviceRepository = serviceRepository;
+        this.consumableRepository = consumableRepository;
+        this.serviceMapper = serviceMapper;
+        this.consumableMapper = consumableMapper;
     }
 
-    public static ServiceConsumableEntity serviceConsumableRequestDtoToServiceConsumableEntity(ServiceConsumableRequestDto serviceConsumableRequestDto) {
-        ServiceConsumableEntity serviceConsumableEntity = new ServiceConsumableEntity();
-        if (serviceConsumableRequestDto.getServiceId() != null)
-            serviceConsumableEntity.setService(new ServiceEntity(serviceConsumableRequestDto.getServiceId()));
-        if (serviceConsumableRequestDto.getConsumableId() != null)
-            serviceConsumableEntity.setConsumable(new ConsumableEntity(serviceConsumableRequestDto.getConsumableId()));
-        serviceConsumableEntity.setCount(serviceConsumableRequestDto.getCount());
-        return serviceConsumableEntity;
+    @Override
+    public ServiceConsumableEntity toEntity(ServiceConsumableRequestDto requestDto) {
+        return toEntity(requestDto, new ServiceConsumableEntity());
     }
 
-    public static ServiceConsumableResponseDto userEntityToServiceConsumableResponseDto(ServiceConsumableEntity serviceConsumableEntity) {
-        ServiceConsumableResponseDto serviceConsumableResponseDto = new ServiceConsumableResponseDto();
-        if (serviceConsumableEntity.getService() != null)
-            serviceConsumableResponseDto.setService(
-                    ServiceMapper.serviceEntityToOrderResponseDto(serviceConsumableEntity.getService())
-            );
-        if (serviceConsumableEntity.getConsumable() != null)
-            serviceConsumableResponseDto.setConsumable(
-                    ConsumableMapper.consumableEntityToConsumableResponseDto(serviceConsumableEntity.getConsumable())
-            );
-        serviceConsumableResponseDto.setCount(serviceConsumableEntity.getCount());
-        return serviceConsumableResponseDto;
+    @Override
+    public ServiceConsumableEntity toEntity(ServiceConsumableRequestDto requestDto, ServiceConsumableEntity entity) {
+        entity.setService(getService(requestDto.getServiceId()));
+        entity.setConsumable(getConsumable(requestDto.getConsumableId()));
+        entity.setCount(requestDto.getCount());
+        return entity;
+    }
+
+    @Override
+    public ServiceConsumableResponseDto toResponseDto(ServiceConsumableEntity entity) {
+        ServiceConsumableResponseDto responseDto = new ServiceConsumableResponseDto();
+        responseDto.setService(Optional.ofNullable(entity.getService())
+                .map(serviceMapper::toResponseDto).orElse(null));
+        responseDto.setConsumable(Optional.ofNullable(entity.getConsumable())
+                .map(consumableMapper::toResponseDto).orElse(null));
+        responseDto.setCount(entity.getCount());
+        return responseDto;
+    }
+
+    private ServiceEntity getService(Long serviceId) {
+        return Optional.ofNullable(serviceId)
+                .flatMap(serviceRepository::findById)
+                .orElse(null);
+    }
+
+    private ConsumableEntity getConsumable(Long consumableId) {
+        return Optional.ofNullable(consumableId)
+                .flatMap(consumableRepository::findById)
+                .orElse(null);
     }
 
 }

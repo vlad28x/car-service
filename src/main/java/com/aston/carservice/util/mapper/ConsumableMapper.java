@@ -3,29 +3,32 @@ package com.aston.carservice.util.mapper;
 import com.aston.carservice.dto.ConsumableRequestDto;
 import com.aston.carservice.dto.ConsumableResponseDto;
 import com.aston.carservice.entity.ConsumableEntity;
+import org.springframework.stereotype.Component;
 
+@Component
+public class ConsumableMapper implements Mapper<ConsumableEntity, ConsumableRequestDto, ConsumableResponseDto> {
 
-public final class ConsumableMapper {
-
-    private ConsumableMapper() {
-        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    @Override
+    public ConsumableEntity toEntity(ConsumableRequestDto requestDto) {
+        return toEntity(requestDto, new ConsumableEntity());
     }
 
-    public static ConsumableEntity consumableRequestDtoToConsumableEntity(ConsumableRequestDto consumableRequestDto) {
-        ConsumableEntity consumableEntity = new ConsumableEntity();
-        consumableEntity.setName(consumableRequestDto.getName());
-        consumableEntity.setPrice(consumableRequestDto.getPrice());
-        consumableEntity.setQuantity(consumableRequestDto.getQuantity());
-        return consumableEntity;
+    @Override
+    public ConsumableEntity toEntity(ConsumableRequestDto requestDto, ConsumableEntity entity) {
+        entity.setName(requestDto.getName());
+        entity.setPrice(requestDto.getPrice());
+        entity.setQuantity(requestDto.getQuantity());
+        return entity;
     }
 
-    public static ConsumableResponseDto consumableEntityToConsumableResponseDto(ConsumableEntity consumableEntity) {
-        ConsumableResponseDto consumableResponseDto = new ConsumableResponseDto();
-        consumableResponseDto.setId(consumableEntity.getId());
-        consumableResponseDto.setName(consumableEntity.getName());
-        consumableResponseDto.setPrice(consumableEntity.getPrice());
-        consumableResponseDto.setQuantity(consumableEntity.getQuantity());
-        return consumableResponseDto;
+    @Override
+    public ConsumableResponseDto toResponseDto(ConsumableEntity entity) {
+        ConsumableResponseDto responseDto = new ConsumableResponseDto();
+        responseDto.setId(entity.getId());
+        responseDto.setName(entity.getName());
+        responseDto.setPrice(entity.getPrice());
+        responseDto.setQuantity(entity.getQuantity());
+        return responseDto;
     }
 
 }

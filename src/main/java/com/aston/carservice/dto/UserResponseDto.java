@@ -17,6 +17,10 @@ public class UserResponseDto {
     public UserResponseDto() {
     }
 
+    public UserResponseDto(Long id) {
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
     }

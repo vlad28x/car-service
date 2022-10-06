@@ -16,6 +16,11 @@ public class ServiceConsumableId implements Serializable {
     public ServiceConsumableId() {
     }
 
+    public ServiceConsumableId(Long serviceId, Long consumableId) {
+        this.serviceId = serviceId;
+        this.consumableId = consumableId;
+    }
+
     public Long getServiceId() {
         return serviceId;
     }

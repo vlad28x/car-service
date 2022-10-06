@@ -6,7 +6,7 @@ import com.aston.carservice.entity.ServiceConsumableId;
 import com.aston.carservice.exception.NotFoundException;
 import com.aston.carservice.repositories.ServiceConsumableRepository;
 import com.aston.carservice.service.ServiceConsumableService;
-import com.aston.carservice.util.mapper.newmapper.ServiceConsumableMapper;
+import com.aston.carservice.util.mapper.ServiceConsumableMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,8 +31,7 @@ public class ServiceConsumableServiceImpl implements ServiceConsumableService {
     public ServiceConsumableResponseDto getById(ServiceConsumableId id) {
         return serviceConsumableRepository.findById(id)
                 .map(serviceConsumableMapper::toResponseDto)
-                .orElseThrow(() -> new NotFoundException(String
-                        .format("ServiceConsumable with ID %s not found", id)));
+                .orElseThrow(() -> new NotFoundException(String.format("ServiceConsumable with ID %s not found", id)));
     }
 
     @Override

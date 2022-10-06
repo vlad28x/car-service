@@ -3,25 +3,30 @@ package com.aston.carservice.util.mapper;
 import com.aston.carservice.dto.CarServiceRequestDto;
 import com.aston.carservice.dto.CarServiceResponseDto;
 import com.aston.carservice.entity.CarServiceEntity;
+import org.springframework.stereotype.Component;
 
-public final class CarServiceMapper {
-    private CarServiceMapper() {
-        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+@Component
+public class CarServiceMapper implements Mapper<CarServiceEntity, CarServiceRequestDto, CarServiceResponseDto> {
+
+    @Override
+    public CarServiceEntity toEntity(CarServiceRequestDto requestDto) {
+        return toEntity(requestDto, new CarServiceEntity());
     }
 
-    public static CarServiceEntity carServiceRequestDtoToCarService(CarServiceRequestDto carServiceRequestDto) {
-        CarServiceEntity carServiceEntity = new CarServiceEntity();
-        carServiceEntity.setName(carServiceRequestDto.getName());
-        carServiceEntity.setBudget(carServiceRequestDto.getBudget());
-        return carServiceEntity;
+    @Override
+    public CarServiceEntity toEntity(CarServiceRequestDto requestDto, CarServiceEntity entity) {
+        entity.setName(requestDto.getName());
+        entity.setBudget(requestDto.getBudget());
+        return entity;
     }
 
-    public static CarServiceResponseDto carServiceEntityToCarServiceResponseDto(CarServiceEntity carServiceEntity) {
-        CarServiceResponseDto carServiceResponseDto = new CarServiceResponseDto();
-        carServiceResponseDto.setId(carServiceEntity.getId());
-        carServiceResponseDto.setName(carServiceEntity.getName());
-        carServiceResponseDto.setBudget(carServiceEntity.getBudget());
-        return carServiceResponseDto;
+    @Override
+    public CarServiceResponseDto toResponseDto(CarServiceEntity entity) {
+        CarServiceResponseDto responseDto = new CarServiceResponseDto();
+        responseDto.setId(entity.getId());
+        responseDto.setName(entity.getName());
+        responseDto.setBudget(entity.getBudget());
+        return responseDto;
     }
 
 }
