@@ -2,107 +2,156 @@ package com.aston.carservice.service.impl;
 
 import com.aston.carservice.dto.RoleRequestDto;
 import com.aston.carservice.dto.RoleResponseDto;
-import com.aston.carservice.util.mapper.RoleMapper;
 import com.aston.carservice.entity.RoleEntity;
 import com.aston.carservice.exception.NotFoundException;
 import com.aston.carservice.repositories.RoleRepository;
-import org.junit.jupiter.api.BeforeEach;
+import com.aston.carservice.util.mapper.newmapper.RoleMapper;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class RoleServiceTest {
 
+    private static final Long ROLE_ID = 1L;
+    private static final RoleRequestDto ROLE_REQUEST = new RoleRequestDto();
+    private static final RoleEntity ROLE_ENTITY = new RoleEntity();
+    private static final RoleResponseDto ROLE_RESPONSE = new RoleResponseDto();
+
     @Mock
     private RoleRepository roleRepository;
+
+    @Mock
+    private RoleMapper roleMapper;
 
     @InjectMocks
     private RoleServiceImpl roleService;
 
-    private RoleRequestDto roleRequestDto;
+    @BeforeAll
+    static void init() {
+        ROLE_REQUEST.setName("New car service");
 
-    @BeforeEach
-    void setUp() {
-        roleRequestDto = new RoleRequestDto();
-        roleRequestDto.setName("ROLE_ADMIN");
+        ROLE_ENTITY.setId(ROLE_ID);
+        ROLE_ENTITY.setName("New car service");
+
+        ROLE_RESPONSE.setId(ROLE_ID);
+        ROLE_RESPONSE.setName("New car service");
     }
 
     @Test
-    void canGetRoleById() {
-        RoleEntity roleEntity = RoleMapper.roleRequestDtoToRoleEntity(roleRequestDto);
-        roleEntity.setId(2L);
+    void shouldFindRoleById() {
+        doReturn(Optional.of(ROLE_ENTITY)).when(roleRepository).findById(ROLE_ID);
+        doReturn(ROLE_RESPONSE).when(roleMapper).toResponseDto(ROLE_ENTITY);
 
-        Mockito.when(roleRepository.findById(2L)).thenReturn(Optional.of(roleEntity));
+        RoleResponseDto actual = roleService.getById(ROLE_ID);
 
-        roleService.getById(2L);
-        Mockito.verify(roleRepository).findById(2L);
+        assertThat(actual).isEqualTo(ROLE_RESPONSE);
+        verify(roleMapper, times(1)).toResponseDto(any(RoleEntity.class));
+        verify(roleRepository, times(1)).findById(any(Long.class));
     }
 
     @Test
-    void willThrowWhenGetRoleByIdNotFound() {
-        Mockito.when(roleRepository.findById(Mockito.any(Long.class))).thenReturn(Optional.empty());
-        assertThrows(NotFoundException.class, () -> roleService.getById(2L));
+    void shouldThrowExceptionWhenFindRoleByIdIfEntityNotExist() {
+        doReturn(Optional.empty()).when(roleRepository).findById(ROLE_ID);
+
+        NotFoundException ex = assertThrows(NotFoundException.class, () -> roleService.getById(ROLE_ID));
+
+        assertThat(ex.getMessage()).isEqualTo("Role with ID 1 not found");
+        verify(roleMapper, never()).toResponseDto(any(RoleEntity.class));
+        verify(roleRepository, times(1)).findById(any(Long.class));
     }
 
     @Test
-    void canGetAllRoles() {
-        List<RoleEntity> list = new ArrayList<>(Arrays.asList(new RoleEntity(), new RoleEntity()));
-        Mockito.when(roleRepository.findAll()).thenReturn(list);
+    void shouldGetAllRoles() {
+        List<RoleEntity> list = Collections.nCopies(3, ROLE_ENTITY);
+        doReturn(list).when(roleRepository).findAll();
+        doReturn(ROLE_RESPONSE).when(roleMapper).toResponseDto(any(RoleEntity.class));
 
-        List<RoleResponseDto> expected = roleService.getAll();
-        Mockito.verify(roleRepository).findAll();
+        List<RoleResponseDto> actualList = roleService.getAll();
 
-        assertEquals(expected.size(), list.size());
+        assertThat(actualList).hasSize(list.size());
+        verify(roleRepository, times(1)).findAll();
+        verify(roleMapper, times(3)).toResponseDto(any(RoleEntity.class));
     }
 
     @Test
-    void canCreateRole() {
-        RoleEntity roleEntity = RoleMapper.roleRequestDtoToRoleEntity(roleRequestDto);
-        Mockito.when(roleRepository.save(Mockito.any(RoleEntity.class))).thenReturn(roleEntity);
+    void shouldCreateRole() {
+        doReturn(ROLE_ENTITY).when(roleMapper).toEntity(ROLE_REQUEST);
+        doReturn(ROLE_ENTITY).when(roleRepository).save(ROLE_ENTITY);
+        doReturn(ROLE_RESPONSE).when(roleMapper).toResponseDto(ROLE_ENTITY);
 
-        RoleResponseDto expected = RoleMapper.roleEntityToRoleResponseDto(roleEntity);
+        RoleResponseDto actual = roleService.create(ROLE_REQUEST);
 
-        RoleResponseDto actual = roleService.create(roleRequestDto);
-
-        Mockito.verify(roleRepository).save(roleEntity);
-
-        assertEquals(expected, actual);
+        assertThat(actual).isEqualTo(ROLE_RESPONSE);
+        verify(roleMapper, times(1)).toEntity(any(RoleRequestDto.class));
+        verify(roleRepository, times(1)).save(any(RoleEntity.class));
+        verify(roleMapper, times(1)).toResponseDto(any(RoleEntity.class));
     }
 
     @Test
-    void canUpdateRole() {
-        RoleEntity roleEntity = RoleMapper.roleRequestDtoToRoleEntity(roleRequestDto);
-        roleEntity.setId(2L);
+    void shouldUpdateRole() {
+        doReturn(Optional.of(ROLE_ENTITY)).when(roleRepository).findById(ROLE_ID);
+        doReturn(ROLE_ENTITY).when(roleMapper).toEntity(ROLE_REQUEST, ROLE_ENTITY);
+        doReturn(ROLE_ENTITY).when(roleRepository).saveAndFlush(ROLE_ENTITY);
+        doReturn(ROLE_RESPONSE).when(roleMapper).toResponseDto(ROLE_ENTITY);
 
-        Mockito.when(roleRepository.save(Mockito.any(RoleEntity.class))).thenReturn(roleEntity);
-        Mockito.when(roleRepository.existsById(Mockito.any(Long.class))).thenReturn(true);
+        RoleResponseDto actual = roleService.update(ROLE_ID, ROLE_REQUEST);
 
-        RoleResponseDto expected = RoleMapper.roleEntityToRoleResponseDto(roleEntity);
-
-        RoleResponseDto actual = roleService.update(2L, roleRequestDto);
-
-        Mockito.verify(roleRepository).save(roleEntity);
-
-        assertEquals(expected, actual);
+        assertThat(actual).isEqualTo(ROLE_RESPONSE);
+        verify(roleRepository, times(1)).findById(any(Long.class));
+        verify(roleMapper, times(1))
+                .toEntity(any(RoleRequestDto.class), any(RoleEntity.class));
+        verify(roleRepository, times(1)).saveAndFlush(any(RoleEntity.class));
+        verify(roleMapper, times(1)).toResponseDto(any(RoleEntity.class));
     }
 
     @Test
-    void canDeleteRole() {
-        roleService.delete(2L);
+    void shouldThrowExceptionWhenUpdateRoleIfEntityNotExist() {
+        doReturn(Optional.empty()).when(roleRepository).findById(ROLE_ID);
 
-        Mockito.verify(roleRepository).deleteById(2L);
+        NotFoundException ex = assertThrows(NotFoundException.class,
+                () -> roleService.update(ROLE_ID, ROLE_REQUEST));
+
+        assertThat(ex.getMessage()).isEqualTo("Role with ID 1 not found");
+        verify(roleRepository, times(1)).findById(any(Long.class));
+        verify(roleMapper, never())
+                .toEntity(any(RoleRequestDto.class), any(RoleEntity.class));
+        verify(roleRepository, never()).saveAndFlush(any(RoleEntity.class));
+        verify(roleMapper, never()).toResponseDto(any(RoleEntity.class));
+    }
+
+    @Test
+    void shouldDeleteRole() {
+        doReturn(Optional.of(ROLE_ENTITY)).when(roleRepository).findById(ROLE_ID);
+
+        boolean actual = roleService.delete(ROLE_ID);
+
+        assertThat(actual).isTrue();
+        verify(roleRepository, times(1)).findById(any(Long.class));
+        verify(roleRepository, times(1)).delete(any(RoleEntity.class));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenDeleteRoleIfEntityNotExist() {
+        doReturn(Optional.empty()).when(roleRepository).findById(ROLE_ID);
+
+        NotFoundException ex = assertThrows(NotFoundException.class,
+                () -> roleService.update(ROLE_ID, ROLE_REQUEST));
+
+        assertThat(ex.getMessage()).isEqualTo("Role with ID 1 not found");
+        verify(roleRepository, times(1)).findById(any(Long.class));
+        verify(roleRepository, never()).delete(any(RoleEntity.class));
     }
 
 }
