@@ -5,7 +5,7 @@ import com.aston.carservice.dto.OrderStatusResponseDto;
 import com.aston.carservice.exception.NotFoundException;
 import com.aston.carservice.repositories.OrderStatusRepository;
 import com.aston.carservice.service.OrderStatusService;
-import com.aston.carservice.util.mapper.newmapper.OrderStatusMapper;
+import com.aston.carservice.util.mapper.OrderStatusMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

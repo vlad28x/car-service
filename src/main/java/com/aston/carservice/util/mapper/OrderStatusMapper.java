@@ -3,23 +3,27 @@ package com.aston.carservice.util.mapper;
 import com.aston.carservice.dto.OrderStatusRequestDto;
 import com.aston.carservice.dto.OrderStatusResponseDto;
 import com.aston.carservice.entity.OrderStatusEntity;
+import org.springframework.stereotype.Component;
 
-public final class OrderStatusMapper {
+@Component
+public class OrderStatusMapper implements Mapper<OrderStatusEntity, OrderStatusRequestDto, OrderStatusResponseDto> {
 
-    private OrderStatusMapper() {
-        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    @Override
+    public OrderStatusEntity toEntity(OrderStatusRequestDto requestDto) {
+        return toEntity(requestDto, new OrderStatusEntity());
     }
 
-    public static OrderStatusEntity orderStatusRequestDtoToOrderStatusEntity(OrderStatusRequestDto requestDto) {
-        OrderStatusEntity orderStatusEntity = new OrderStatusEntity();
-        orderStatusEntity.setName(requestDto.getName());
-        return orderStatusEntity;
+    @Override
+    public OrderStatusEntity toEntity(OrderStatusRequestDto requestDto, OrderStatusEntity entity) {
+        entity.setName(requestDto.getName());
+        return entity;
     }
 
-    public static OrderStatusResponseDto orderStatusEntityToOrderStatusResponseDto(OrderStatusEntity orderStatusEntity) {
+    @Override
+    public OrderStatusResponseDto toResponseDto(OrderStatusEntity entity) {
         OrderStatusResponseDto responseDto = new OrderStatusResponseDto();
-        responseDto.setId(orderStatusEntity.getId());
-        responseDto.setName(orderStatusEntity.getName());
+        responseDto.setId(entity.getId());
+        responseDto.setName(entity.getName());
         return responseDto;
     }
 

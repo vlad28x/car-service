@@ -5,7 +5,7 @@ import com.aston.carservice.dto.CarServiceResponseDto;
 import com.aston.carservice.entity.CarServiceEntity;
 import com.aston.carservice.exception.NotFoundException;
 import com.aston.carservice.repositories.CarServiceRepository;
-import com.aston.carservice.util.mapper.newmapper.CarServiceMapper;
+import com.aston.carservice.util.mapper.CarServiceMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,7 +23,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CarServiceServiceTest {
-    
+
     private static final Long CAR_SERVICE_ID = 1L;
     private static final CarServiceRequestDto CAR_SERVICE_REQUEST = new CarServiceRequestDto();
     private static final CarServiceEntity CAR_SERVICE_ENTITY = new CarServiceEntity();

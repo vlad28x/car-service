@@ -12,6 +12,10 @@ public class ConsumableResponseDto {
     public ConsumableResponseDto() {
     }
 
+    public ConsumableResponseDto(Long id) {
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
     }

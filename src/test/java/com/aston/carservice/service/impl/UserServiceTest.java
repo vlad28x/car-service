@@ -8,7 +8,7 @@ import com.aston.carservice.entity.RoleEntity;
 import com.aston.carservice.entity.UserEntity;
 import com.aston.carservice.exception.NotFoundException;
 import com.aston.carservice.repositories.UserRepository;
-import com.aston.carservice.util.mapper.newmapper.UserMapper;
+import com.aston.carservice.util.mapper.UserMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -62,9 +62,7 @@ class UserServiceTest {
         USER_RESPONSE.setUsername("username");
         USER_RESPONSE.setEmail("email@gmail.com");
         USER_RESPONSE.setSalary(100_000L);
-        RoleResponseDto roleResponseDto = new RoleResponseDto();
-        roleResponseDto.setId(1L);
-        USER_RESPONSE.setRole(roleResponseDto);
+        USER_RESPONSE.setRole(new RoleResponseDto(1L));
         USER_RESPONSE.setCarServiceId(1L);
     }
 
