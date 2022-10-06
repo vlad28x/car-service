@@ -2,9 +2,9 @@ package com.aston.carservice.util.mapper;
 
 import com.aston.carservice.dto.UserRequestDto;
 import com.aston.carservice.dto.UserResponseDto;
+import com.aston.carservice.entity.CarServiceEntity;
 import com.aston.carservice.entity.RoleEntity;
 import com.aston.carservice.entity.UserEntity;
-import com.aston.carservice.entity.CarServiceEntity;
 
 public final class UserMapper {
 
