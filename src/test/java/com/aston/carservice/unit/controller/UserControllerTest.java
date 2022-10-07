@@ -4,8 +4,6 @@ import com.aston.carservice.controller.UserController;
 import com.aston.carservice.dto.RoleResponseDto;
 import com.aston.carservice.dto.UserResponseDto;
 import com.aston.carservice.service.UserService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -17,7 +15,8 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.Collections;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static com.aston.carservice.unit.controller.Util.asJsonString;
+import static com.aston.carservice.unit.controller.Util.verifyBody;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -43,8 +42,7 @@ class UserControllerTest {
     void setUp() {
         mockMvc = standaloneSetup(new UserController(userService)).build();
 
-        USER_RESPONSE = new UserResponseDto();
-        USER_RESPONSE.setId(USER_ID);
+        USER_RESPONSE = new UserResponseDto(USER_ID);
         USER_RESPONSE.setUsername("username");
         USER_RESPONSE.setEmail("email@gmail.com");
         USER_RESPONSE.setSalary(100_000L);
@@ -57,7 +55,7 @@ class UserControllerTest {
         when(userService.getById(USER_ID)).thenReturn(USER_RESPONSE);
 
         MvcResult mvcResult = mockMvc
-                    .perform(get("/api/v1/users/1").param("id", "1")
+                    .perform(get("/api/v1/users/1").param("id", String.valueOf(USER_ID))
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(asJsonString(USER_RESPONSE)))
                     .andExpect(status().isOk())
@@ -81,7 +79,7 @@ class UserControllerTest {
     void createMethod_shouldCreateUser() throws Exception {
         MvcResult mvcResult = mockMvc
                 .perform(post("/api/v1/users")
-                        .characterEncoding("utf-8")
+                        .characterEncoding("UTF-8")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(USER_RESPONSE)))
                 .andExpect(status().isCreated())
@@ -94,7 +92,7 @@ class UserControllerTest {
         MvcResult mvcResult = mockMvc
                 .perform(put("/api/v1/users/1")
                         .param("id", String.valueOf(USER_ID))
-                        .characterEncoding("utf-8")
+                        .characterEncoding("UTF-8")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(USER_RESPONSE)))
                 .andExpect(status().isOk())
@@ -107,20 +105,12 @@ class UserControllerTest {
         MvcResult mvcResult = mockMvc
                 .perform(delete("/api/v1/users/1")
                         .param("id", String.valueOf(USER_ID))
-                        .characterEncoding("utf-8")
+                        .characterEncoding("UTF-8")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(0)))
                 .andExpect(status().isOk())
                 .andReturn();
         verifyBody(asJsonString(0), mvcResult.getRequest().getContentAsString());
-    }
-
-    private static String asJsonString(final Object obj) throws JsonProcessingException {
-        return new ObjectMapper().writeValueAsString(obj);
-    }
-
-    private void verifyBody(String expectedBody, String actualBody) {
-        assertThat(actualBody).isEqualTo(expectedBody);
     }
 
 }
