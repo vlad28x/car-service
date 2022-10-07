@@ -1,4 +1,4 @@
-package com.aston.carservice.service.impl;
+package com.aston.carservice.unit.service;
 
 import com.aston.carservice.dto.ConsumableResponseDto;
 import com.aston.carservice.dto.ServiceConsumableRequestDto;
@@ -10,6 +10,7 @@ import com.aston.carservice.entity.ServiceConsumableId;
 import com.aston.carservice.entity.ServiceEntity;
 import com.aston.carservice.exception.NotFoundException;
 import com.aston.carservice.repositories.ServiceConsumableRepository;
+import com.aston.carservice.service.impl.ServiceConsumableServiceImpl;
 import com.aston.carservice.util.mapper.ServiceConsumableMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
