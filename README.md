@@ -47,3 +47,5 @@ spring.datasource.password=postgres
 ```
 
 Приложение будет запущено по адресу http://localhost:8080/.
+
+Swagger UI доступен по адресе http://localhost:8080/swagger-ui/.
