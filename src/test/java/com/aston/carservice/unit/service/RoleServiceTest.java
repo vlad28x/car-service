@@ -41,13 +41,13 @@ class RoleServiceTest {
 
     @BeforeAll
     static void init() {
-        ROLE_REQUEST.setName("New car service");
+        ROLE_REQUEST.setName("ADMIN");
 
         ROLE_ENTITY.setId(ROLE_ID);
-        ROLE_ENTITY.setName("New car service");
+        ROLE_ENTITY.setName("ADMIN");
 
         ROLE_RESPONSE.setId(ROLE_ID);
-        ROLE_RESPONSE.setName("New car service");
+        ROLE_RESPONSE.setName("ADMIN");
     }
 
     @Test
