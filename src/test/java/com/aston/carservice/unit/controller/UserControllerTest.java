@@ -57,7 +57,7 @@ class UserControllerTest {
         when(userService.getById(USER_ID)).thenReturn(USER_RESPONSE);
 
         MvcResult mvcResult = mockMvc
-                    .perform(get("/users/1").param("id", "1")
+                    .perform(get("/api/v1/users/1").param("id", "1")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(asJsonString(USER_RESPONSE)))
                     .andExpect(status().isOk())
@@ -69,7 +69,7 @@ class UserControllerTest {
     void getAllMethod_shouldReturnAllUsers() throws Exception {
             when(userService.getAll()).thenReturn(Collections.singletonList(USER_RESPONSE));
             MvcResult mvcResult = mockMvc
-                    .perform(get("/users")
+                    .perform(get("/api/v1/users")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(asJsonString(USER_RESPONSE)))
                     .andExpect(status().isOk())
@@ -80,7 +80,7 @@ class UserControllerTest {
     @Test
     void createMethod_shouldCreateUser() throws Exception {
         MvcResult mvcResult = mockMvc
-                .perform(post("/users")
+                .perform(post("/api/v1/users")
                         .characterEncoding("utf-8")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(USER_RESPONSE)))
@@ -92,7 +92,7 @@ class UserControllerTest {
     @Test
     void updateMethod_shouldUpdateUser() throws Exception {
         MvcResult mvcResult = mockMvc
-                .perform(put("/users/1")
+                .perform(put("/api/v1/users/1")
                         .param("id", String.valueOf(USER_ID))
                         .characterEncoding("utf-8")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -105,7 +105,7 @@ class UserControllerTest {
     @Test
     void deleteMethod_shouldDeleteUser() throws Exception {
         MvcResult mvcResult = mockMvc
-                .perform(delete("/users/1")
+                .perform(delete("/api/v1/users/1")
                         .param("id", String.valueOf(USER_ID))
                         .characterEncoding("utf-8")
                         .contentType(MediaType.APPLICATION_JSON)
