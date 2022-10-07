@@ -6,6 +6,10 @@ Car-service - это АИС для автосервиса, которое поз
 * процесс заказа дополнительных расходников; 
 * процесс распределения заработной платы работников.
 
+**Heroku URL**: https://carservice-aston.herokuapp.com/
+
+**Heroku Swagger UI URL**: https://carservice-aston.herokuapp.com/swagger-ui/
+
 ## Stack
 
 В ходе разработки приложения были использованы следующие технологии:
