@@ -1,7 +1,10 @@
 package com.aston.carservice.unit.controller;
 
 import com.aston.carservice.controller.OrderStatusController;
+import com.aston.carservice.controller.handler.GlobalExceptionHandler;
+import com.aston.carservice.dto.OrderStatusRequestDto;
 import com.aston.carservice.dto.OrderStatusResponseDto;
+import com.aston.carservice.exception.NotFoundException;
 import com.aston.carservice.service.OrderStatusService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -16,6 +19,7 @@ import java.util.Collections;
 
 import static com.aston.carservice.unit.controller.Util.asJsonString;
 import static com.aston.carservice.unit.controller.Util.verifyBody;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -39,7 +43,8 @@ public class OrderStatusControllerTest {
 
     @BeforeAll
     void setUp() {
-        mockMvc = standaloneSetup(new OrderStatusController(orderStatusService)).build();
+        mockMvc = standaloneSetup(new OrderStatusController(orderStatusService))
+                .setControllerAdvice(new GlobalExceptionHandler()).build();
 
         ORDER_STATUS_RESPONSE = new OrderStatusResponseDto(ORDER_STATUS_ID);
         ORDER_STATUS_RESPONSE.setName("PENDING");
@@ -58,6 +63,17 @@ public class OrderStatusControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
         verifyBody(asJsonString(ORDER_STATUS_RESPONSE), mvcResult.getResponse().getContentAsString());
+    }
+
+    @Test
+    void getByIdMethod_ifOrderStatusNotFound_thenReturnNotFoundException() throws Exception {
+        when(orderStatusService.getById(any(Long.class))).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(get("/api/v1/orders/statuses/1")
+                        .param("id", String.valueOf(ORDER_STATUS_ID))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(ORDER_STATUS_RESPONSE)))
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -99,6 +115,17 @@ public class OrderStatusControllerTest {
     }
 
     @Test
+    void updateMethod_ifOrderStatusNotFound_thenReturnNotFoundException() throws Exception {
+        when(orderStatusService.update(any(Long.class), any(OrderStatusRequestDto.class))).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(put("/api/v1/orders/statuses/1")
+                        .param("id", String.valueOf(ORDER_STATUS_ID))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(ORDER_STATUS_RESPONSE)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     void deleteMethod_shouldDeleteOrderStatus() throws Exception {
         MvcResult mvcResult = mockMvc
                 .perform(delete("/api/v1/orders/statuses/1")
@@ -109,6 +136,17 @@ public class OrderStatusControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
         verifyBody(asJsonString(0), mvcResult.getRequest().getContentAsString());
+    }
+
+    @Test
+    void deleteMethod_ifOrderStatusNotFound_thenReturnNotFoundException() throws Exception {
+        when(orderStatusService.delete(any(Long.class))).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(delete("/api/v1/orders/statuses/1")
+                        .param("id", String.valueOf(ORDER_STATUS_ID))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(ORDER_STATUS_RESPONSE)))
+                .andExpect(status().isNotFound());
     }
 
 }

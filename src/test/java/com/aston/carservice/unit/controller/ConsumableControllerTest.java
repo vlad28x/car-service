@@ -1,7 +1,10 @@
 package com.aston.carservice.unit.controller;
 
 import com.aston.carservice.controller.ConsumableController;
+import com.aston.carservice.controller.handler.GlobalExceptionHandler;
+import com.aston.carservice.dto.ConsumableRequestDto;
 import com.aston.carservice.dto.ConsumableResponseDto;
+import com.aston.carservice.exception.NotFoundException;
 import com.aston.carservice.service.ConsumableService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -16,6 +19,7 @@ import java.util.Collections;
 
 import static com.aston.carservice.unit.controller.Util.asJsonString;
 import static com.aston.carservice.unit.controller.Util.verifyBody;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -39,7 +43,8 @@ public class ConsumableControllerTest {
 
     @BeforeAll
     void setUp() {
-        mockMvc = standaloneSetup(new ConsumableController(consumableService)).build();
+        mockMvc = standaloneSetup(new ConsumableController(consumableService))
+                .setControllerAdvice(new GlobalExceptionHandler()).build();
 
         CONSUMABLE_RESPONSE = new ConsumableResponseDto(CONSUMABLE_ID);
         CONSUMABLE_RESPONSE.setName("gloves");
@@ -60,6 +65,17 @@ public class ConsumableControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
         verifyBody(asJsonString(CONSUMABLE_RESPONSE), mvcResult.getResponse().getContentAsString());
+    }
+
+    @Test
+    void getByIdMethod_ifConsumableNotFound_thenReturnNotFoundException() throws Exception {
+        when(consumableService.getById(any(Long.class))).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(get("/api/v1/consumables/1")
+                        .param("id", String.valueOf(CONSUMABLE_ID))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(CONSUMABLE_RESPONSE)))
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -101,6 +117,17 @@ public class ConsumableControllerTest {
     }
 
     @Test
+    void updateMethod_ifConsumableNotFound_thenReturnNotFoundException() throws Exception {
+        when(consumableService.update(any(Long.class), any(ConsumableRequestDto.class))).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(put("/api/v1/consumables/1")
+                        .param("id", String.valueOf(CONSUMABLE_ID))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(CONSUMABLE_RESPONSE)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     void deleteMethod_shouldDeleteConsumable() throws Exception {
         MvcResult mvcResult = mockMvc
                 .perform(delete("/api/v1/consumables/1")
@@ -111,6 +138,17 @@ public class ConsumableControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
         verifyBody(asJsonString(0), mvcResult.getRequest().getContentAsString());
+    }
+
+    @Test
+    void deleteMethod_ifConsumableNotFound_thenReturnNotFoundException() throws Exception {
+        when(consumableService.delete(any(Long.class))).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(delete("/api/v1/consumables/1")
+                        .param("id", String.valueOf(CONSUMABLE_ID))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(CONSUMABLE_RESPONSE)))
+                .andExpect(status().isNotFound());
     }
 
 }

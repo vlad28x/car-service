@@ -1,10 +1,13 @@
 package com.aston.carservice.unit.controller;
 
 import com.aston.carservice.controller.ServiceConsumableController;
+import com.aston.carservice.controller.handler.GlobalExceptionHandler;
 import com.aston.carservice.dto.ConsumableResponseDto;
+import com.aston.carservice.dto.ServiceConsumableRequestDto;
 import com.aston.carservice.dto.ServiceConsumableResponseDto;
 import com.aston.carservice.dto.ServiceResponseDto;
 import com.aston.carservice.entity.ServiceConsumableId;
+import com.aston.carservice.exception.NotFoundException;
 import com.aston.carservice.service.ServiceConsumableService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -19,6 +22,7 @@ import java.util.Collections;
 
 import static com.aston.carservice.unit.controller.Util.asJsonString;
 import static com.aston.carservice.unit.controller.Util.verifyBody;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -42,7 +46,8 @@ public class ServiceConsumableControllerTest {
 
     @BeforeAll
     void setUp() {
-        mockMvc = standaloneSetup(new ServiceConsumableController(serviceConsumableService)).build();
+        mockMvc = standaloneSetup(new ServiceConsumableController(serviceConsumableService))
+                .setControllerAdvice(new GlobalExceptionHandler()).build();
 
         SERVICE_CONSUMABLE_RESPONSE = new ServiceConsumableResponseDto();
         SERVICE_CONSUMABLE_RESPONSE.setService(new ServiceResponseDto(1L));
@@ -64,6 +69,18 @@ public class ServiceConsumableControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
         verifyBody(asJsonString(SERVICE_CONSUMABLE_RESPONSE), mvcResult.getResponse().getContentAsString());
+    }
+
+    @Test
+    void getByIdMethod_ifServiceConsumableNotFound_thenReturnNotFoundException() throws Exception {
+        when(serviceConsumableService.getById(any(ServiceConsumableId.class))).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(get("/api/v1/services/1/consumables/1")
+                        .param("serviceId", String.valueOf(SERVICE_CONSUMABLE_RESPONSE.getService().getId()))
+                        .param("consumableId", String.valueOf(SERVICE_CONSUMABLE_RESPONSE.getConsumable().getId()))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(SERVICE_CONSUMABLE_RESPONSE)))
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -106,6 +123,18 @@ public class ServiceConsumableControllerTest {
     }
 
     @Test
+    void updateMethod_ifServiceConsumableNotFound_thenReturnNotFoundException() throws Exception {
+        when(serviceConsumableService.update(any(ServiceConsumableId.class), any(ServiceConsumableRequestDto.class))).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(put("/api/v1/services/1/consumables/1")
+                        .param("serviceId", String.valueOf(SERVICE_CONSUMABLE_RESPONSE.getService().getId()))
+                        .param("consumableId", String.valueOf(SERVICE_CONSUMABLE_RESPONSE.getConsumable().getId()))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(SERVICE_CONSUMABLE_RESPONSE)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     void deleteMethod_shouldDeleteServiceConsumable() throws Exception {
         MvcResult mvcResult = mockMvc
                 .perform(delete("/api/v1/services/1/consumables/1")
@@ -117,6 +146,18 @@ public class ServiceConsumableControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
         verifyBody(asJsonString(0), mvcResult.getRequest().getContentAsString());
+    }
+
+    @Test
+    void deleteMethod_ifServiceConsumableNotFound_thenReturnNotFoundException() throws Exception {
+        when(serviceConsumableService.delete(any(ServiceConsumableId.class))).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(delete("/api/v1/services/1/consumables/1")
+                        .param("serviceId", String.valueOf(SERVICE_CONSUMABLE_RESPONSE.getService().getId()))
+                        .param("consumableId", String.valueOf(SERVICE_CONSUMABLE_RESPONSE.getConsumable().getId()))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(SERVICE_CONSUMABLE_RESPONSE)))
+                .andExpect(status().isNotFound());
     }
 
 }
