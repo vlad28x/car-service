@@ -1,7 +1,10 @@
 package com.aston.carservice.unit.controller;
 
 import com.aston.carservice.controller.CarServiceController;
+import com.aston.carservice.controller.handler.GlobalExceptionHandler;
+import com.aston.carservice.dto.CarServiceRequestDto;
 import com.aston.carservice.dto.CarServiceResponseDto;
+import com.aston.carservice.exception.NotFoundException;
 import com.aston.carservice.service.CarServiceService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -16,6 +19,7 @@ import java.util.Collections;
 
 import static com.aston.carservice.unit.controller.Util.asJsonString;
 import static com.aston.carservice.unit.controller.Util.verifyBody;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -39,7 +43,8 @@ public class CarServiceControllerTest {
 
     @BeforeAll
     void setUp() {
-        mockMvc = standaloneSetup(new CarServiceController(carServiceService)).build();
+        mockMvc = standaloneSetup(new CarServiceController(carServiceService))
+                .setControllerAdvice(new GlobalExceptionHandler()).build();
 
         CAR_SERVICE_RESPONSE = new CarServiceResponseDto(CAR_SERVICE_ID);
         CAR_SERVICE_RESPONSE.setName("New car service");
@@ -59,6 +64,17 @@ public class CarServiceControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
         verifyBody(asJsonString(CAR_SERVICE_RESPONSE), mvcResult.getResponse().getContentAsString());
+    }
+
+    @Test
+    void getByIdMethod_ifCarServiceNotFound_thenReturnNotFoundException() throws Exception {
+        when(carServiceService.getById(any(Long.class))).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(get("/api/v1/carservices/1")
+                        .param("id", String.valueOf(CAR_SERVICE_ID))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(CAR_SERVICE_RESPONSE)))
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -100,6 +116,17 @@ public class CarServiceControllerTest {
     }
 
     @Test
+    void updateMethod_ifCarServiceNotFound_thenReturnNotFoundException() throws Exception {
+        when(carServiceService.update(any(Long.class), any(CarServiceRequestDto.class))).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(put("/api/v1/carservices/1")
+                        .param("id", String.valueOf(CAR_SERVICE_ID))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(CAR_SERVICE_RESPONSE)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     void deleteMethod_shouldDeleteCarService() throws Exception {
         MvcResult mvcResult = mockMvc
                 .perform(delete("/api/v1/carservices/1")
@@ -110,6 +137,17 @@ public class CarServiceControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
         verifyBody(asJsonString(0), mvcResult.getRequest().getContentAsString());
+    }
+
+    @Test
+    void deleteMethod_ifCarServiceNotFound_thenReturnNotFoundException() throws Exception {
+        when(carServiceService.delete(any(Long.class))).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(delete("/api/v1/carservices/1")
+                        .param("id", String.valueOf(CAR_SERVICE_ID))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(CAR_SERVICE_RESPONSE)))
+                .andExpect(status().isNotFound());
     }
 
 }

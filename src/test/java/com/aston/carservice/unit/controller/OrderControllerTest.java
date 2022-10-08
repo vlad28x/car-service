@@ -1,10 +1,13 @@
 package com.aston.carservice.unit.controller;
 
 import com.aston.carservice.controller.OrderController;
+import com.aston.carservice.controller.handler.GlobalExceptionHandler;
+import com.aston.carservice.dto.OrderRequestDto;
 import com.aston.carservice.dto.OrderResponseDto;
 import com.aston.carservice.dto.OrderStatusResponseDto;
 import com.aston.carservice.dto.ServiceResponseDto;
 import com.aston.carservice.dto.UserResponseDto;
+import com.aston.carservice.exception.NotFoundException;
 import com.aston.carservice.service.OrderService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -19,6 +22,7 @@ import java.util.Collections;
 
 import static com.aston.carservice.unit.controller.Util.asJsonString;
 import static com.aston.carservice.unit.controller.Util.verifyBody;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -42,7 +46,8 @@ public class OrderControllerTest {
 
     @BeforeAll
     void setUp() {
-        mockMvc = standaloneSetup(new OrderController(orderService)).build();
+        mockMvc = standaloneSetup(new OrderController(orderService))
+                .setControllerAdvice(new GlobalExceptionHandler()).build();
 
         ORDER_RESPONSE = new OrderResponseDto(ORDER_ID);
         ORDER_RESPONSE.setPrice(10_000L);
@@ -66,6 +71,17 @@ public class OrderControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
         verifyBody(asJsonString(ORDER_RESPONSE), mvcResult.getResponse().getContentAsString());
+    }
+
+    @Test
+    void getByIdMethod_ifOrderNotFound_thenReturnNotFoundException() throws Exception {
+        when(orderService.getById(any(Long.class))).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(get("/api/v1/orders/1")
+                        .param("id", String.valueOf(ORDER_ID))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(ORDER_RESPONSE)))
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -107,6 +123,17 @@ public class OrderControllerTest {
     }
 
     @Test
+    void updateMethod_ifOrderNotFound_thenReturnNotFoundException() throws Exception {
+        when(orderService.update(any(Long.class), any(OrderRequestDto.class))).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(put("/api/v1/orders/1")
+                        .param("id", String.valueOf(ORDER_ID))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(ORDER_RESPONSE)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     void deleteMethod_shouldDeleteOrder() throws Exception {
         MvcResult mvcResult = mockMvc
                 .perform(delete("/api/v1/orders/1")
@@ -117,6 +144,17 @@ public class OrderControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
         verifyBody(asJsonString(0), mvcResult.getRequest().getContentAsString());
+    }
+
+    @Test
+    void deleteMethod_ifOrderNotFound_thenReturnNotFoundException() throws Exception {
+        when(orderService.delete(any(Long.class))).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(delete("/api/v1/orders/1")
+                        .param("id", String.valueOf(ORDER_ID))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(ORDER_RESPONSE)))
+                .andExpect(status().isNotFound());
     }
 
 }
