@@ -1,8 +1,11 @@
 package com.aston.carservice.unit.controller;
 
 import com.aston.carservice.controller.UserController;
+import com.aston.carservice.controller.handler.GlobalExceptionHandler;
 import com.aston.carservice.dto.RoleResponseDto;
+import com.aston.carservice.dto.UserRequestDto;
 import com.aston.carservice.dto.UserResponseDto;
+import com.aston.carservice.exception.NotFoundException;
 import com.aston.carservice.service.UserService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -17,6 +20,7 @@ import java.util.Collections;
 
 import static com.aston.carservice.unit.controller.Util.asJsonString;
 import static com.aston.carservice.unit.controller.Util.verifyBody;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -40,7 +44,8 @@ class UserControllerTest {
 
     @BeforeAll
     void setUp() {
-        mockMvc = standaloneSetup(new UserController(userService)).build();
+        mockMvc = standaloneSetup(new UserController(userService))
+                .setControllerAdvice(new GlobalExceptionHandler()).build();
 
         USER_RESPONSE = new UserResponseDto(USER_ID);
         USER_RESPONSE.setUsername("username");
@@ -61,6 +66,17 @@ class UserControllerTest {
                     .andExpect(status().isOk())
                     .andReturn();
         verifyBody(asJsonString(USER_RESPONSE), mvcResult.getResponse().getContentAsString());
+    }
+
+    @Test
+    void getByIdMethod_ifUserNotFound_thenReturnNotFoundException() throws Exception {
+        when(userService.getById(any(Long.class))).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(get("/api/v1/users/1")
+                        .param("id", String.valueOf(USER_ID))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(USER_RESPONSE)))
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -101,6 +117,17 @@ class UserControllerTest {
     }
 
     @Test
+    void updateMethod_ifUserNotFound_thenReturnNotFoundException() throws Exception {
+        when(userService.update(any(Long.class), any(UserRequestDto.class))).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(put("/api/v1/users/1")
+                        .param("id", String.valueOf(USER_ID))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(USER_RESPONSE)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     void deleteMethod_shouldDeleteUser() throws Exception {
         MvcResult mvcResult = mockMvc
                 .perform(delete("/api/v1/users/1")
@@ -111,6 +138,17 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
         verifyBody(asJsonString(0), mvcResult.getRequest().getContentAsString());
+    }
+
+    @Test
+    void deleteMethod_ifUserNotFound_thenReturnNotFoundException() throws Exception {
+        when(userService.delete(any(Long.class))).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(delete("/api/v1/users/1")
+                        .param("id", String.valueOf(USER_ID))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(USER_RESPONSE)))
+                .andExpect(status().isNotFound());
     }
 
 }
