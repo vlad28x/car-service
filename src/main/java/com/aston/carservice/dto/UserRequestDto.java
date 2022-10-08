@@ -1,12 +1,28 @@
 package com.aston.carservice.dto;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class UserRequestDto {
 
+    @NotNull
+    @Size(min = 3, max = 255)
     private String username;
+    @NotNull
+    @Size(min = 6, max = 255)
     private String password;
+    @Email
+    @NotNull
     private String email;
+    @Min(0)
     private Long salary;
+    @Min(1)
+    @NotNull
     private Long roleId;
+    @Min(1)
+    @NotNull
     private Long carServiceId;
 
     public UserRequestDto() {
