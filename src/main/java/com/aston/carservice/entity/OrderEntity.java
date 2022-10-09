@@ -1,6 +1,7 @@
 package com.aston.carservice.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +9,7 @@ import java.util.List;
 @Table(name = "orders")
 public class OrderEntity extends BaseEntity<Long> {
 
-    @Column(name = "price")
+    @Column(name = "price", nullable = false)
     private Long price;
     @ManyToOne
     @JoinColumn(name = "status_id")

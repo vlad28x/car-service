@@ -1,6 +1,7 @@
 package com.aston.carservice.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,9 +9,9 @@ import java.util.List;
 @Table(name = "service")
 public class ServiceEntity extends BaseEntity<Long> {
 
-    @Column(name = "name")
+    @Column(name = "name", unique = true, nullable = false)
     private String name;
-    @Column(name = "price")
+    @Column(name = "price", nullable = false)
     private Long price;
     @ManyToOne
     @JoinColumn(name = "car_service_id")

@@ -1,10 +1,18 @@
 package com.aston.carservice.dto;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 public class ServiceConsumableRequestDto {
 
+    @NotNull
+    @Min(1)
     private Long serviceId;
+    @NotNull
+    @Min(1)
     private Long consumableId;
-
+    @NotNull
+    @Min(0)
     private Long count;
 
     public ServiceConsumableRequestDto() {
