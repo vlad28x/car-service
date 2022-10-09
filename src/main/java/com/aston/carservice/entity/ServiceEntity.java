@@ -1,7 +1,6 @@
 package com.aston.carservice.entity;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +11,7 @@ public class ServiceEntity extends BaseEntity<Long> {
     @Column(name = "name", unique = true, nullable = false)
     private String name;
     @Column(name = "price", nullable = false)
-    private Long price;
+    private Long price = 0L;
     @ManyToOne
     @JoinColumn(name = "car_service_id")
     private CarServiceEntity carService;
@@ -66,6 +65,10 @@ public class ServiceEntity extends BaseEntity<Long> {
 
     public void setOrders(List<OrderEntity> orders) {
         this.orders = orders;
+    }
+
+    public void addToPrice(Long difference) {
+        price += difference;
     }
 
     @Override

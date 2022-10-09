@@ -43,7 +43,6 @@ class ServiceServiceTest {
     @BeforeAll
     static void init() {
         SERVICE_REQUEST.setName("смена шин");
-        SERVICE_REQUEST.setPrice(10_000L);
         SERVICE_REQUEST.setCarServiceId(1L);
 
         SERVICE_ENTITY.setId(SERVICE_ID);

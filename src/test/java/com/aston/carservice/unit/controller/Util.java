@@ -5,7 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class Util {
+public final class Util {
+
+    private Util() {}
+
     static String asJsonString(final Object obj) throws JsonProcessingException {
         return new ObjectMapper().writeValueAsString(obj);
     }
@@ -13,4 +16,5 @@ public class Util {
     static void verifyBody(String expectedBody, String actualBody) {
         assertThat(actualBody).isEqualTo(expectedBody);
     }
+
 }

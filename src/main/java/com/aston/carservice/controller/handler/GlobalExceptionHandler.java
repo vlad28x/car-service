@@ -55,10 +55,8 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        Function<FieldError, String> getMessageFromFieldError = (fieldError) -> {
-            if (fieldError.getDefaultMessage() == null) return "";
-            return fieldError.getDefaultMessage();
-        };
+        Function<FieldError, String> getMessageFromFieldError =
+                (fieldError) -> (fieldError.getDefaultMessage() == null) ? "" : fieldError.getDefaultMessage();
         return ex.getBindingResult()
                 .getAllErrors()
                 .stream()
