@@ -21,6 +21,7 @@ import java.util.Collections;
 import static com.aston.carservice.unit.controller.Util.asJsonString;
 import static com.aston.carservice.unit.controller.Util.verifyBody;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -38,6 +39,8 @@ class UserControllerTest {
 
     private UserResponseDto USER_RESPONSE;
 
+    private UserRequestDto USER_REQUEST;
+
     private MockMvc mockMvc;
 
     private static final Long USER_ID = 1L;
@@ -53,6 +56,14 @@ class UserControllerTest {
         USER_RESPONSE.setSalary(100_000L);
         USER_RESPONSE.setRole(new RoleResponseDto(1L));
         USER_RESPONSE.setCarServiceId(1L);
+
+        USER_REQUEST = new UserRequestDto();
+        USER_REQUEST.setUsername("username");
+        USER_REQUEST.setEmail("email@gmail.com");
+        USER_REQUEST.setPassword("hardpassword");
+        USER_REQUEST.setSalary(100_000L);
+        USER_REQUEST.setRoleId(1L);
+        USER_REQUEST.setCarServiceId(1L);
     }
 
     @Test
@@ -82,6 +93,7 @@ class UserControllerTest {
     @Test
     void getAllMethod_shouldReturnAllUsers() throws Exception {
             when(userService.getAll()).thenReturn(Collections.singletonList(USER_RESPONSE));
+
             MvcResult mvcResult = mockMvc
                     .perform(get("/api/v1/users")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -93,27 +105,33 @@ class UserControllerTest {
 
     @Test
     void createMethod_shouldCreateUser() throws Exception {
+        doReturn(USER_RESPONSE).when(userService).create(any(UserRequestDto.class));
+
         MvcResult mvcResult = mockMvc
                 .perform(post("/api/v1/users")
                         .characterEncoding("UTF-8")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(USER_RESPONSE)))
+                        .content(asJsonString(USER_REQUEST)))
                 .andExpect(status().isCreated())
                 .andReturn();
-        verifyBody(asJsonString(USER_RESPONSE), mvcResult.getRequest().getContentAsString());
+        verifyBody(asJsonString(USER_REQUEST), mvcResult.getRequest().getContentAsString());
+        verifyBody(asJsonString(USER_RESPONSE), mvcResult.getResponse().getContentAsString());
     }
 
     @Test
     void updateMethod_shouldUpdateUser() throws Exception {
+        doReturn(USER_RESPONSE).when(userService).update(any(Long.class), any(UserRequestDto.class));
+
         MvcResult mvcResult = mockMvc
                 .perform(put("/api/v1/users/1")
                         .param("id", String.valueOf(USER_ID))
                         .characterEncoding("UTF-8")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(USER_RESPONSE)))
+                        .content(asJsonString(USER_REQUEST)))
                 .andExpect(status().isOk())
                 .andReturn();
-        verifyBody(asJsonString(USER_RESPONSE), mvcResult.getRequest().getContentAsString());
+        verifyBody(asJsonString(USER_REQUEST), mvcResult.getRequest().getContentAsString());
+        verifyBody(asJsonString(USER_RESPONSE), mvcResult.getResponse().getContentAsString());
     }
 
     @Test
@@ -123,7 +141,7 @@ class UserControllerTest {
         mockMvc.perform(put("/api/v1/users/1")
                         .param("id", String.valueOf(USER_ID))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(USER_RESPONSE)))
+                        .content(asJsonString(USER_REQUEST)))
                 .andExpect(status().isNotFound());
     }
 

@@ -20,6 +20,7 @@ import java.util.Collections;
 import static com.aston.carservice.unit.controller.Util.asJsonString;
 import static com.aston.carservice.unit.controller.Util.verifyBody;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -37,6 +38,8 @@ public class OrderStatusControllerTest {
 
     private OrderStatusResponseDto ORDER_STATUS_RESPONSE;
 
+    private OrderStatusRequestDto ORDER_STATUS_REQUEST;
+
     private MockMvc mockMvc;
 
     private static final Long ORDER_STATUS_ID = 1L;
@@ -45,6 +48,9 @@ public class OrderStatusControllerTest {
     void setUp() {
         mockMvc = standaloneSetup(new OrderStatusController(orderStatusService))
                 .setControllerAdvice(new GlobalExceptionHandler()).build();
+
+        ORDER_STATUS_REQUEST = new OrderStatusRequestDto();
+        ORDER_STATUS_REQUEST.setName("PENDING");
 
         ORDER_STATUS_RESPONSE = new OrderStatusResponseDto(ORDER_STATUS_ID);
         ORDER_STATUS_RESPONSE.setName("PENDING");
@@ -79,6 +85,7 @@ public class OrderStatusControllerTest {
     @Test
     void getAllMethod_shouldReturnAllOrderStatuses() throws Exception {
         when(orderStatusService.getAll()).thenReturn(Collections.singletonList(ORDER_STATUS_RESPONSE));
+
         MvcResult mvcResult = mockMvc
                 .perform(get("/api/v1/orders/statuses")
                         .characterEncoding("UTF-8")
@@ -91,27 +98,33 @@ public class OrderStatusControllerTest {
 
     @Test
     void createMethod_shouldCreateOrderStatus() throws Exception {
+        doReturn(ORDER_STATUS_RESPONSE).when(orderStatusService).create(any(OrderStatusRequestDto.class));
+
         MvcResult mvcResult = mockMvc
                 .perform(post("/api/v1/orders/statuses")
                         .characterEncoding("UTF-8")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(ORDER_STATUS_RESPONSE)))
+                        .content(asJsonString(ORDER_STATUS_REQUEST)))
                 .andExpect(status().isCreated())
                 .andReturn();
-        verifyBody(asJsonString(ORDER_STATUS_RESPONSE), mvcResult.getRequest().getContentAsString());
+        verifyBody(asJsonString(ORDER_STATUS_REQUEST), mvcResult.getRequest().getContentAsString());
+        verifyBody(asJsonString(ORDER_STATUS_RESPONSE), mvcResult.getResponse().getContentAsString());
     }
 
     @Test
     void updateMethod_shouldUpdateCarOrderStatus() throws Exception {
+        doReturn(ORDER_STATUS_RESPONSE).when(orderStatusService).update(any(Long.class), any(OrderStatusRequestDto.class));
+
         MvcResult mvcResult = mockMvc
                 .perform(put("/api/v1/orders/statuses/1")
                         .param("id", String.valueOf(ORDER_STATUS_ID))
                         .characterEncoding("UTF-8")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(ORDER_STATUS_RESPONSE)))
+                        .content(asJsonString(ORDER_STATUS_REQUEST)))
                 .andExpect(status().isOk())
                 .andReturn();
-        verifyBody(asJsonString(ORDER_STATUS_RESPONSE), mvcResult.getRequest().getContentAsString());
+        verifyBody(asJsonString(ORDER_STATUS_REQUEST), mvcResult.getRequest().getContentAsString());
+        verifyBody(asJsonString(ORDER_STATUS_RESPONSE), mvcResult.getResponse().getContentAsString());
     }
 
     @Test
@@ -121,7 +134,7 @@ public class OrderStatusControllerTest {
         mockMvc.perform(put("/api/v1/orders/statuses/1")
                         .param("id", String.valueOf(ORDER_STATUS_ID))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(ORDER_STATUS_RESPONSE)))
+                        .content(asJsonString(ORDER_STATUS_REQUEST)))
                 .andExpect(status().isNotFound());
     }
 

@@ -20,6 +20,7 @@ import java.util.Collections;
 import static com.aston.carservice.unit.controller.Util.asJsonString;
 import static com.aston.carservice.unit.controller.Util.verifyBody;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -37,6 +38,8 @@ public class RoleControllerTest {
 
     private RoleResponseDto ROLE_RESPONSE;
 
+    private RoleRequestDto ROLE_REQUEST;
+
     private MockMvc mockMvc;
 
     private static final Long ROLE_ID = 1L;
@@ -45,6 +48,9 @@ public class RoleControllerTest {
     void setUp() {
         mockMvc = standaloneSetup(new RoleController(roleService))
                 .setControllerAdvice(new GlobalExceptionHandler()).build();
+
+        ROLE_REQUEST = new RoleRequestDto();
+        ROLE_REQUEST.setName("ADMIN");
 
         ROLE_RESPONSE = new RoleResponseDto(ROLE_ID);
         ROLE_RESPONSE.setName("ADMIN");
@@ -79,6 +85,7 @@ public class RoleControllerTest {
     @Test
     void getAllMethod_shouldReturnAllRoles() throws Exception {
         when(roleService.getAll()).thenReturn(Collections.singletonList(ROLE_RESPONSE));
+
         MvcResult mvcResult = mockMvc
                 .perform(get("/api/v1/roles")
                         .characterEncoding("UTF-8")
@@ -91,27 +98,33 @@ public class RoleControllerTest {
 
     @Test
     void createMethod_shouldCreateRole() throws Exception {
+        doReturn(ROLE_RESPONSE).when(roleService).create(any(RoleRequestDto.class));
+
         MvcResult mvcResult = mockMvc
                 .perform(post("/api/v1/roles")
                         .characterEncoding("UTF-8")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(ROLE_RESPONSE)))
+                        .content(asJsonString(ROLE_REQUEST)))
                 .andExpect(status().isCreated())
                 .andReturn();
-        verifyBody(asJsonString(ROLE_RESPONSE), mvcResult.getRequest().getContentAsString());
+        verifyBody(asJsonString(ROLE_REQUEST), mvcResult.getRequest().getContentAsString());
+        verifyBody(asJsonString(ROLE_RESPONSE), mvcResult.getResponse().getContentAsString());
     }
 
     @Test
     void updateMethod_shouldUpdateRole() throws Exception {
+        doReturn(ROLE_RESPONSE).when(roleService).update(any(Long.class), any(RoleRequestDto.class));
+
         MvcResult mvcResult = mockMvc
                 .perform(put("/api/v1/roles/1")
                         .param("id", String.valueOf(ROLE_ID))
                         .characterEncoding("UTF-8")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(ROLE_RESPONSE)))
+                        .content(asJsonString(ROLE_REQUEST)))
                 .andExpect(status().isOk())
                 .andReturn();
-        verifyBody(asJsonString(ROLE_RESPONSE), mvcResult.getRequest().getContentAsString());
+        verifyBody(asJsonString(ROLE_REQUEST), mvcResult.getRequest().getContentAsString());
+        verifyBody(asJsonString(ROLE_RESPONSE), mvcResult.getResponse().getContentAsString());
     }
 
     @Test
@@ -121,7 +134,7 @@ public class RoleControllerTest {
         mockMvc.perform(put("/api/v1/roles/1")
                         .param("id", String.valueOf(ROLE_ID))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(ROLE_RESPONSE)))
+                        .content(asJsonString(ROLE_REQUEST)))
                 .andExpect(status().isNotFound());
     }
 

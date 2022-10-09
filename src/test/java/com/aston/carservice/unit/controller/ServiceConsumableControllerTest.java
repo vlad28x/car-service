@@ -23,6 +23,7 @@ import java.util.Collections;
 import static com.aston.carservice.unit.controller.Util.asJsonString;
 import static com.aston.carservice.unit.controller.Util.verifyBody;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -40,6 +41,8 @@ public class ServiceConsumableControllerTest {
 
     private ServiceConsumableResponseDto SERVICE_CONSUMABLE_RESPONSE;
 
+    private ServiceConsumableRequestDto SERVICE_CONSUMABLE_REQUEST;
+
     private MockMvc mockMvc;
 
     private static final ServiceConsumableId SERVICE_CONSUMABLE_ID = new ServiceConsumableId(1L, 1L);
@@ -48,6 +51,11 @@ public class ServiceConsumableControllerTest {
     void setUp() {
         mockMvc = standaloneSetup(new ServiceConsumableController(serviceConsumableService))
                 .setControllerAdvice(new GlobalExceptionHandler()).build();
+
+        SERVICE_CONSUMABLE_REQUEST = new ServiceConsumableRequestDto();
+        SERVICE_CONSUMABLE_REQUEST.setServiceId(1L);
+        SERVICE_CONSUMABLE_REQUEST.setConsumableId(1L);
+        SERVICE_CONSUMABLE_REQUEST.setCount(4L);
 
         SERVICE_CONSUMABLE_RESPONSE = new ServiceConsumableResponseDto();
         SERVICE_CONSUMABLE_RESPONSE.setService(new ServiceResponseDto(1L));
@@ -86,6 +94,7 @@ public class ServiceConsumableControllerTest {
     @Test
     void getAllMethod_shouldReturnAllServiceConsumables() throws Exception {
         when(serviceConsumableService.getAll()).thenReturn(Collections.singletonList(SERVICE_CONSUMABLE_RESPONSE));
+
         MvcResult mvcResult = mockMvc
                 .perform(get("/api/v1/services/consumables")
                         .characterEncoding("UTF-8")
@@ -98,28 +107,34 @@ public class ServiceConsumableControllerTest {
 
     @Test
     void createMethod_shouldCreateServiceConsumable() throws Exception {
+        doReturn(SERVICE_CONSUMABLE_RESPONSE).when(serviceConsumableService).create(any(ServiceConsumableRequestDto.class));
+
         MvcResult mvcResult = mockMvc
                 .perform(post("/api/v1/services/consumables")
                         .characterEncoding("UTF-8")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(SERVICE_CONSUMABLE_RESPONSE)))
+                        .content(asJsonString(SERVICE_CONSUMABLE_REQUEST)))
                 .andExpect(status().isCreated())
                 .andReturn();
-        verifyBody(asJsonString(SERVICE_CONSUMABLE_RESPONSE), mvcResult.getRequest().getContentAsString());
+        verifyBody(asJsonString(SERVICE_CONSUMABLE_REQUEST), mvcResult.getRequest().getContentAsString());
+        verifyBody(asJsonString(SERVICE_CONSUMABLE_RESPONSE), mvcResult.getResponse().getContentAsString());
     }
 
     @Test
     void updateMethod_shouldUpdateServiceConsumable() throws Exception {
+        doReturn(SERVICE_CONSUMABLE_RESPONSE).when(serviceConsumableService).update(any(ServiceConsumableId.class), any(ServiceConsumableRequestDto.class));
+
         MvcResult mvcResult = mockMvc
                 .perform(put("/api/v1/services/1/consumables/1")
-                        .param("serviceId", String.valueOf(SERVICE_CONSUMABLE_RESPONSE.getService().getId()))
-                        .param("consumableId", String.valueOf(SERVICE_CONSUMABLE_RESPONSE.getConsumable().getId()))
+                        .param("serviceId", String.valueOf(SERVICE_CONSUMABLE_REQUEST.getServiceId()))
+                        .param("consumableId", String.valueOf(SERVICE_CONSUMABLE_REQUEST.getConsumableId()))
                         .characterEncoding("UTF-8")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(SERVICE_CONSUMABLE_RESPONSE)))
+                        .content(asJsonString(SERVICE_CONSUMABLE_REQUEST)))
                 .andExpect(status().isOk())
                 .andReturn();
-        verifyBody(asJsonString(SERVICE_CONSUMABLE_RESPONSE), mvcResult.getRequest().getContentAsString());
+        verifyBody(asJsonString(SERVICE_CONSUMABLE_REQUEST), mvcResult.getRequest().getContentAsString());
+        verifyBody(asJsonString(SERVICE_CONSUMABLE_RESPONSE), mvcResult.getResponse().getContentAsString());
     }
 
     @Test
@@ -127,10 +142,10 @@ public class ServiceConsumableControllerTest {
         when(serviceConsumableService.update(any(ServiceConsumableId.class), any(ServiceConsumableRequestDto.class))).thenThrow(NotFoundException.class);
 
         mockMvc.perform(put("/api/v1/services/1/consumables/1")
-                        .param("serviceId", String.valueOf(SERVICE_CONSUMABLE_RESPONSE.getService().getId()))
-                        .param("consumableId", String.valueOf(SERVICE_CONSUMABLE_RESPONSE.getConsumable().getId()))
+                        .param("serviceId", String.valueOf(SERVICE_CONSUMABLE_REQUEST.getServiceId()))
+                        .param("consumableId", String.valueOf(SERVICE_CONSUMABLE_REQUEST.getConsumableId()))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(SERVICE_CONSUMABLE_RESPONSE)))
+                        .content(asJsonString(SERVICE_CONSUMABLE_REQUEST)))
                 .andExpect(status().isNotFound());
     }
 
