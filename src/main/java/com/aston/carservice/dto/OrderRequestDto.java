@@ -7,34 +7,21 @@ import java.util.List;
 
 public class OrderRequestDto {
 
-    @NotNull
-    @Min(0)
-    private Long price;
     @Min(1)
     @NotNull
     private Long statusId;
-    @Size(min = 1)
+    @Size(min = 1, max = 10)
     @NotNull
     private List<Long> servicesId;
     @Min(1)
-    @NotNull
     private Long workerId;
     @Min(1)
-    @NotNull
     private Long managerId;
     @Min(1)
     @NotNull
     private Long customerId;
 
     public OrderRequestDto() {
-    }
-
-    public Long getPrice() {
-        return price;
-    }
-
-    public void setPrice(Long price) {
-        this.price = price;
     }
 
     public Long getStatusId() {

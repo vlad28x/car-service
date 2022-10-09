@@ -11,7 +11,7 @@ public class OrderEntity extends BaseEntity<Long> {
     @Column(name = "price", nullable = false)
     private Long price;
     @ManyToOne
-    @JoinColumn(name = "status_id")
+    @JoinColumn(name = "status_id", nullable = false)
     private OrderStatusEntity orderStatus;
     @ManyToMany
     @JoinTable(name = "service_orders",
@@ -26,7 +26,7 @@ public class OrderEntity extends BaseEntity<Long> {
     @JoinColumn(name = "manager_id")
     private UserEntity manager;
     @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "customer_id", nullable = false)
     private UserEntity customer;
 
     public OrderEntity() {

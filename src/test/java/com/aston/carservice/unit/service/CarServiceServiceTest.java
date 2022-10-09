@@ -4,7 +4,7 @@ import com.aston.carservice.dto.CarServiceRequestDto;
 import com.aston.carservice.dto.CarServiceResponseDto;
 import com.aston.carservice.entity.CarServiceEntity;
 import com.aston.carservice.exception.NotFoundException;
-import com.aston.carservice.repositories.CarServiceRepository;
+import com.aston.carservice.repository.CarServiceRepository;
 import com.aston.carservice.service.impl.CarServiceServiceImpl;
 import com.aston.carservice.util.mapper.CarServiceMapper;
 import org.junit.jupiter.api.BeforeAll;

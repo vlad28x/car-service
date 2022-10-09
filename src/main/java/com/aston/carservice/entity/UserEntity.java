@@ -17,10 +17,10 @@ public class UserEntity extends BaseEntity<Long> {
     @Column(name = "salary")
     private Long salary;
     @ManyToOne
-    @JoinColumn(name = "role_id")
+    @JoinColumn(name = "role_id", nullable = false)
     private RoleEntity role;
     @ManyToOne
-    @JoinColumn(name = "car_service_id")
+    @JoinColumn(name = "car_service_id", nullable = false)
     private CarServiceEntity carService;
     @OneToMany(mappedBy = "worker")
     private List<OrderEntity> workerOrders = new ArrayList<>();

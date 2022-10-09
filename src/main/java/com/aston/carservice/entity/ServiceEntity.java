@@ -13,7 +13,7 @@ public class ServiceEntity extends BaseEntity<Long> {
     @Column(name = "price", nullable = false)
     private Long price = 0L;
     @ManyToOne
-    @JoinColumn(name = "car_service_id")
+    @JoinColumn(name = "car_service_id", nullable = false)
     private CarServiceEntity carService;
     @OneToMany(mappedBy = "service")
     private List<ServiceConsumableEntity> serviceConsumables = new ArrayList<>();

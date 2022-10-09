@@ -3,7 +3,7 @@ package com.aston.carservice.service.impl;
 import com.aston.carservice.dto.UserRequestDto;
 import com.aston.carservice.dto.UserResponseDto;
 import com.aston.carservice.exception.NotFoundException;
-import com.aston.carservice.repositories.UserRepository;
+import com.aston.carservice.repository.UserRepository;
 import com.aston.carservice.service.UserService;
 import com.aston.carservice.util.mapper.UserMapper;
 import org.springframework.stereotype.Service;
