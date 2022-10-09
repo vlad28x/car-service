@@ -1,14 +1,29 @@
 package com.aston.carservice.dto;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 public class OrderRequestDto {
 
+    @NotNull
+    @Min(0)
     private Long price;
+    @Min(1)
+    @NotNull
     private Long statusId;
+    @Size(min = 1)
+    @NotNull
     private List<Long> servicesId;
+    @Min(1)
+    @NotNull
     private Long workerId;
+    @Min(1)
+    @NotNull
     private Long managerId;
+    @Min(1)
+    @NotNull
     private Long customerId;
 
     public OrderRequestDto() {

@@ -1,9 +1,19 @@
 package com.aston.carservice.dto;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class ServiceRequestDto {
 
+    @NotNull
+    @Size(min = 3, max = 255)
     private String name;
+    @NotNull
+    @Min(0)
     private Long price;
+    @Min(1)
+    @NotNull
     private Long carServiceId;
 
     public ServiceRequestDto() {

@@ -1,6 +1,7 @@
 package com.aston.carservice.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 
@@ -10,7 +11,7 @@ public class ServiceConsumableEntity {
 
     @EmbeddedId
     private ServiceConsumableId id = new ServiceConsumableId();
-    @Column(name = "count")
+    @Column(name = "count", nullable = false)
     private Long count;
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("serviceId")

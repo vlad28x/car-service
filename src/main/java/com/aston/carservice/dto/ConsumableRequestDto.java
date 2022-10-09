@@ -1,9 +1,19 @@
 package com.aston.carservice.dto;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class ConsumableRequestDto {
 
+    @NotNull
+    @Size(min = 3, max = 255)
     private String name;
+    @NotNull
+    @Min(0)
     private Long price;
+    @NotNull
+    @Min(0)
     private Long quantity;
 
     public ConsumableRequestDto() {
