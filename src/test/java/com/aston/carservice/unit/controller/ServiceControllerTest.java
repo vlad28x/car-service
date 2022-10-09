@@ -20,6 +20,7 @@ import java.util.Collections;
 import static com.aston.carservice.unit.controller.Util.asJsonString;
 import static com.aston.carservice.unit.controller.Util.verifyBody;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -37,6 +38,8 @@ class ServiceControllerTest {
 
     private ServiceResponseDto SERVICE_RESPONSE;
 
+    private ServiceRequestDto SERVICE_REQUEST;
+
     private MockMvc mockMvc;
 
     private static final Long SERVICE_ID = 1L;
@@ -45,6 +48,11 @@ class ServiceControllerTest {
     void setUp() {
         mockMvc = standaloneSetup(new ServiceController(serviceService))
                 .setControllerAdvice(new GlobalExceptionHandler()).build();
+
+        SERVICE_REQUEST = new ServiceRequestDto();
+        SERVICE_REQUEST.setName("changing tires");
+        SERVICE_REQUEST.setPrice(10_000L);
+        SERVICE_REQUEST.setCarServiceId(1L);
 
         SERVICE_RESPONSE = new ServiceResponseDto(SERVICE_ID);
         SERVICE_RESPONSE.setName("changing tires");
@@ -81,6 +89,7 @@ class ServiceControllerTest {
     @Test
     void getAllMethod_shouldReturnAllServices() throws Exception {
         when(serviceService.getAll()).thenReturn(Collections.singletonList(SERVICE_RESPONSE));
+
         MvcResult mvcResult = mockMvc
                 .perform(get("/api/v1/services")
                         .characterEncoding("UTF-8")
@@ -93,27 +102,33 @@ class ServiceControllerTest {
 
     @Test
     void createMethod_shouldCreateService() throws Exception {
+        doReturn(SERVICE_RESPONSE).when(serviceService).create(any(ServiceRequestDto.class));
+
         MvcResult mvcResult = mockMvc
                 .perform(post("/api/v1/services")
                         .characterEncoding("UTF-8")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(SERVICE_RESPONSE)))
+                        .content(asJsonString(SERVICE_REQUEST)))
                 .andExpect(status().isCreated())
                 .andReturn();
-        verifyBody(asJsonString(SERVICE_RESPONSE), mvcResult.getRequest().getContentAsString());
+        verifyBody(asJsonString(SERVICE_REQUEST), mvcResult.getRequest().getContentAsString());
+        verifyBody(asJsonString(SERVICE_RESPONSE), mvcResult.getResponse().getContentAsString());
     }
 
     @Test
     void updateMethod_shouldUpdateService() throws Exception {
+        doReturn(SERVICE_RESPONSE).when(serviceService).update(any(Long.class), any(ServiceRequestDto.class));
+
         MvcResult mvcResult = mockMvc
                 .perform(put("/api/v1/services/1")
                         .param("id", String.valueOf(SERVICE_ID))
                         .characterEncoding("UTF-8")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(SERVICE_RESPONSE)))
+                        .content(asJsonString(SERVICE_REQUEST)))
                 .andExpect(status().isOk())
                 .andReturn();
-        verifyBody(asJsonString(SERVICE_RESPONSE), mvcResult.getRequest().getContentAsString());
+        verifyBody(asJsonString(SERVICE_REQUEST), mvcResult.getRequest().getContentAsString());
+        verifyBody(asJsonString(SERVICE_RESPONSE), mvcResult.getResponse().getContentAsString());
     }
 
     @Test
@@ -123,7 +138,7 @@ class ServiceControllerTest {
         mockMvc.perform(put("/api/v1/services/1")
                         .param("id", String.valueOf(SERVICE_ID))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(SERVICE_RESPONSE)))
+                        .content(asJsonString(SERVICE_REQUEST)))
                 .andExpect(status().isNotFound());
     }
 
