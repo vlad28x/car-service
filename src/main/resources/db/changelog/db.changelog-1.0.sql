@@ -32,7 +32,7 @@ create table service
 (
     id             bigserial primary key,
     name           varchar(255) not null unique,
-    price          bigint       not null,
+    price          bigint       not null default 0,
     car_service_id bigint references car_service (id)
 );
 

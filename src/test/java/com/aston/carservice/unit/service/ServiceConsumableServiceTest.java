@@ -52,7 +52,9 @@ class ServiceConsumableServiceTest {
 
         SERVICE_CONSUMABLE_ENTITY.setId(SERVICE_CONSUMABLE_ID);
         SERVICE_CONSUMABLE_ENTITY.setService(new ServiceEntity(1L));
-        SERVICE_CONSUMABLE_ENTITY.setConsumable(new ConsumableEntity(1L));
+        ConsumableEntity consumableEntity = new ConsumableEntity(1L);
+        consumableEntity.setPrice(100L);
+        SERVICE_CONSUMABLE_ENTITY.setConsumable(consumableEntity);
         SERVICE_CONSUMABLE_ENTITY.setCount(4L);
 
         SERVICE_CONSUMABLE_RESPONSE.setService(new ServiceResponseDto(1L));

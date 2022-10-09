@@ -2,6 +2,7 @@ package com.aston.carservice.service.impl;
 
 import com.aston.carservice.dto.ConsumableRequestDto;
 import com.aston.carservice.dto.ConsumableResponseDto;
+import com.aston.carservice.entity.ConsumableEntity;
 import com.aston.carservice.exception.NotFoundException;
 import com.aston.carservice.repositories.ConsumableRepository;
 import com.aston.carservice.service.ConsumableService;
@@ -53,6 +54,7 @@ public class ConsumableServiceImpl implements ConsumableService {
     @Transactional
     public ConsumableResponseDto update(Long id, ConsumableRequestDto newConsumable) {
         return consumableRepository.findById(id)
+                .map(entity -> changeServicesPrice(entity, newConsumable.getPrice() - entity.getPrice()))
                 .map(entity -> consumableMapper.toEntity(newConsumable, entity))
                 .map(consumableRepository::saveAndFlush)
                 .map(consumableMapper::toResponseDto)
@@ -68,6 +70,12 @@ public class ConsumableServiceImpl implements ConsumableService {
                     return true;
                 })
                 .orElseThrow(() -> new NotFoundException(String.format("Consumable with ID %s not found", id)));
+    }
+
+    private ConsumableEntity changeServicesPrice(ConsumableEntity consumableEntity, Long difference) {
+        consumableEntity.getServiceConsumables()
+                .forEach(e -> e.getService().addToPrice(difference * e.getCount()));
+        return consumableEntity;
     }
 
 }

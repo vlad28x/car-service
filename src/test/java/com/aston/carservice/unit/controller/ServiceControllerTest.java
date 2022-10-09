@@ -51,7 +51,6 @@ class ServiceControllerTest {
 
         SERVICE_REQUEST = new ServiceRequestDto();
         SERVICE_REQUEST.setName("changing tires");
-        SERVICE_REQUEST.setPrice(10_000L);
         SERVICE_REQUEST.setCarServiceId(1L);
 
         SERVICE_RESPONSE = new ServiceResponseDto(SERVICE_ID);
