@@ -5,8 +5,8 @@ import com.aston.carservice.dto.ServiceConsumableResponseDto;
 import com.aston.carservice.entity.ConsumableEntity;
 import com.aston.carservice.entity.ServiceConsumableEntity;
 import com.aston.carservice.entity.ServiceEntity;
-import com.aston.carservice.repositories.ConsumableRepository;
-import com.aston.carservice.repositories.ServiceRepository;
+import com.aston.carservice.repository.ConsumableRepository;
+import com.aston.carservice.repository.ServiceRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;

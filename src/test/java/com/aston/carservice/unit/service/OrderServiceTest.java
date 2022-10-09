@@ -6,7 +6,7 @@ import com.aston.carservice.entity.OrderStatusEntity;
 import com.aston.carservice.entity.ServiceEntity;
 import com.aston.carservice.entity.UserEntity;
 import com.aston.carservice.exception.NotFoundException;
-import com.aston.carservice.repositories.OrderRepository;
+import com.aston.carservice.repository.OrderRepository;
 import com.aston.carservice.service.impl.OrderServiceImpl;
 import com.aston.carservice.util.mapper.OrderMapper;
 import org.junit.jupiter.api.BeforeAll;
@@ -43,7 +43,6 @@ class OrderServiceTest {
 
     @BeforeAll
     static void init() {
-        ORDER_REQUEST.setPrice(10_000L);
         ORDER_REQUEST.setStatusId(1L);
         ORDER_REQUEST.setCustomerId(1L);
         ORDER_REQUEST.setManagerId(2L);

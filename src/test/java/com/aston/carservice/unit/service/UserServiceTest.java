@@ -7,7 +7,7 @@ import com.aston.carservice.entity.CarServiceEntity;
 import com.aston.carservice.entity.RoleEntity;
 import com.aston.carservice.entity.UserEntity;
 import com.aston.carservice.exception.NotFoundException;
-import com.aston.carservice.repositories.UserRepository;
+import com.aston.carservice.repository.UserRepository;
 import com.aston.carservice.service.impl.UserServiceImpl;
 import com.aston.carservice.util.mapper.UserMapper;
 import org.junit.jupiter.api.BeforeAll;
