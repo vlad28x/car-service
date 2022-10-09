@@ -15,6 +15,7 @@ public class UserRequestDto {
     private String password;
     @Email
     @NotNull
+    @Size(max = 255)
     private String email;
     @Min(0)
     private Long salary;

@@ -4,10 +4,14 @@ import com.aston.carservice.dto.OrderRequestDto;
 import com.aston.carservice.dto.OrderResponseDto;
 import com.aston.carservice.service.OrderService;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.List;
 
+@Validated
 @RestController
 @RequestMapping("/api/v1/orders")
 public class OrderController {
@@ -19,7 +23,7 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public OrderResponseDto getById(@PathVariable("id") Long id) {
+    public OrderResponseDto getById(@PathVariable("id") @Min(1) Long id) {
         return orderService.getById(id);
     }
 
@@ -30,17 +34,17 @@ public class OrderController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public OrderResponseDto create(@RequestBody OrderRequestDto newOrder) {
+    public OrderResponseDto create(@Valid @RequestBody OrderRequestDto newOrder) {
         return orderService.create(newOrder);
     }
 
     @PutMapping("/{id}")
-    public OrderResponseDto update(@PathVariable Long id, @RequestBody OrderRequestDto newOrder) {
+    public OrderResponseDto update(@PathVariable @Min(1) Long id, @Valid @RequestBody OrderRequestDto newOrder) {
         return orderService.update(id, newOrder);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") Long id) {
+    public void delete(@PathVariable("id") @Min(1) Long id) {
         orderService.delete(id);
     }
 

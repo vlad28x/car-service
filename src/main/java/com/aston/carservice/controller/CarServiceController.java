@@ -4,10 +4,14 @@ import com.aston.carservice.dto.CarServiceRequestDto;
 import com.aston.carservice.dto.CarServiceResponseDto;
 import com.aston.carservice.service.CarServiceService;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.List;
 
+@Validated
 @RestController
 @RequestMapping("/api/v1/carservices")
 public class CarServiceController {
@@ -19,7 +23,7 @@ public class CarServiceController {
     }
 
     @GetMapping("/{id}")
-    public CarServiceResponseDto getById(@PathVariable("id") Long id) {
+    public CarServiceResponseDto getById(@PathVariable("id") @Min(1) Long id) {
         return carService.getById(id);
     }
 
@@ -30,17 +34,17 @@ public class CarServiceController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CarServiceResponseDto create(@RequestBody CarServiceRequestDto newCarService) {
+    public CarServiceResponseDto create(@Valid @RequestBody CarServiceRequestDto newCarService) {
         return carService.create(newCarService);
     }
 
     @PutMapping("/{id}")
-    public CarServiceResponseDto update(@PathVariable("id") Long id, @RequestBody CarServiceRequestDto newCarService) {
+    public CarServiceResponseDto update(@PathVariable("id") @Min(1) Long id, @Valid @RequestBody CarServiceRequestDto newCarService) {
         return carService.update(id, newCarService);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") Long id) {
+    public void delete(@PathVariable("id") @Min(1) Long id) {
         carService.delete(id);
     }
 

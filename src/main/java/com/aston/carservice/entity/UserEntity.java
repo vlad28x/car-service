@@ -1,6 +1,7 @@
 package com.aston.carservice.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,11 +9,11 @@ import java.util.List;
 @Table(name = "users")
 public class UserEntity extends BaseEntity<Long> {
 
-    @Column(name = "username")
+    @Column(name = "username", unique = true, nullable = false)
     private String username;
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
-    @Column(name = "email")
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
     @Column(name = "salary")
     private Long salary;

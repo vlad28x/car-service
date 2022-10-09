@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,11 +12,11 @@ import java.util.List;
 @Table(name = "consumable")
 public class ConsumableEntity extends BaseEntity<Long> {
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
-    @Column(name = "price")
+    @Column(name = "price", nullable = false)
     private Long price;
-    @Column(name = "quantity")
+    @Column(name = "quantity", nullable = false)
     private Long quantity;
     @OneToMany(mappedBy = "consumable")
     private List<ServiceConsumableEntity> serviceConsumables = new ArrayList<>();
