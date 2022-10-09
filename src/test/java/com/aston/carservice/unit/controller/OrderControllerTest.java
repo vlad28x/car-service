@@ -23,6 +23,7 @@ import java.util.Collections;
 import static com.aston.carservice.unit.controller.Util.asJsonString;
 import static com.aston.carservice.unit.controller.Util.verifyBody;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -40,6 +41,8 @@ public class OrderControllerTest {
 
     private OrderResponseDto ORDER_RESPONSE;
 
+    private OrderRequestDto ORDER_REQUEST;
+
     private MockMvc mockMvc;
 
     private static final Long ORDER_ID = 1L;
@@ -48,6 +51,14 @@ public class OrderControllerTest {
     void setUp() {
         mockMvc = standaloneSetup(new OrderController(orderService))
                 .setControllerAdvice(new GlobalExceptionHandler()).build();
+
+        ORDER_REQUEST = new OrderRequestDto();
+        ORDER_REQUEST.setPrice(10_000L);
+        ORDER_REQUEST.setStatusId(1L);
+        ORDER_REQUEST.setCustomerId(1L);
+        ORDER_REQUEST.setManagerId(2L);
+        ORDER_REQUEST.setWorkerId(3L);
+        ORDER_REQUEST.setServicesId(Collections.singletonList(1L));
 
         ORDER_RESPONSE = new OrderResponseDto(ORDER_ID);
         ORDER_RESPONSE.setPrice(10_000L);
@@ -87,6 +98,7 @@ public class OrderControllerTest {
     @Test
     void getAllMethod_shouldReturnAllOrders() throws Exception {
         when(orderService.getAll()).thenReturn(Collections.singletonList(ORDER_RESPONSE));
+
         MvcResult mvcResult = mockMvc
                 .perform(get("/api/v1/orders")
                         .characterEncoding("UTF-8")
@@ -99,27 +111,33 @@ public class OrderControllerTest {
 
     @Test
     void createMethod_shouldCreateOrder() throws Exception {
+        doReturn(ORDER_RESPONSE).when(orderService).create(any(OrderRequestDto.class));
+
         MvcResult mvcResult = mockMvc
                 .perform(post("/api/v1/orders")
                         .characterEncoding("UTF-8")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(ORDER_RESPONSE)))
+                        .content(asJsonString(ORDER_REQUEST)))
                 .andExpect(status().isCreated())
                 .andReturn();
-        verifyBody(asJsonString(ORDER_RESPONSE), mvcResult.getRequest().getContentAsString());
+        verifyBody(asJsonString(ORDER_REQUEST), mvcResult.getRequest().getContentAsString());
+        verifyBody(asJsonString(ORDER_RESPONSE), mvcResult.getResponse().getContentAsString());
     }
 
     @Test
     void updateMethod_shouldUpdateCarOrder() throws Exception {
+        doReturn(ORDER_RESPONSE).when(orderService).update(any(Long.class), any(OrderRequestDto.class));
+
         MvcResult mvcResult = mockMvc
                 .perform(put("/api/v1/orders/1")
                         .param("id", String.valueOf(ORDER_ID))
                         .characterEncoding("UTF-8")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(ORDER_RESPONSE)))
+                        .content(asJsonString(ORDER_REQUEST)))
                 .andExpect(status().isOk())
                 .andReturn();
-        verifyBody(asJsonString(ORDER_RESPONSE), mvcResult.getRequest().getContentAsString());
+        verifyBody(asJsonString(ORDER_REQUEST), mvcResult.getRequest().getContentAsString());
+        verifyBody(asJsonString(ORDER_RESPONSE), mvcResult.getResponse().getContentAsString());
     }
 
     @Test
@@ -129,7 +147,7 @@ public class OrderControllerTest {
         mockMvc.perform(put("/api/v1/orders/1")
                         .param("id", String.valueOf(ORDER_ID))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(ORDER_RESPONSE)))
+                        .content(asJsonString(ORDER_REQUEST)))
                 .andExpect(status().isNotFound());
     }
 
