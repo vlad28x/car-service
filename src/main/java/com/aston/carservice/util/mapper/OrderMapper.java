@@ -6,9 +6,9 @@ import com.aston.carservice.entity.OrderEntity;
 import com.aston.carservice.entity.OrderStatusEntity;
 import com.aston.carservice.entity.ServiceEntity;
 import com.aston.carservice.entity.UserEntity;
-import com.aston.carservice.repositories.OrderStatusRepository;
-import com.aston.carservice.repositories.ServiceRepository;
-import com.aston.carservice.repositories.UserRepository;
+import com.aston.carservice.repository.OrderStatusRepository;
+import com.aston.carservice.repository.ServiceRepository;
+import com.aston.carservice.repository.UserRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -46,9 +46,9 @@ public class OrderMapper implements Mapper<OrderEntity, OrderRequestDto, OrderRe
 
     @Override
     public OrderEntity toEntity(OrderRequestDto requestDto, OrderEntity entity) {
-        entity.setPrice(requestDto.getPrice());
         entity.setOrderStatus(getOrderStatus(requestDto.getStatusId()));
         entity.setServices(getServices(requestDto.getServicesId()));
+        entity.setPrice(getPrice(entity.getServices()));
         entity.setWorker(getUser(requestDto.getWorkerId()));
         entity.setManager(getUser(requestDto.getManagerId()));
         entity.setCustomer(getUser(requestDto.getCustomerId()));
@@ -95,6 +95,10 @@ public class OrderMapper implements Mapper<OrderEntity, OrderRequestDto, OrderRe
         return Optional.ofNullable(userId)
                 .flatMap(userRepository::findById)
                 .orElse(null);
+    }
+
+    private Long getPrice(List<ServiceEntity> services) {
+        return services.stream().mapToLong(ServiceEntity::getPrice).sum();
     }
 
 }

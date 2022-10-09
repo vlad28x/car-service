@@ -1,4 +1,4 @@
-package com.aston.carservice.repositories;
+package com.aston.carservice.repository;
 
 import com.aston.carservice.entity.OrderEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

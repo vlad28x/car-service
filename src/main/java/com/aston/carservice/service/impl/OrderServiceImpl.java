@@ -3,7 +3,7 @@ package com.aston.carservice.service.impl;
 import com.aston.carservice.dto.OrderRequestDto;
 import com.aston.carservice.dto.OrderResponseDto;
 import com.aston.carservice.exception.NotFoundException;
-import com.aston.carservice.repositories.OrderRepository;
+import com.aston.carservice.repository.OrderRepository;
 import com.aston.carservice.service.OrderService;
 import com.aston.carservice.util.mapper.OrderMapper;
 import org.springframework.stereotype.Service;

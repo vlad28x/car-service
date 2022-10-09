@@ -1,4 +1,4 @@
-package com.aston.carservice.repositories;
+package com.aston.carservice.repository;
 
 import com.aston.carservice.entity.ServiceConsumableEntity;
 import com.aston.carservice.entity.ServiceConsumableId;

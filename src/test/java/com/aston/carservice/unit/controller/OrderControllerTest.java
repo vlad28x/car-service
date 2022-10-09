@@ -53,7 +53,6 @@ public class OrderControllerTest {
                 .setControllerAdvice(new GlobalExceptionHandler()).build();
 
         ORDER_REQUEST = new OrderRequestDto();
-        ORDER_REQUEST.setPrice(10_000L);
         ORDER_REQUEST.setStatusId(1L);
         ORDER_REQUEST.setCustomerId(1L);
         ORDER_REQUEST.setManagerId(2L);

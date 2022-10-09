@@ -8,9 +8,9 @@ import java.util.Objects;
 @Embeddable
 public class ServiceConsumableId implements Serializable {
 
-    @Column(name = "service_id")
+    @Column(name = "service_id", nullable = false)
     private Long serviceId;
-    @Column(name = "consumable_id")
+    @Column(name = "consumable_id", nullable = false)
     private Long consumableId;
 
     public ServiceConsumableId() {

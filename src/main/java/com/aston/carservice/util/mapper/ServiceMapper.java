@@ -4,7 +4,7 @@ import com.aston.carservice.dto.ServiceRequestDto;
 import com.aston.carservice.dto.ServiceResponseDto;
 import com.aston.carservice.entity.CarServiceEntity;
 import com.aston.carservice.entity.ServiceEntity;
-import com.aston.carservice.repositories.CarServiceRepository;
+import com.aston.carservice.repository.CarServiceRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
