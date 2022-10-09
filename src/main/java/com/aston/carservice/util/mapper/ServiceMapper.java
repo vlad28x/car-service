@@ -26,7 +26,6 @@ public class ServiceMapper implements Mapper<ServiceEntity, ServiceRequestDto, S
     @Override
     public ServiceEntity toEntity(ServiceRequestDto requestDto, ServiceEntity entity) {
         entity.setName(requestDto.getName());
-        entity.setPrice(requestDto.getPrice());
         entity.setCarService(getCarService(requestDto.getCarServiceId()));
         return entity;
     }
