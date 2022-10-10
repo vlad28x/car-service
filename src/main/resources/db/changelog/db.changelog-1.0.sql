@@ -79,8 +79,8 @@ create table order_status
 create table orders
 (
     id          bigserial primary key,
-    price       bigint not null,
-    status_id   bigint references order_status (id),
+    price       bigint                              not null,
+    status_id   bigint references order_status (id) not null,
     worker_id   bigint references users (id),
     manager_id  bigint references users (id),
     customer_id bigint references users (id),

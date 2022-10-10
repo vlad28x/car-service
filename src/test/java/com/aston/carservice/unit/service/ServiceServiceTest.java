@@ -5,7 +5,7 @@ import com.aston.carservice.dto.ServiceResponseDto;
 import com.aston.carservice.entity.CarServiceEntity;
 import com.aston.carservice.entity.ServiceEntity;
 import com.aston.carservice.exception.NotFoundException;
-import com.aston.carservice.repositories.ServiceRepository;
+import com.aston.carservice.repository.ServiceRepository;
 import com.aston.carservice.service.impl.ServiceServiceImpl;
 import com.aston.carservice.util.mapper.ServiceMapper;
 import org.junit.jupiter.api.BeforeAll;
@@ -43,7 +43,6 @@ class ServiceServiceTest {
     @BeforeAll
     static void init() {
         SERVICE_REQUEST.setName("смена шин");
-        SERVICE_REQUEST.setPrice(10_000L);
         SERVICE_REQUEST.setCarServiceId(1L);
 
         SERVICE_ENTITY.setId(SERVICE_ID);

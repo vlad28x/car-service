@@ -8,12 +8,12 @@ import java.util.List;
 @Table(name = "service")
 public class ServiceEntity extends BaseEntity<Long> {
 
-    @Column(name = "name")
+    @Column(name = "name", unique = true, nullable = false)
     private String name;
-    @Column(name = "price")
-    private Long price;
+    @Column(name = "price", nullable = false)
+    private Long price = 0L;
     @ManyToOne
-    @JoinColumn(name = "car_service_id")
+    @JoinColumn(name = "car_service_id", nullable = false)
     private CarServiceEntity carService;
     @OneToMany(mappedBy = "service")
     private List<ServiceConsumableEntity> serviceConsumables = new ArrayList<>();
@@ -65,6 +65,10 @@ public class ServiceEntity extends BaseEntity<Long> {
 
     public void setOrders(List<OrderEntity> orders) {
         this.orders = orders;
+    }
+
+    public void addToPrice(Long difference) {
+        price += difference;
     }
 
     @Override

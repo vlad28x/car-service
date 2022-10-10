@@ -3,7 +3,7 @@ package com.aston.carservice.service.impl;
 import com.aston.carservice.dto.RoleRequestDto;
 import com.aston.carservice.dto.RoleResponseDto;
 import com.aston.carservice.exception.NotFoundException;
-import com.aston.carservice.repositories.RoleRepository;
+import com.aston.carservice.repository.RoleRepository;
 import com.aston.carservice.service.RoleService;
 import com.aston.carservice.util.mapper.RoleMapper;
 import org.springframework.stereotype.Service;

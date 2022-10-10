@@ -4,7 +4,7 @@ import com.aston.carservice.dto.OrderStatusRequestDto;
 import com.aston.carservice.dto.OrderStatusResponseDto;
 import com.aston.carservice.entity.OrderStatusEntity;
 import com.aston.carservice.exception.NotFoundException;
-import com.aston.carservice.repositories.OrderStatusRepository;
+import com.aston.carservice.repository.OrderStatusRepository;
 import com.aston.carservice.service.impl.OrderStatusServiceImpl;
 import com.aston.carservice.util.mapper.OrderStatusMapper;
 import org.junit.jupiter.api.BeforeAll;

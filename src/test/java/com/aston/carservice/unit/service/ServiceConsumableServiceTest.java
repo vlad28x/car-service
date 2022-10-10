@@ -9,7 +9,7 @@ import com.aston.carservice.entity.ServiceConsumableEntity;
 import com.aston.carservice.entity.ServiceConsumableId;
 import com.aston.carservice.entity.ServiceEntity;
 import com.aston.carservice.exception.NotFoundException;
-import com.aston.carservice.repositories.ServiceConsumableRepository;
+import com.aston.carservice.repository.ServiceConsumableRepository;
 import com.aston.carservice.service.impl.ServiceConsumableServiceImpl;
 import com.aston.carservice.util.mapper.ServiceConsumableMapper;
 import org.junit.jupiter.api.BeforeAll;
@@ -52,7 +52,9 @@ class ServiceConsumableServiceTest {
 
         SERVICE_CONSUMABLE_ENTITY.setId(SERVICE_CONSUMABLE_ID);
         SERVICE_CONSUMABLE_ENTITY.setService(new ServiceEntity(1L));
-        SERVICE_CONSUMABLE_ENTITY.setConsumable(new ConsumableEntity(1L));
+        ConsumableEntity consumableEntity = new ConsumableEntity(1L);
+        consumableEntity.setPrice(100L);
+        SERVICE_CONSUMABLE_ENTITY.setConsumable(consumableEntity);
         SERVICE_CONSUMABLE_ENTITY.setCount(4L);
 
         SERVICE_CONSUMABLE_RESPONSE.setService(new ServiceResponseDto(1L));

@@ -8,19 +8,19 @@ import java.util.List;
 @Table(name = "users")
 public class UserEntity extends BaseEntity<Long> {
 
-    @Column(name = "username")
+    @Column(name = "username", unique = true, nullable = false)
     private String username;
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
-    @Column(name = "email")
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
     @Column(name = "salary")
     private Long salary;
     @ManyToOne
-    @JoinColumn(name = "role_id")
+    @JoinColumn(name = "role_id", nullable = false)
     private RoleEntity role;
     @ManyToOne
-    @JoinColumn(name = "car_service_id")
+    @JoinColumn(name = "car_service_id", nullable = false)
     private CarServiceEntity carService;
     @OneToMany(mappedBy = "worker")
     private List<OrderEntity> workerOrders = new ArrayList<>();
