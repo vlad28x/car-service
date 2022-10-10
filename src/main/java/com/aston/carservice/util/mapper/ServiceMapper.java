@@ -4,6 +4,7 @@ import com.aston.carservice.dto.ServiceRequestDto;
 import com.aston.carservice.dto.ServiceResponseDto;
 import com.aston.carservice.entity.CarServiceEntity;
 import com.aston.carservice.entity.ServiceEntity;
+import com.aston.carservice.exception.NotFoundException;
 import com.aston.carservice.repository.CarServiceRepository;
 import org.springframework.stereotype.Component;
 
@@ -45,7 +46,7 @@ public class ServiceMapper implements Mapper<ServiceEntity, ServiceRequestDto, S
     private CarServiceEntity getCarService(Long carServiceId) {
         return Optional.ofNullable(carServiceId)
                 .flatMap(carServiceRepository::findById)
-                .orElse(null);
+                .orElseThrow(() -> new NotFoundException("car service entity not found"));
     }
 
 }
