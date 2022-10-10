@@ -5,6 +5,7 @@ import com.aston.carservice.dto.UserResponseDto;
 import com.aston.carservice.entity.CarServiceEntity;
 import com.aston.carservice.entity.RoleEntity;
 import com.aston.carservice.entity.UserEntity;
+import com.aston.carservice.exception.NotFoundException;
 import com.aston.carservice.repository.CarServiceRepository;
 import com.aston.carservice.repository.RoleRepository;
 import org.springframework.stereotype.Component;
@@ -57,13 +58,13 @@ public class UserMapper implements Mapper<UserEntity, UserRequestDto, UserRespon
     private RoleEntity getRole(Long roleId) {
         return Optional.ofNullable(roleId)
                 .flatMap(roleRepository::findById)
-                .orElse(null);
+                .orElseThrow(() -> new NotFoundException("role entity not found"));
     }
 
     private CarServiceEntity getCarService(Long carServiceId) {
         return Optional.ofNullable(carServiceId)
                 .flatMap(carServiceRepository::findById)
-                .orElse(null);
+                .orElseThrow(() -> new NotFoundException("car service entity not found"));
     }
 
 }
