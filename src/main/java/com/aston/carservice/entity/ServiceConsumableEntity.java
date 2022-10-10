@@ -1,6 +1,10 @@
 package com.aston.carservice.entity;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
+import java.util.Date;
 import java.util.Objects;
 
 
@@ -18,6 +22,16 @@ public class ServiceConsumableEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("consumableId")
     private ConsumableEntity consumable;
+
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created", nullable = false)
+    private Date created;
+
+    @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "updated", nullable = false)
+    private Date updated;
 
     public ServiceConsumableEntity() {
     }
@@ -52,6 +66,22 @@ public class ServiceConsumableEntity {
 
     public void setConsumable(ConsumableEntity consumable) {
         this.consumable = consumable;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public Date getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(Date updated) {
+        this.updated = updated;
     }
 
     @Override
