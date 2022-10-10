@@ -5,6 +5,7 @@ import com.aston.carservice.dto.ServiceConsumableResponseDto;
 import com.aston.carservice.entity.ConsumableEntity;
 import com.aston.carservice.entity.ServiceConsumableEntity;
 import com.aston.carservice.entity.ServiceEntity;
+import com.aston.carservice.exception.NotFoundException;
 import com.aston.carservice.repository.ConsumableRepository;
 import com.aston.carservice.repository.ServiceRepository;
 import org.springframework.stereotype.Component;
@@ -56,13 +57,13 @@ public class ServiceConsumableMapper implements Mapper<ServiceConsumableEntity, 
     private ServiceEntity getService(Long serviceId) {
         return Optional.ofNullable(serviceId)
                 .flatMap(serviceRepository::findById)
-                .orElse(null);
+                .orElseThrow(() -> new NotFoundException("service entity not found"));
     }
 
     private ConsumableEntity getConsumable(Long consumableId) {
         return Optional.ofNullable(consumableId)
                 .flatMap(consumableRepository::findById)
-                .orElse(null);
+                .orElseThrow(() -> new NotFoundException("consumable entity not found"));
     }
 
 }

@@ -6,14 +6,17 @@ import com.aston.carservice.entity.OrderEntity;
 import com.aston.carservice.entity.OrderStatusEntity;
 import com.aston.carservice.entity.ServiceEntity;
 import com.aston.carservice.entity.UserEntity;
+import com.aston.carservice.exception.NotFoundException;
 import com.aston.carservice.repository.OrderStatusRepository;
 import com.aston.carservice.repository.ServiceRepository;
 import com.aston.carservice.repository.UserRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 public class OrderMapper implements Mapper<OrderEntity, OrderRequestDto, OrderResponseDto> {
@@ -78,15 +81,15 @@ public class OrderMapper implements Mapper<OrderEntity, OrderRequestDto, OrderRe
     private OrderStatusEntity getOrderStatus(Long statusId) {
         return Optional.ofNullable(statusId)
                 .flatMap(orderStatusRepository::findById)
-                .orElse(null);
+                .orElseThrow(() -> new NotFoundException("order status entity not found"));
     }
 
     private List<ServiceEntity> getServices(List<Long> servicesId) {
         return Optional.ofNullable(servicesId)
                 .map(services -> services.stream()
                         .map(serviceRepository::findById)
-                        .filter(Optional::isPresent)
-                        .map(Optional::get)
+                        .flatMap(serviceEntity -> serviceEntity.map(Stream::of).orElseThrow(() ->
+                                new NotFoundException("service entity not found")))
                         .collect(Collectors.toList()))
                 .orElse(null);
     }
@@ -94,7 +97,7 @@ public class OrderMapper implements Mapper<OrderEntity, OrderRequestDto, OrderRe
     private UserEntity getUser(Long userId) {
         return Optional.ofNullable(userId)
                 .flatMap(userRepository::findById)
-                .orElse(null);
+                .orElseThrow(() -> new NotFoundException("user entity not found"));
     }
 
     private Long getPrice(List<ServiceEntity> services) {
