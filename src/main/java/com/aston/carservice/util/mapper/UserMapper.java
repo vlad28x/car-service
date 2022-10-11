@@ -8,6 +8,7 @@ import com.aston.carservice.entity.UserEntity;
 import com.aston.carservice.exception.NotFoundException;
 import com.aston.carservice.repository.CarServiceRepository;
 import com.aston.carservice.repository.RoleRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -18,11 +19,13 @@ public class UserMapper implements Mapper<UserEntity, UserRequestDto, UserRespon
     private final RoleRepository roleRepository;
     private final CarServiceRepository carServiceRepository;
     private final RoleMapper roleMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserMapper(RoleRepository roleRepository, CarServiceRepository carServiceRepository, RoleMapper roleMapper, CarServiceMapper carServiceMapper) {
+    public UserMapper(RoleRepository roleRepository, CarServiceRepository carServiceRepository, RoleMapper roleMapper, CarServiceMapper carServiceMapper, PasswordEncoder passwordEncoder) {
         this.roleRepository = roleRepository;
         this.carServiceRepository = carServiceRepository;
         this.roleMapper = roleMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -33,7 +36,7 @@ public class UserMapper implements Mapper<UserEntity, UserRequestDto, UserRespon
     @Override
     public UserEntity toEntity(UserRequestDto requestDto, UserEntity entity) {
         entity.setUsername(requestDto.getUsername());
-        entity.setPassword(requestDto.getPassword());
+        entity.setPassword(passwordEncoder.encode(requestDto.getPassword()));
         entity.setEmail(requestDto.getEmail());
         entity.setSalary(requestDto.getSalary());
         entity.setRole(getRole(requestDto.getRoleId()));

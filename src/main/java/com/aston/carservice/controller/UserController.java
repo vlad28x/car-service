@@ -4,6 +4,7 @@ import com.aston.carservice.dto.UserRequestDto;
 import com.aston.carservice.dto.UserResponseDto;
 import com.aston.carservice.service.UserService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,28 +23,32 @@ public class UserController {
         this.userService = userService;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public UserResponseDto getById(@PathVariable("id") @Min(1) Long id) {
         return userService.getById(id);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public List<UserResponseDto> getAll() {
         return userService.getAll();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponseDto create(@Valid @RequestBody UserRequestDto newUser) {
         return userService.create(newUser);
     }
 
-
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public UserResponseDto update(@PathVariable("id") @Min(1) Long id, @Valid @RequestBody UserRequestDto newUser) {
         return userService.update(id, newUser);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") @Min(1) Long id) {
         userService.delete(id);
