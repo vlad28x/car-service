@@ -4,6 +4,7 @@ import com.aston.carservice.dto.ServiceRequestDto;
 import com.aston.carservice.dto.ServiceResponseDto;
 import com.aston.carservice.service.ServiceService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,27 +23,32 @@ public class ServiceController {
         this.service = service;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ServiceResponseDto getById(@PathVariable("id") @Min(1) Long id) {
         return service.getById(id);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public List<ServiceResponseDto> getAll() {
         return service.getAll();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ServiceResponseDto create(@Valid @RequestBody ServiceRequestDto newService) {
         return service.create(newService);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ServiceResponseDto update(@PathVariable("id") @Min(1) Long id, @Valid @RequestBody ServiceRequestDto newService) {
         return service.update(id, newService);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") @Min(1) Long id) {
         service.delete(id);

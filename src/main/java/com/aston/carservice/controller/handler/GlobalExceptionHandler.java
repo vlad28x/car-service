@@ -72,12 +72,12 @@ public class GlobalExceptionHandler {
                 .collect(Collectors.toMap(ConstraintViolation::getPropertyPath, ConstraintViolation::getMessage));
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(value = Exception.class)
-    public ResponseError handleAllException(Exception ex) {
-        return handle(ex);
-    }
-
+    /* @ResponseStatus(HttpStatus.BAD_REQUEST)
+     @ExceptionHandler(value = Exception.class)
+     public ResponseError handleAllException(Exception ex) {
+         return handle(ex);
+     }
+ */
     private ResponseError handle(Exception ex) {
         logger.error("Exception Handling: " + ex);
         return new ResponseError(ex.getMessage());
