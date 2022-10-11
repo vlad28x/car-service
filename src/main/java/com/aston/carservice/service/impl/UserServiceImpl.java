@@ -70,4 +70,10 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new NotFoundException(String.format("User with ID %s not found", id)));
     }
 
+    @Override
+    public UserResponseDto findByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .map(userMapper::toResponseDto)
+                .orElseThrow(() -> new NotFoundException(String.format("User with username %s not found", username)));
+    }
 }

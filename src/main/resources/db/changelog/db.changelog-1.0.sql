@@ -111,15 +111,15 @@ values ('MANAGER', now(), now()),
 
 --changeset Anastasia7868:000011-insert-users
 insert into users(username, password, email, salary, role_id, car_service_id, created, updated)
-values ('customer1', 'customer1', 'сustomer1@mail.ru', null, 3, 1, now(), now()),
-       ('manager1', 'manager1', 'manager1@mail.ru', 150000, 1, 1, now(), now()),
-       ('worker1', 'worker1', 'worker1@mail.ru', 60000, 2, 1, now(), now()),
-       ('admin', 'admin', 'admin@mail.ru', null, 4, 1, now(), now()),
-       ('customer2', 'customer2', 'customer2@mail.ru', null, 3, 1, now(), now()),
-       ('worker2', 'worker2', 'worker2@mail.ru', 50000, 2, 1, now(), now()),
-       ('worker3', 'worker3', 'worker3@mail.ru', 70000, 2, 1, now(), now()),
-       ('customer3', 'customer3', 'customer3@mail.ru', null, 3, 1, now(), now()),
-       ('manager2', 'manager2', 'manager2@mail.ru', 150000, 1, 1, now(), now());
+values ('customer1', '{bcrypt}$2a$10$KcAofaeS7s7uETdSzQXudOjlv2EIXewqr5KXCF8mL829Vablkoxoa', 'сustomer1@mail.ru', null, 3, 1, now(), now()),
+       ('manager1', '{bcrypt}$2a$10$ikicThnWNzO.B2Z28pQKRu17g3aQnyw71M4QS86iEqcYdTn/OQNQy', 'manager1@mail.ru', 150000, 1, 1, now(), now()),
+       ('worker1', '{bcrypt}$2a$10$vLkVSNBM1TP2gjRNDGLgvO3/VFRW1esnpEthDRYgDjCi9nSuRHc5.', 'worker1@mail.ru', 60000, 2, 1, now(), now()),
+       ('admin', '{bcrypt}$2a$10$vU7XQkeiNH9UFH3t.IBKfeRCK9VOnggeQhAcyDIl97Ax.3hZzVyEi', 'admin@mail.ru', null, 4, 1, now(), now()),
+       ('customer2', '{bcrypt}$2a$10$bgii7i1SCppyI7QBf8KTRevm.EeiPCRbKcNn9XMrBlJDKt8qVeF6q', 'customer2@mail.ru', null, 3, 1, now(), now()),
+       ('worker2', '{bcrypt}$2a$10$TBDjsk/oYuGmXqM6heUy2ubpoYpOd0qaTYGz8JRMiTMf75KQX0AM6', 'worker2@mail.ru', 50000, 2, 1, now(), now()),
+       ('worker3', '{bcrypt}$2a$10$QMhqwZYlv72DNfum1x3UoehK2hvt3pILscz9mPvnfAViHZLJfVDFS', 'worker3@mail.ru', 70000, 2, 1, now(), now()),
+       ('customer3', '{bcrypt}$2a$10$F.ZJmmlQqRZzoz83B53Uv.D4.4br/7oM0Ph7u5SphKxjdUwsbXGLO', 'customer3@mail.ru', null, 3, 1, now(), now()),
+       ('manager2', '{bcrypt}$2a$10$joUBJ7sIQXw7NlVMvl7SY.2h.3ujQbeEdd7X/CWmULPGuJhmd5Xmi', 'manager2@mail.ru', 150000, 1, 1, now(), now());
 
 --changeset Anastasia7868:000012-insert-service
 insert into service(name, price, car_service_id, created, updated)
