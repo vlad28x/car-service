@@ -2,9 +2,7 @@ package com.aston.carservice.service.impl;
 
 import com.aston.carservice.dto.OrderRequestDto;
 import com.aston.carservice.dto.OrderResponseDto;
-import com.aston.carservice.entity.CarServiceEntity;
-import com.aston.carservice.entity.OrderEntity;
-import com.aston.carservice.entity.UserEntity;
+import com.aston.carservice.entity.*;
 import com.aston.carservice.exception.BadRequestException;
 import com.aston.carservice.exception.NotFoundException;
 import com.aston.carservice.repository.OrderRepository;
@@ -23,6 +21,8 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class OrderServiceImpl implements OrderService {
 
+    private static final Long MIN_QUANTITY = 10L;
+    private static final Long AMOUNT_CONSUMABLE_TO_BUY = 100L;
     private final OrderRepository orderRepository;
     private final OrderStatusRepository orderStatusRepository;
     private final OrderMapper orderMapper;
@@ -88,8 +88,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderResponseDto payOrderOfCurrentCustomer(Long orderId, Principal principal) {
-        OrderEntity order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new NotFoundException(String.format("Order with ID %s not found", orderId)));
+        OrderEntity order = getOrderById(orderId);
         if (!order.getCustomer().getUsername().equals(principal.getName())) {
             throw new BadRequestException(String.format("Current customer doesn't have access to order with ID %s", orderId));
         }
@@ -107,6 +106,45 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderStatus(orderStatusRepository.findByName("PAID").orElse(null));
         orderRepository.saveAndFlush(order);
         return orderMapper.toResponseDto(order);
+    }
+
+    @Override
+    @Transactional
+    public OrderResponseDto startOrder(Long orderId, Principal principal) {
+        OrderEntity order = getOrderById(orderId);
+        if (order.getWorker() == null) {
+            throw new BadRequestException(String.format("Order with ID %s doesn't have a worker", orderId));
+        } else if (!order.getWorker().getUsername().equals(principal.getName())) {
+            throw new BadRequestException(String.format("Current worker is not assigned to an order with ID %s", orderId));
+        }
+        if (!order.getOrderStatus().getName().equals("ASSIGNED")) {
+            throw new BadRequestException(String.format("Order with id %s is in status other than ASSIGNED", orderId));
+        }
+        CarServiceEntity carService = order.getWorker().getCarService();
+        order.getServices().forEach(service -> {
+                    service.getServiceConsumables().forEach(serviceConsumable -> {
+                        ConsumableEntity consumable = serviceConsumable.getConsumable();
+                        Long newQuantity = consumable.getQuantity() - serviceConsumable.getCount();
+                        consumable.setQuantity(newQuantity);
+                        if (newQuantity <= MIN_QUANTITY) {
+                            buyConsumables(carService, consumable, AMOUNT_CONSUMABLE_TO_BUY);
+                        }
+                    });
+                });
+        order.setOrderStatus(orderStatusRepository.findByName("IN PROGRESS").orElse(null));
+        orderRepository.saveAndFlush(order);
+        return orderMapper.toResponseDto(order);
+    }
+
+    private void buyConsumables(CarServiceEntity carService, ConsumableEntity consumable, Long amount) {
+        Long cost = consumable.getPrice()*amount;
+        carService.spendBudget(cost);
+        consumable.addToQuantity(amount);
+    }
+
+    private OrderEntity getOrderById(Long orderId) {
+        return orderRepository.findById(orderId)
+                .orElseThrow(() -> new NotFoundException(String.format("Order with ID %s not found", orderId)));
     }
 
 }
