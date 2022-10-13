@@ -63,6 +63,10 @@ public class CarServiceEntity extends BaseEntity<Long> {
         budget += difference;
     }
 
+    public void spendBudget(Long cost) {
+        budget -= cost;
+    }
+
     @Override
     public String toString() {
         return "CarServiceEntity{" +
