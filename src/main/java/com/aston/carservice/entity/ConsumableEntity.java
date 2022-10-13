@@ -59,6 +59,10 @@ public class ConsumableEntity extends BaseEntity<Long> {
         this.serviceConsumables = serviceConsumables;
     }
 
+    public void addToQuantity(Long amount) {
+        quantity += amount;
+    }
+
     @Override
     public String toString() {
         return "ConsumableEntity{" +
