@@ -159,4 +159,12 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new NotFoundException(String.format("Order with ID %s not found", orderId)));
     }
 
+    @Override
+    public List<OrderResponseDto> getOrdersWithPendingStatus() {
+        List<OrderEntity> orderEntities =
+                orderRepository.findAllByOrderStatus("PENDING");
+        return orderEntities.stream()
+                .map(orderMapper::toResponseDto)
+                .collect(Collectors.toList());
+    }
 }

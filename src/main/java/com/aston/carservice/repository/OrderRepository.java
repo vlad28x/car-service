@@ -13,4 +13,6 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
 
     List<OrderEntity> findAllByWorkerUsername(String username);
 
+    List<OrderEntity> findAllByOrderStatus(String status);
+
 }

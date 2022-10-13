@@ -38,6 +38,7 @@ public class WorkerController {
     public List<OrderResponseDto> getAllOrdersCurrentWorker(Principal principal) {
         return orderService.getAllOrdersCurrentWorker(principal);
     }
+
     @PreAuthorize("hasRole('WORKER')")
     @PatchMapping("/current/orders/{orderId}/start")
     public OrderResponseDto startOrder(@PathVariable @Min(1) Long orderId, Principal principal) {

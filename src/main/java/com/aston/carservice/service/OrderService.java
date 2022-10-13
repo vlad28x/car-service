@@ -16,4 +16,5 @@ public interface OrderService extends Service<OrderResponseDto, OrderRequestDto,
 
     OrderResponseDto startOrder(Long orderId, Principal principal);
 
+    List<OrderResponseDto> getOrdersWithPendingStatus();
 }
