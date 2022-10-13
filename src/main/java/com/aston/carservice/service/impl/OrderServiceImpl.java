@@ -6,9 +6,11 @@ import com.aston.carservice.exception.NotFoundException;
 import com.aston.carservice.repository.OrderRepository;
 import com.aston.carservice.service.OrderService;
 import com.aston.carservice.util.mapper.OrderMapper;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -68,6 +70,13 @@ public class OrderServiceImpl implements OrderService {
                     return true;
                 })
                 .orElseThrow(() -> new NotFoundException(String.format("Order with ID %s not found", id)));
+    }
+
+    @Override
+    public List<OrderResponseDto> getAllOrdersCurrentCustomer(Principal principal) {
+        return orderRepository.findAllByCustomerUsername(principal.getName()).stream()
+                .map(orderMapper::toResponseDto)
+                .collect(Collectors.toList());
     }
 
 }
