@@ -109,4 +109,11 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.toResponseDto(order);
     }
 
+    @Override
+    public List<OrderResponseDto> getAllOrdersCurrentWorker(Principal principal) {
+        return orderRepository.findAllByWorkerUsername(principal.getName()).stream()
+                .map(orderMapper::toResponseDto)
+                .collect(Collectors.toList());
+    }
+
 }
