@@ -3,10 +3,9 @@ package com.aston.carservice.controller;
 import com.aston.carservice.dto.OrderResponseDto;
 import com.aston.carservice.service.OrderService;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Min;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +24,12 @@ public class CustomerController {
     @GetMapping("/current/orders")
     public List<OrderResponseDto> getAllOrdersCurrentCustomer(Principal principal) {
         return orderService.getAllOrdersCurrentCustomer(principal);
+    }
+
+    @PreAuthorize("hasRole('CUSTOMER')")
+    @PatchMapping("/current/orders/{orderId}/payment")
+    public void payOrderOfCurrentCustomer(@PathVariable @Min(1) Long orderId, Principal principal) {
+        orderService.payOrderOfCurrentCustomer(orderId, principal);
     }
 
 }

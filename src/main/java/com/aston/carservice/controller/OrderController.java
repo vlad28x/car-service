@@ -23,13 +23,13 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @PreAuthorize("hasRole('MANAGER')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public OrderResponseDto getById(@PathVariable("id") @Min(1) Long id) {
         return orderService.getById(id);
     }
 
-    @PreAuthorize("hasRole('MANAGER')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public List<OrderResponseDto> getAll() {
         return orderService.getAll();

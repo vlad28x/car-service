@@ -80,7 +80,7 @@ public class OrderMapper implements Mapper<OrderEntity, OrderRequestDto, OrderRe
     private OrderStatusEntity getOrderStatus(Long statusId) {
         return Optional.ofNullable(statusId)
                 .flatMap(orderStatusRepository::findById)
-                .orElseThrow(() -> new NotFoundException("order status entity not found"));
+                .orElseThrow(() -> new NotFoundException("Order status not found"));
     }
 
     private List<ServiceEntity> getServices(List<Long> servicesId) {
@@ -88,19 +88,20 @@ public class OrderMapper implements Mapper<OrderEntity, OrderRequestDto, OrderRe
                 .map(services -> services.stream()
                         .map(serviceRepository::findById)
                         .flatMap(serviceEntity -> serviceEntity.map(Stream::of).orElseThrow(() ->
-                                new NotFoundException("service entity not found")))
+                                new NotFoundException("Service not found")))
                         .collect(Collectors.toList()))
                 .orElse(null);
     }
 
     private UserEntity getUser(Long userId) {
         return Optional.ofNullable(userId)
-                .flatMap(userRepository::findById)
-                .orElseThrow(() -> new NotFoundException("user entity not found"));
+                .map(id -> userRepository.findById(id)
+                        .orElseThrow(() -> new NotFoundException(String.format("User with ID %s not found", id))))
+                .orElse(null);
     }
 
     private Long getPrice(List<ServiceEntity> services) {
-        return services.stream().mapToLong(ServiceEntity::getPrice).sum();
+        return 2 * services.stream().mapToLong(ServiceEntity::getPrice).sum();
     }
 
 }

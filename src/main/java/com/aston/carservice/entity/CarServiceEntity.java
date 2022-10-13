@@ -59,6 +59,10 @@ public class CarServiceEntity extends BaseEntity<Long> {
         this.services = services;
     }
 
+    public void addToBudget(Long difference) {
+        budget += difference;
+    }
+
     @Override
     public String toString() {
         return "CarServiceEntity{" +
