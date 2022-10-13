@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Min;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -28,8 +27,8 @@ public class CustomerController {
 
     @PreAuthorize("hasRole('CUSTOMER')")
     @PatchMapping("/current/orders/{orderId}/payment")
-    public void payOrderOfCurrentCustomer(@PathVariable @Min(1) Long orderId, Principal principal) {
-        orderService.payOrderOfCurrentCustomer(orderId, principal);
+    public OrderResponseDto payOrderOfCurrentCustomer(@PathVariable @Min(1) Long orderId, Principal principal) {
+        return orderService.payOrderOfCurrentCustomer(orderId, principal);
     }
 
 }

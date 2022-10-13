@@ -10,6 +10,6 @@ public interface OrderService extends Service<OrderResponseDto, OrderRequestDto,
 
     List<OrderResponseDto> getAllOrdersCurrentCustomer(Principal principal);
 
-    boolean payOrderOfCurrentCustomer(Long orderId, Principal principal);
+    OrderResponseDto payOrderOfCurrentCustomer(Long orderId, Principal principal);
 
 }
