@@ -108,6 +108,10 @@ public class UserEntity extends BaseEntity<Long> {
         this.customerOrders = customerOrders;
     }
 
+    public void addToSalary(Long difference) {
+        salary += difference;
+    }
+
     @Override
     public String toString() {
         return "UserEntity{" +

@@ -93,9 +93,7 @@ create table service_orders
 (
     service_id bigint references service (id),
     orders_id  bigint references orders (id),
-    primary key (service_id, orders_id),
-    created timestamp not null,
-    updated timestamp not null
+    primary key (service_id, orders_id)
 );
 
 --changeset Anastasia7868:000009-insert-car_service
@@ -165,10 +163,10 @@ values (19200, 4, 3, 2, 1, now(), now()),
        (7800, 2, 3, 9, 8, now(), now());
 
 --changeset Anastasia7868:000017-insert-service_orders
-insert into service_orders(service_id, orders_id, created, updated)
-values (2, 1, now(), now()),
-       (1, 2, now(), now()),
-       (3, 3, now(), now()),
-       (2, 4, now(), now()),
-       (3, 4, now(), now());
+insert into service_orders(service_id, orders_id)
+values (2, 1),
+       (1, 2),
+       (3, 3),
+       (2, 4),
+       (3, 4);
 
