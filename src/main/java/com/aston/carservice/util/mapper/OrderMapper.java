@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Component
 public class OrderMapper implements Mapper<OrderEntity, OrderRequestDto, OrderResponseDto> {
@@ -79,16 +78,16 @@ public class OrderMapper implements Mapper<OrderEntity, OrderRequestDto, OrderRe
 
     private OrderStatusEntity getOrderStatus(Long statusId) {
         return Optional.ofNullable(statusId)
-                .flatMap(orderStatusRepository::findById)
-                .orElseThrow(() -> new NotFoundException("Order status not found"));
+                .map(id -> orderStatusRepository.findById(id)
+                        .orElseThrow(() -> new NotFoundException(String.format("Order status with ID %s not found", id))))
+                .orElse(null);
     }
 
     private List<ServiceEntity> getServices(List<Long> servicesId) {
         return Optional.ofNullable(servicesId)
                 .map(services -> services.stream()
-                        .map(serviceRepository::findById)
-                        .flatMap(serviceEntity -> serviceEntity.map(Stream::of).orElseThrow(() ->
-                                new NotFoundException("Service not found")))
+                        .map(id -> serviceRepository.findById(id).orElseThrow(
+                                () -> new NotFoundException(String.format("Service with ID %s not found", id))))
                         .collect(Collectors.toList()))
                 .orElse(null);
     }

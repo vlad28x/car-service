@@ -87,11 +87,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public boolean payOrderOfCurrentCustomer(Long orderId, Principal principal) {
+    public OrderResponseDto payOrderOfCurrentCustomer(Long orderId, Principal principal) {
         OrderEntity order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new NotFoundException(String.format("Order with ID %s not found", orderId)));
         if (!order.getCustomer().getUsername().equals(principal.getName())) {
-            throw new BadRequestException("Current customer doesn't have access to order with ID " + orderId);
+            throw new BadRequestException(String.format("Current customer doesn't have access to order with ID %s", orderId));
         }
         if (order.getOrderStatus().getName().equals("PAID")) {
             throw new BadRequestException(String.format("Order with ID %s has been already paid", orderId));
@@ -105,7 +105,8 @@ public class OrderServiceImpl implements OrderService {
         manager.addToSalary((long) (order.getPrice() / 2 * 0.1));
         worker.addToSalary((long) (order.getPrice() / 2 * 0.4));
         order.setOrderStatus(orderStatusRepository.findByName("PAID").orElse(null));
-        return true;
+        orderRepository.saveAndFlush(order);
+        return orderMapper.toResponseDto(order);
     }
 
 }
