@@ -22,7 +22,7 @@ public class EmployeeController {
 
     @PreAuthorize("hasRole('MANAGER')")
     @PatchMapping("/payment")
-    List<UserResponseDto> paySalariesToCurrentCarServiceEmployees(Principal principal) {
+    public List<UserResponseDto> paySalariesToCurrentCarServiceEmployees(Principal principal) {
         return userService.paySalariesToCurrentCarServiceEmployees(principal);
     }
 

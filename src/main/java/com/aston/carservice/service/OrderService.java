@@ -14,4 +14,6 @@ public interface OrderService extends Service<OrderResponseDto, OrderRequestDto,
 
     List<OrderResponseDto> getAllOrdersCurrentWorker(Principal principal);
 
+    OrderResponseDto startOrder(Long orderId, Principal principal);
+
 }

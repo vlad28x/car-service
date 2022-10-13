@@ -95,6 +95,7 @@ public class UserServiceImpl implements UserService {
         return employeeDtos;
     }
 
+    @Override
     public List<UserResponseDto> getAllWorkers() {
         List<UserEntity> employeeEntities =
                 userRepository.findAllByRoleName("WORKER");
