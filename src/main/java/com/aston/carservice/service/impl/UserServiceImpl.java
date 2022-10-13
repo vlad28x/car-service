@@ -2,6 +2,7 @@ package com.aston.carservice.service.impl;
 
 import com.aston.carservice.dto.UserRequestDto;
 import com.aston.carservice.dto.UserResponseDto;
+import com.aston.carservice.entity.UserEntity;
 import com.aston.carservice.exception.NotFoundException;
 import com.aston.carservice.repository.UserRepository;
 import com.aston.carservice.service.UserService;
@@ -9,6 +10,8 @@ import com.aston.carservice.util.mapper.UserMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -76,4 +79,20 @@ public class UserServiceImpl implements UserService {
                 .map(userMapper::toResponseDto)
                 .orElseThrow(() -> new NotFoundException(String.format("User with username %s not found", username)));
     }
+
+    @Override
+    @Transactional
+    public List<UserResponseDto> paySalariesToCurrentCarServiceEmployees(Principal principal) {
+        UserEntity manager = userRepository.findByUsername(principal.getName())
+                .orElseThrow(() -> new NotFoundException("Manager not found"));
+        List<UserEntity> employeeEntities =
+                userRepository.findAllByCarServiceAndRoleNameIn(manager.getCarService(), Arrays.asList("WORKER", "MANAGER"));
+        List<UserResponseDto> employeeDtos = employeeEntities.stream()
+                .map(userMapper::toResponseDto)
+                .collect(Collectors.toList());
+        employeeEntities.forEach(entity -> entity.setSalary(0L));
+        userRepository.saveAll(employeeEntities);
+        return employeeDtos;
+    }
+
 }
