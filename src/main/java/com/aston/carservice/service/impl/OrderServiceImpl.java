@@ -2,7 +2,11 @@ package com.aston.carservice.service.impl;
 
 import com.aston.carservice.dto.OrderRequestDto;
 import com.aston.carservice.dto.OrderResponseDto;
-import com.aston.carservice.entity.*;
+
+import com.aston.carservice.entity.CarServiceEntity;
+import com.aston.carservice.entity.ConsumableEntity;
+import com.aston.carservice.entity.OrderEntity;
+import com.aston.carservice.entity.UserEntity;
 import com.aston.carservice.exception.BadRequestException;
 import com.aston.carservice.exception.NotFoundException;
 import com.aston.carservice.repository.OrderRepository;
@@ -88,7 +92,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderResponseDto payOrderOfCurrentCustomer(Long orderId, Principal principal) {
-        OrderEntity order = getOrderById(orderId);
+        OrderEntity order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new NotFoundException(String.format("Order with ID %s not found", orderId)));
         if (!order.getCustomer().getUsername().equals(principal.getName())) {
             throw new BadRequestException(String.format("Current customer doesn't have access to order with ID %s", orderId));
         }
@@ -106,6 +111,13 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderStatus(orderStatusRepository.findByName("PAID").orElse(null));
         orderRepository.saveAndFlush(order);
         return orderMapper.toResponseDto(order);
+    }
+
+    @Override
+    public List<OrderResponseDto> getAllOrdersCurrentWorker(Principal principal) {
+        return orderRepository.findAllByWorkerUsername(principal.getName()).stream()
+                .map(orderMapper::toResponseDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -137,7 +149,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private void buyConsumables(CarServiceEntity carService, ConsumableEntity consumable, Long amount) {
-        Long cost = consumable.getPrice()*amount;
+        Long cost = consumable.getPrice() * amount;
         carService.spendBudget(cost);
         consumable.addToQuantity(amount);
     }
@@ -147,4 +159,12 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new NotFoundException(String.format("Order with ID %s not found", orderId)));
     }
 
+    @Override
+    public List<OrderResponseDto> getOrdersWithPendingStatus() {
+        List<OrderEntity> orderEntities =
+                orderRepository.findAllByOrderStatus("PENDING");
+        return orderEntities.stream()
+                .map(orderMapper::toResponseDto)
+                .collect(Collectors.toList());
+    }
 }

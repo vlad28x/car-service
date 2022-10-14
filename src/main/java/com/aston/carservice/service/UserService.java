@@ -12,4 +12,6 @@ public interface UserService extends Service<UserResponseDto, UserRequestDto, Lo
 
     List<UserResponseDto> paySalariesToCurrentCarServiceEmployees(Principal principal);
 
+    List<UserResponseDto> getAllWorkers();
+
 }
