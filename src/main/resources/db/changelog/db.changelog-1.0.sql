@@ -127,11 +127,11 @@ values ('carwash', 1200, 1, now(), now()),
 
 --changeset Anastasia7868:000013-insert-consumable
 insert into consumable(name, price, quantity, created, updated)
-values ('rags', 100, 100, now(), now()),
-       ('tires', 2000, 50, now(), now()),
-       ('gloves', 150, 200, now(), now()),
-       ('detergents', 700, 30, now(), now()),
-       ('screwdrivers', 400, 50, now(), now());
+values ('rags', 100, 10, now(), now()),
+       ('tires', 2000, 10, now(), now()),
+       ('gloves', 150, 10, now(), now()),
+       ('detergents', 700, 10, now(), now()),
+       ('screwdrivers', 400, 10, now(), now());
 
 --changeset Anastasia7868:000014-insert-service_consumable
 insert into service_consumable(service_id, consumable_id, count, created, updated)
@@ -157,7 +157,7 @@ values ('PENDING', now(), now()),
 
 --changeset Anastasia7868:000016-insert-orders
 insert into orders(price, status_id, worker_id, manager_id, customer_id, created, updated)
-values (19200, 4, 3, 2, 1, now(), now()),
+values (19200, 5, 3, 2, 1, now(), now()),
        (2400, 5, 6, 9, 5, now(), now()),
        (5400, 6, 7, 2, 1, now(), now()),
        (7800, 2, 3, 9, 8, now(), now());

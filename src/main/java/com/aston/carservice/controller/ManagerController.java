@@ -5,11 +5,9 @@ import com.aston.carservice.dto.UserResponseDto;
 import com.aston.carservice.service.OrderService;
 import com.aston.carservice.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Min;
 import java.security.Principal;
 import java.util.List;
 
@@ -35,6 +33,12 @@ public class ManagerController {
     @GetMapping("/current/orders/pending")
     public List<OrderResponseDto> getOrdersWithPendingStatus() {
         return orderService.getOrdersWithPendingStatus();
+    }
+
+    @PreAuthorize("hasRole('MANAGER')")
+    @PatchMapping("/current/{orderId}/assigment/{workerId}")
+    public OrderResponseDto assignWorker(@PathVariable @Min(1) Long orderId, @PathVariable @Min(1) Long workerId, Principal principal) {
+        return orderService.assignWorker(orderId, workerId, principal);
     }
 
 }
