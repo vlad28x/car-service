@@ -2,7 +2,6 @@ package com.aston.carservice.service.impl;
 
 import com.aston.carservice.dto.OrderRequestDto;
 import com.aston.carservice.dto.OrderResponseDto;
-
 import com.aston.carservice.entity.CarServiceEntity;
 import com.aston.carservice.entity.ConsumableEntity;
 import com.aston.carservice.entity.OrderEntity;
@@ -11,12 +10,14 @@ import com.aston.carservice.exception.BadRequestException;
 import com.aston.carservice.exception.NotFoundException;
 import com.aston.carservice.repository.OrderRepository;
 import com.aston.carservice.repository.OrderStatusRepository;
+import com.aston.carservice.repository.UserRepository;
 import com.aston.carservice.service.OrderService;
 import com.aston.carservice.util.mapper.OrderMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,11 +30,13 @@ public class OrderServiceImpl implements OrderService {
     private static final Long AMOUNT_CONSUMABLE_TO_BUY = 100L;
     private final OrderRepository orderRepository;
     private final OrderStatusRepository orderStatusRepository;
+    private final UserRepository userRepository;
     private final OrderMapper orderMapper;
 
-    public OrderServiceImpl(OrderRepository orderRepository, OrderStatusRepository orderStatusRepository, OrderMapper orderMapper) {
+    public OrderServiceImpl(OrderRepository orderRepository, OrderStatusRepository orderStatusRepository, UserRepository userRepository, OrderMapper orderMapper) {
         this.orderRepository = orderRepository;
         this.orderStatusRepository = orderStatusRepository;
+        this.userRepository = userRepository;
         this.orderMapper = orderMapper;
     }
 
@@ -134,18 +137,44 @@ public class OrderServiceImpl implements OrderService {
         }
         CarServiceEntity carService = order.getWorker().getCarService();
         order.getServices().forEach(service -> {
-                    service.getServiceConsumables().forEach(serviceConsumable -> {
-                        ConsumableEntity consumable = serviceConsumable.getConsumable();
-                        Long newQuantity = consumable.getQuantity() - serviceConsumable.getCount();
-                        consumable.setQuantity(newQuantity);
-                        if (newQuantity <= MIN_QUANTITY) {
-                            buyConsumables(carService, consumable, AMOUNT_CONSUMABLE_TO_BUY);
-                        }
-                    });
-                });
+            service.getServiceConsumables().forEach(serviceConsumable -> {
+                ConsumableEntity consumable = serviceConsumable.getConsumable();
+                Long newQuantity = consumable.getQuantity() - serviceConsumable.getCount();
+                consumable.setQuantity(newQuantity);
+                if (newQuantity <= MIN_QUANTITY) {
+                    buyConsumables(carService, consumable, AMOUNT_CONSUMABLE_TO_BUY);
+                }
+            });
+        });
         order.setOrderStatus(orderStatusRepository.findByName("IN PROGRESS").orElse(null));
         orderRepository.saveAndFlush(order);
         return orderMapper.toResponseDto(order);
+    }
+
+    @Override
+    public List<OrderResponseDto> getOrdersWithPendingStatus() {
+        List<OrderEntity> orderEntities =
+                orderRepository.findAllByOrderStatus("PENDING");
+        return orderEntities.stream()
+                .map(orderMapper::toResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public OrderResponseDto assignWorker(Long orderId, Long workerId, Principal principal) {
+        OrderEntity order = getOrderById(orderId);
+        if (!order.getOrderStatus().getName().equals("PENDING")) {
+            throw new BadRequestException(String.format("Order with id %s is in status other than PENDING", orderId));
+        }
+        UserEntity manager = userRepository.findByUsername(principal.getName()).orElseThrow(
+                () -> new NotFoundException(String.format("Manager with username %s not found", principal.getName())));
+        order.setManager(manager);
+        List<UserEntity> workers = userRepository
+                .findAllByCarServiceAndRoleNameIn(manager.getCarService(), Collections.singletonList("WORKER"));
+        if (workers.isEmpty()) {
+            throw new BadRequestException(String.format("Car Service with ID %s doesn't have workers", manager.getCarService().getId()));
+        }
+        return null;
     }
 
     private void buyConsumables(CarServiceEntity carService, ConsumableEntity consumable, Long amount) {
@@ -159,12 +188,4 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new NotFoundException(String.format("Order with ID %s not found", orderId)));
     }
 
-    @Override
-    public List<OrderResponseDto> getOrdersWithPendingStatus() {
-        List<OrderEntity> orderEntities =
-                orderRepository.findAllByOrderStatus("PENDING");
-        return orderEntities.stream()
-                .map(orderMapper::toResponseDto)
-                .collect(Collectors.toList());
-    }
 }
