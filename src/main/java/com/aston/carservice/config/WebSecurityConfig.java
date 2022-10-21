@@ -32,7 +32,11 @@ public class WebSecurityConfig {
                 .and()
                 .authorizeHttpRequests(
                         authz -> authz
-                                .antMatchers("/api/auth/login").permitAll()
+                                .antMatchers("/auth/login").permitAll()
+                                .antMatchers("/swagger-resources/**",
+                                        "/swagger-ui/**",
+                                        "/v3/api-docs/**",
+                                        "/webjars/**").permitAll()
                                 .anyRequest().authenticated()
                                 .and()
                                 .addFilterAfter(new JwtTokenFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
